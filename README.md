@@ -3,8 +3,8 @@
 
 
 **Materia:** PP4 - Proyecto Integrador  
-**Profesores:** Emir Eliezer Garcia Ontiveros y Kevin Axel Del Bello<!--  -->  
-**Grupo:** Tecnova
+**Profesores:** Emir Eliezer Garcia Ontiveros y Kevin Axel Del Bello  
+**Grupo:** Tecnova  
 **Comisión:** A  
 **Fecha:** 17-05-2026 
 
