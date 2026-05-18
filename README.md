@@ -988,7 +988,7 @@ El primer paso consiste en obtener el código fuente del proyecto desde el repos
 
 El sistema depende de múltiples librerías del ecosistema Node.js. Todas las dependencias necesarias se instalan mediante npm.
 
-- npm install
+- pnpm install
 
 Este proceso descarga e instala los módulos definidos en el archivo package.json, incluyendo dependencias del backend, testing y utilidades del sistema.
 
@@ -1015,11 +1015,11 @@ Estas variables permiten separar la configuración del código fuente.
 
 Para iniciar el servidor en modo desarrollo se utiliza:
 
-- npm run dev
+- pnpm run dev
 
 En modo producción:
 
-- npm start
+- pnpm start
 
 Una vez ejecutado, el sistema levanta el servidor Express y establece la conexión con la base de datos.
 
