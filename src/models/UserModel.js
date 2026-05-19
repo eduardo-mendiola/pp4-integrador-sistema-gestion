@@ -91,7 +91,7 @@ class UserModel extends BaseModel {
   }
 
   findByUsername(username) {
-    return this.model.findOne({ username }).populate('role_id');
+    return this.model.findOne({ username }).populate('role_id person_id');
   }
 
   updateLastLogin(userId) {

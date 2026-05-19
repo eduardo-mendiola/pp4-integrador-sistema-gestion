@@ -12,7 +12,8 @@
     "dev": "nodemon server.js",
     "build:client": "npm --prefix client run build",
     "start:prod": "npm run build:client && node server.js",
-    "test:db": "node test-db-connection.js"
+    "test:db": "node test-db-connection.js",
+    "repair:users-persons": "node scripts-local/repair-users-persons.js"
   },
   "author": "Eduardo Mendiola",
   "license": "MIT",
