@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
     match: [/^\S+@\S+\.\S+$/, 'Email inválido']
   },
   role_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true },
+  person_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Person', required: true, unique: true },
 
   is_temporary_role: { type: Boolean, default: false },
   role_expiration_date: { type: Date },
@@ -82,11 +83,11 @@ class UserModel extends BaseModel {
   }
 
   findAll() {
-    return super.findAll(['role_id', 'fallback_role_id']);
+    return super.findAll(['role_id', 'fallback_role_id', 'person_id']);
   }
 
   findById(id) {
-    return super.findById(id, ['role_id', 'fallback_role_id']);
+    return super.findById(id, ['role_id', 'fallback_role_id', 'person_id']);
   }
 
   findByUsername(username) {
