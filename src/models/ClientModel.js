@@ -26,7 +26,6 @@ const clientSchema = new mongoose.Schema({
   id_number: { type: String },
   category: { type: String },
   company_type: { type: String },
-  website: { type: String },
   phone: { type: String },
   address: addressSchema,
   billing_info: billingInfoSchema,
@@ -67,7 +66,6 @@ clientSchema.virtual('projects_titles').get(function () {
 });
 
 
-// Modelo base (igual patrón Product)
 const Client = mongoose.model('Client', clientSchema);
 
 class ClientModel extends BaseModel {
