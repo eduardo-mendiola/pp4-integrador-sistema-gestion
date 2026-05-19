@@ -40,10 +40,14 @@ const userSchema = new mongoose.Schema({
 // Virtual
 userSchema.virtual('employee', {
   ref: 'Employee',
-  localField: '_id',
-  foreignField: 'user_id',
+  localField: 'person_id',
+  foreignField: 'person_id',
   justOne: true
 });
+
+userSchema.methods.comparePassword = async function (password) {
+  return bcrypt.compare(password, this.password_hash);
+};
 
 
 // Pre-save password hashing
@@ -91,7 +95,7 @@ class UserModel extends BaseModel {
   }
 
   findByUsername(username) {
-    return this.model.findOne({ username }).populate('role_id person_id');
+    return this.model.findOne({ username }).populate('role_id');
   }
 
   updateLastLogin(userId) {

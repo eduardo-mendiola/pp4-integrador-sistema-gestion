@@ -13,6 +13,7 @@ import saleRoutes from './routes/sale-routes.js'
 import userRoutes from './routes/user-routes.js'
 import roleRoutes from './routes/role-routes.js'
 import personRoutes from './routes/person-routes.js'
+import employeeRoutes from './routes/employee-routes.js'
 
 
 const app = express();
@@ -59,6 +60,8 @@ app.use('/api/clients', clientRoutes);
 app.use('/api/sales', saleRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/persons', personRoutes);
+app.use('/api/employees', employeeRoutes);
+
 
 // ======================
 // HEALTH CHECK
