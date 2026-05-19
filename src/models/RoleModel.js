@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
-import BaseModel from './BaseModel.js'
+import mongoose from 'mongoose';
+import BaseModel from './BaseModel.js';
 
 const roleSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true, trim: true },
@@ -9,12 +9,14 @@ const roleSchema = new mongoose.Schema({
 }, {
   collection: 'roles',
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
-})
+});
+
+const Role = mongoose.model('Role', roleSchema);
 
 class RoleModel extends BaseModel {
   constructor() {
-    super(roleSchema, 'Role')
+    super(roleSchema, 'Role');
   }
 }
 
-export default new RoleModel()
+export default new RoleModel();

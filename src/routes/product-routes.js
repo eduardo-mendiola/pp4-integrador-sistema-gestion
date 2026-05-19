@@ -1,18 +1,15 @@
 import express from 'express';
-const router = express.Router();
-
 import ProductController from '../controllers/ProductController.js';
 import { isAuthenticated } from '../middleware/authMiddleware.js';
-import { hasRole } from '../middleware/permissionMiddleware.js';
 
-const canEditInventory = hasRole('admin', 'manager', 'Administrador', 'Gerente de Proyecto', 'CEO', 'executive');
+const router = express.Router();
 
 router.use(isAuthenticated);
 
 router.get('/', ProductController.getAll);
 router.get('/:id', ProductController.getById);
-router.post('/', canEditInventory, ProductController.create);
-router.put('/:id', canEditInventory, ProductController.update);
-router.delete('/:id', canEditInventory, ProductController.remove);
+router.post('/', ProductController.create);
+router.put('/:id', ProductController.update);
+router.delete('/:id', ProductController.remove);
 
 export default router;

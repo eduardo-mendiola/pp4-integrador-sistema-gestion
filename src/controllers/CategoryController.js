@@ -3,7 +3,7 @@ import Category from '../models/CategoryModel.js';
 const CategoryController = {
   getAll: async (req, res) => {
     try {
-      const categories = await Category.find({}).sort({ createdAt: -1 }).lean();
+      const categories = await Category.findAll();
       return res.json({ success: true, data: categories });
     } catch (error) {
       return res.status(500).json({ success: false, message: error.message });
@@ -12,10 +12,12 @@ const CategoryController = {
 
   getById: async (req, res) => {
     try {
-      const category = await Category.findById(req.params.id).lean();
+      const category = await Category.findById(req.params.id);
+
       if (!category) {
         return res.status(404).json({ success: false, message: 'Categoría no encontrada' });
       }
+
       return res.json({ success: true, data: category });
     } catch (error) {
       return res.status(500).json({ success: false, message: error.message });
@@ -33,10 +35,7 @@ const CategoryController = {
 
   update: async (req, res) => {
     try {
-      const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
-      }).lean();
+      const category = await Category.update(req.params.id, req.body);
 
       if (!category) {
         return res.status(404).json({ success: false, message: 'Categoría no encontrada' });
@@ -50,10 +49,12 @@ const CategoryController = {
 
   remove: async (req, res) => {
     try {
-      const deleted = await Category.findByIdAndDelete(req.params.id);
+      const deleted = await Category.delete(req.params.id);
+
       if (!deleted) {
         return res.status(404).json({ success: false, message: 'Categoría no encontrada' });
       }
+
       return res.json({ success: true, message: 'Categoría eliminada' });
     } catch (error) {
       return res.status(500).json({ success: false, message: error.message });

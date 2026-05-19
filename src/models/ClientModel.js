@@ -39,50 +39,53 @@ const clientSchema = new mongoose.Schema({
 });
 
 
-// Virtual populate: traer los contactos de este cliente
+// Virtuals
 clientSchema.virtual('contacts', {
-  ref: 'Contact',           
-  localField: '_id',        
-  foreignField: 'client_id' 
+  ref: 'Contact',
+  localField: '_id',
+  foreignField: 'client_id'
 });
 
-// Virtual populate: traer los proyectos de este cliente
 clientSchema.virtual('projects', {
-  ref: 'Project',           
-  localField: '_id',        
-  foreignField: 'client_id' 
+  ref: 'Project',
+  localField: '_id',
+  foreignField: 'client_id'
 });
 
-
-// Virtual auxiliar (lista de nombres de contactos)
 clientSchema.virtual('contacts_names').get(function () {
   if (!this.contacts || this.contacts.length === 0) return 'Sin contactos';
-  return this.contacts.map(c => `${c.first_name} ${c.last_name} - Código: ${c.code}`).join(', ');
+  return this.contacts
+    .map(c => `${c.first_name} ${c.last_name} - Código: ${c.code}`)
+    .join(', ');
 });
 
 clientSchema.virtual('projects_titles').get(function () {
   if (!this.projects || this.projects.length === 0) return 'Sin proyectos';
-  return this.projects.map(p => `${p.title} - Código: ${p.code}`).join(', ');
+  return this.projects
+    .map(p => `${p.title} - Código: ${p.code}`)
+    .join(', ');
 });
 
+
+// Modelo base (igual patrón Product)
+const Client = mongoose.model('Client', clientSchema);
 
 class ClientModel extends BaseModel {
   constructor() {
     super(clientSchema, 'Client');
   }
 
-  async findAll() {
-    // populate automático con contactos
+  findAll() {
     return super.findAll([
-      'contacts', 
-       { path: 'projects', populate: { path: 'project_manager' } }
+      'contacts',
+      { path: 'projects', populate: { path: 'project_manager' } }
     ]);
   }
 
-  async findById(id) {
+  findById(id) {
     return super.findById(id, [
-      'contacts', 
-       { path: 'projects', populate: { path: 'project_manager' } }
+      'contacts',
+      { path: 'projects', populate: { path: 'project_manager' } }
     ]);
   }
 }

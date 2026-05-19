@@ -1,26 +1,36 @@
-import express from 'express'
-import session from 'express-session'
-import MongoStore from 'connect-mongo'
-import passport from './config/passport.js'
-import productRoutes from './routes/product-routes.js'
-import authRoutes from './routes/auth-routes.js'
-import categoryRoutes from './routes/category-routes.js'
+import express from 'express';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+import passport from './config/passport.js';
+
+// Routes
+import authRoutes from './routes/auth-routes.js';
+import productRoutes from './routes/product-routes.js';
+import categoryRoutes from './routes/category-routes.js';
+import supplierRoutes from './routes/supplier-routes.js';
 import clientRoutes from './routes/client-routes.js'
 import saleRoutes from './routes/sale-routes.js'
 import userRoutes from './routes/user-routes.js'
 import roleRoutes from './routes/role-routes.js'
 
+
+const app = express();
+
+// ======================
+// CORE MIDDLEWARES
+// ======================
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ======================
+// SESSION STORE
+// ======================
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI_ATLAS || process.env.MONGO_URI
-})
-
-const app = express()
-
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+});
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'dev-session-secret',
+  secret: process.env.SESSION_SECRET || 'dev-secret',
   resave: false,
   saveUninitialized: false,
   store: sessionStore,
@@ -28,28 +38,38 @@ app.use(session({
     httpOnly: true,
     sameSite: 'lax'
   }
-}))
+}));
 
-app.use(passport.initialize())
-app.use(passport.session())
+// ======================
+// PASSPORT
+// ======================
+app.use(passport.initialize());
+app.use(passport.session());
 
-// Session-based auth API
-app.use('/api/auth', authRoutes)
+// ======================
+// ROUTES API
+// ======================
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/suppliers', supplierRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/clients', clientRoutes);
+app.use('/api/sales', saleRoutes);
+app.use('/api/roles', roleRoutes);
 
-// Inventory API
-app.use('/api/products', productRoutes)
-app.use('/api/categories', categoryRoutes)
-app.use('/api/clients', clientRoutes)
-app.use('/api/sales', saleRoutes)
-app.use('/api/users', userRoutes)
-app.use('/api/roles', roleRoutes)
+// ======================
+// HEALTH CHECK
+// ======================
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
 
-// Health check
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
-
-// Fallback 404 for unknown API routes — backend exposes only `/api/*`
+// ======================
+// 404 HANDLER
+// ======================
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: 'Not found' });
+});
 
-export default app
+export default app;
