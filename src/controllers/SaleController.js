@@ -7,10 +7,10 @@ const normalizeItems = (items) => {
 };
 
 const SaleController = {
+
   getAll: async (req, res) => {
     try {
-      const data = await Sale.findAll(['items.product', 'created_by']);
-
+      const data = await Sale.findAll();
       return res.json({ success: true, data });
     } catch (error) {
       return res.status(500).json({ success: false, message: error.message });
@@ -19,10 +19,7 @@ const SaleController = {
 
   getById: async (req, res) => {
     try {
-      const sale = await Sale.findById(req.params.id, [
-        'items.product',
-        'created_by'
-      ]);
+      const sale = await Sale.findById(req.params.id);
 
       if (!sale) {
         return res.status(404).json({ success: false, message: 'Venta no encontrada' });
@@ -36,10 +33,20 @@ const SaleController = {
 
   create: async (req, res) => {
     try {
+      const items = normalizeItems(req.body.items);
+
+      const normalizedItems = items.map(item => ({
+        ...item,
+        subtotal: item.quantity * item.price
+      }));
+
+      const total = normalizedItems.reduce((acc, i) => acc + i.subtotal, 0);
+
       const payload = {
         ...req.body,
-        items: normalizeItems(req.body.items),
-        created_by: req.user?._id || req.body.created_by
+        items: normalizedItems,
+        total,
+        employee_id: req.user?._id || req.body.employee_id
       };
 
       const sale = await Sale.create(payload);
@@ -55,7 +62,14 @@ const SaleController = {
       const payload = { ...req.body };
 
       if (payload.items !== undefined) {
-        payload.items = normalizeItems(payload.items);
+        const items = normalizeItems(payload.items);
+
+        payload.items = items.map(item => ({
+          ...item,
+          subtotal: item.quantity * item.price
+        }));
+
+        payload.total = payload.items.reduce((acc, i) => acc + i.subtotal, 0);
       }
 
       const sale = await Sale.update(req.params.id, payload);
