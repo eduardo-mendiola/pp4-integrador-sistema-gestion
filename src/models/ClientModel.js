@@ -2,88 +2,99 @@ import mongoose from 'mongoose';
 import BaseModel from './BaseModel.js';
 
 const addressSchema = new mongoose.Schema({
-  street: String,
-  city: String,
-  state: String,
-  postal_code: String,
-  country: String,
-  number: String
-}, { _id: false });
-
-const billingInfoSchema = new mongoose.Schema({
-  payment_terms: String,
-  currency: String,
-  email: String
+  street: { type: String, trim: true },
+  number: { type: String, trim: true },
+  city: { type: String, trim: true },
+  state: { type: String, trim: true },
+  postal_code: { type: String, trim: true },
+  country: { type: String, trim: true, default: 'Argentina' }
 }, { _id: false });
 
 const clientSchema = new mongoose.Schema({
-  code: { type: String, unique: true },
-  client_type: { type: String, enum: ['person', 'company'], required: true },
-  name: { type: String },
-  first_name: { type: String },
-  last_name: { type: String },
-  id_type: { type: String, enum: ['DNI', 'CUIL', 'CUIT'] },
-  id_number: { type: String },
-  category: { type: String },
-  company_type: { type: String },
-  phone: { type: String },
-  address: addressSchema,
-  billing_info: billingInfoSchema,
-  is_active: { type: Boolean, default: true }
+  code: { type: String, unique: true, required: true, trim: true },
+  tipo_documento: { type: String, enum: ['DNI', 'CUIT', 'CUIL', 'PASAPORTE', 'CDI', 'LC'], required: true },
+  nro_documento: { type: String, required: true, trim: true },
+  tipo_cliente: {
+    type: String,
+    enum: [
+      'CONSUMIDOR_FINAL',
+      'RESPONSABLE_INSCRIPTO',
+      'MONOTRIBUTISTA',
+      'EXENTO'
+    ],
+    default: 'CONSUMIDOR_FINAL'
+  },
+  razon_social: { type: String, trim: true},
+  nombre: { type: String, trim: true },
+  apellido: { type: String, trim: true },
+  email: { type: String, trim: true, lowercase: true },
+  tel: { type: String, trim: true },
+  direccion: addressSchema,
+  activo: { type: Boolean, default: true }
+
 }, {
   collection: 'clients',
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
-  toObject: { virtuals: true },
-  toJSON: { virtuals: true }
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
 
-// Virtuals
-clientSchema.virtual('contacts', {
-  ref: 'Contact',
+
+// Historial de ventas del cliente
+clientSchema.virtual('ventas', {
+  ref: 'Sale',
   localField: '_id',
   foreignField: 'client_id'
 });
 
-clientSchema.virtual('projects', {
-  ref: 'Project',
-  localField: '_id',
-  foreignField: 'client_id'
-});
-
-clientSchema.virtual('contacts_names').get(function () {
-  if (!this.contacts || this.contacts.length === 0) return 'Sin contactos';
-  return this.contacts
-    .map(c => `${c.first_name} ${c.last_name} - Código: ${c.code}`)
-    .join(', ');
-});
-
-clientSchema.virtual('projects_titles').get(function () {
-  if (!this.projects || this.projects.length === 0) return 'Sin proyectos';
-  return this.projects
-    .map(p => `${p.title} - Código: ${p.code}`)
-    .join(', ');
+// Nombre completo
+clientSchema.virtual('nombre_completo').get(function () {
+  return `${this.nombre || ''} ${this.apellido || ''}`.trim();
 });
 
 
-const Client = mongoose.model('Client', clientSchema);
+mongoose.models.Client || mongoose.model('Client', clientSchema);
+
 
 class ClientModel extends BaseModel {
   constructor() {
     super(clientSchema, 'Client');
   }
 
-  findAll() {
-    return super.findAll([
-      'contacts',
-      { path: 'projects', populate: { path: 'project_manager' } }
+  async findAll() {
+    return await super.findAll([
+      {
+        path: 'ventas',
+        populate: [
+          {
+            path: 'created_by',
+            select: 'username code'
+          },
+          {
+            path: 'items.product',
+            select: 'name sku precio_venta'
+          }
+        ]
+      }
     ]);
   }
 
-  findById(id) {
-    return super.findById(id, [
-      'contacts',
-      { path: 'projects', populate: { path: 'project_manager' } }
+  async findById(id) {
+    return await super.findById(id, [
+      {
+        path: 'ventas',
+        populate: [
+          {
+            path: 'created_by',
+            select: 'username code'
+          },
+          {
+            path: 'items.product',
+            select: 'name sku precio_venta'
+          }
+        ]
+      }
     ]);
   }
 }
