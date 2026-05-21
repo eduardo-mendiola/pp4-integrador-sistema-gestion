@@ -17,22 +17,31 @@ export const createMockUser = (overrides = {}) => {
       _id: new mongoose.Types.ObjectId(),
       name: 'admin',
       permissions: [
-        'view_projects',
-        'create_projects',
-        'edit_projects',
-        'delete_projects',
+        // PRODUCTS
+        'view_products',
+        'create_products',
+        'edit_products',
+        'delete_products',
+
+        // SALES
+        'view_sales',
+        'create_sales',
+        'edit_sales',
+        'delete_sales',
+
+        // CLIENTS (si los sigues usando en el sistema)
         'view_clients',
         'create_clients',
         'edit_clients',
         'delete_clients',
+
+        // EMPLOYEES (si aplica en tu sistema)
         'view_employees',
         'create_employees',
         'edit_employees',
         'delete_employees',
-        'view_tasks',
-        'create_tasks',
-        'edit_tasks',
-        'delete_tasks',
+
+        // GLOBAL
         'view_all'
       ]
     },
@@ -42,7 +51,6 @@ export const createMockUser = (overrides = {}) => {
 
 /**
  * Middleware que bypasea autenticación en modo test
- * Inyecta un usuario mock con permisos completos
  */
 export const bypassAuth = (req, res, next) => {
   if (process.env.NODE_ENV === 'test') {
@@ -53,8 +61,7 @@ export const bypassAuth = (req, res, next) => {
 };
 
 /**
- * Función para configurar autenticación en tests de integración
- * Retorna headers y configuración necesaria para Supertest
+ * Configuración base para requests en tests
  */
 export const setupAuthForTests = () => {
   return {
