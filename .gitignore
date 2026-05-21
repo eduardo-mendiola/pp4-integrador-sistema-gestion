@@ -1,8 +1,6 @@
-/node_modules
-/.env
-/.vscode/
-/coverage
-/notes
-/scripts-local
-
-
+node_modules/
+.env
+.vscode/
+coverage/
+notes/
+scripts-local/
