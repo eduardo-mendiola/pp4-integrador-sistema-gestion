@@ -1,0 +1,64 @@
+import Category from '../models/CategoryModel.js';
+
+const CategoryController = {
+  getAll: async (req, res) => {
+    try {
+      const categories = await Category.find({}).sort({ createdAt: -1 }).lean();
+      return res.json({ success: true, data: categories });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  getById: async (req, res) => {
+    try {
+      const category = await Category.findById(req.params.id).lean();
+      if (!category) {
+        return res.status(404).json({ success: false, message: 'Categoría no encontrada' });
+      }
+      return res.json({ success: true, data: category });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  create: async (req, res) => {
+    try {
+      const category = await Category.create(req.body);
+      return res.status(201).json({ success: true, data: category });
+    } catch (error) {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+  },
+
+  update: async (req, res) => {
+    try {
+      const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+      }).lean();
+
+      if (!category) {
+        return res.status(404).json({ success: false, message: 'Categoría no encontrada' });
+      }
+
+      return res.json({ success: true, data: category });
+    } catch (error) {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+  },
+
+  remove: async (req, res) => {
+    try {
+      const deleted = await Category.findByIdAndDelete(req.params.id);
+      if (!deleted) {
+        return res.status(404).json({ success: false, message: 'Categoría no encontrada' });
+      }
+      return res.json({ success: true, message: 'Categoría eliminada' });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  }
+};
+
+export default CategoryController;
