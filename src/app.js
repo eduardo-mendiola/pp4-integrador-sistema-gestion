@@ -14,6 +14,9 @@ import userRoutes from './routes/user-routes.js'
 import roleRoutes from './routes/role-routes.js'
 import personRoutes from './routes/person-routes.js'
 import employeeRoutes from './routes/employee-routes.js'
+import discountRulesRoutes from './routes/discountRule-routes.js'
+import paymentMethodRoutes from './routes/paymentMethod-routes.js'
+import promotionRoutes from './routes/promotion-routes.js'
 
 
 const app = express();
@@ -61,6 +64,9 @@ app.use('/api/sales', saleRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/persons', personRoutes);
 app.use('/api/employees', employeeRoutes);
+app.use('/api/discount-rules', discountRulesRoutes);
+app.use('/api/payment-methods', paymentMethodRoutes);
+app.use('/api/promotions', promotionRoutes);
 
 
 // ======================
