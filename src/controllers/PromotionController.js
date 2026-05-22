@@ -1,4 +1,4 @@
-import Promotion from "../models/Promotion.js";
+import Promotion from "../models/PromotionModel.js";
 
 const PromotionController = {
   create: async (req, res) => {
@@ -38,7 +38,7 @@ const PromotionController = {
     }
   },
 
-  delete: async (req, res) => {
+  remove: async (req, res) => {
     try {
       const promotion = await Promotion.findByIdAndDelete(req.params.id);
       if (!promotion) return res.status(404).json({ message: "Not found" });
