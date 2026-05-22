@@ -6,6 +6,12 @@ const normalizeItems = (items) => {
   return [];
 };
 
+const normalizePayments = (payments) => {
+  if (Array.isArray(payments)) return payments;
+  if (typeof payments === 'string' && payments.trim()) return JSON.parse(payments);
+  return [];
+};
+
 const SaleController = {
 
   getAll: async (req, res) => {
@@ -42,10 +48,16 @@ const SaleController = {
 
       const total = normalizedItems.reduce((acc, i) => acc + i.subtotal, 0);
 
+      const payments = normalizePayments(req.body.payments);
+
+      const paidAmount = payments.reduce((acc, p) => acc + p.amount, 0);
+
       const payload = {
         ...req.body,
         items: normalizedItems,
+        payments,
         total,
+        status: paidAmount >= total ? 'PAID' : 'PENDING',
         employee_id: req.user?._id || req.body.employee_id
       };
 
@@ -70,6 +82,17 @@ const SaleController = {
         }));
 
         payload.total = payload.items.reduce((acc, i) => acc + i.subtotal, 0);
+      }
+
+      if (payload.payments !== undefined) {
+        const payments = normalizePayments(payload.payments);
+
+        payload.payments = payments;
+
+        const paidAmount = payments.reduce((acc, p) => acc + p.amount, 0);
+        const total = payload.total || 0;
+
+        payload.status = paidAmount >= total ? 'PAID' : 'PENDING';
       }
 
       const sale = await Sale.update(req.params.id, payload);
