@@ -1,7 +1,7 @@
 import Sale from "../models/SaleModel.js";
-import ProductModel from "../models/Product.js";
-import Promotion from "../models/Promotion.js";
-import DiscountRule from "../models/DiscountRule.js";
+import ProductModel from "../models/ProductModel.js";
+import Promotion from "../models/PromotionModel.js";
+import DiscountRule from "../models/DiscountRuleModel.js";
 import PricingService from "../services/PricingService.js";
 
 const Product = ProductModel.getNativeModel();
