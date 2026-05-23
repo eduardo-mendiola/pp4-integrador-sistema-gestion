@@ -68,7 +68,7 @@ class ClientModel extends BaseModel {
         path: 'purchases',
         populate: [
           {
-            path: 'created_by',
+            path: 'employee_id',
             select: 'username code'
           },
           {
@@ -86,7 +86,7 @@ class ClientModel extends BaseModel {
         path: 'purchases',
         populate: [
           {
-            path: 'created_by',
+            path: 'employee_id',
             select: 'username code'
           },
           {
