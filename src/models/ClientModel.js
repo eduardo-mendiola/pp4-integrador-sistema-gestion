@@ -12,9 +12,9 @@ const addressSchema = new mongoose.Schema({
 
 const clientSchema = new mongoose.Schema({
   code: { type: String, unique: true, required: true, trim: true },
-  tipo_documento: { type: String, enum: ['DNI', 'CUIT', 'CUIL', 'PASAPORTE', 'CDI', 'LC'], required: true },
-  nro_documento: { type: String, required: true, trim: true },
-  tipo_cliente: {
+  document_type: { type: String, enum: ['DNI', 'CUIT', 'CUIL', 'PASAPORTE', 'CDI', 'LC'], required: true },
+  document_number: { type: String, required: true, trim: true },
+  client_type: {
     type: String,
     enum: [
       'CONSUMIDOR_FINAL',
@@ -24,13 +24,13 @@ const clientSchema = new mongoose.Schema({
     ],
     default: 'CONSUMIDOR_FINAL'
   },
-  razon_social: { type: String, trim: true},
-  nombre: { type: String, trim: true },
-  apellido: { type: String, trim: true },
+  business_name: { type: String, trim: true},
+  first_name: { type: String, trim: true },
+  last_name: { type: String, trim: true },
   email: { type: String, trim: true, lowercase: true },
-  tel: { type: String, trim: true },
-  direccion: addressSchema,
-  activo: { type: Boolean, default: true }
+  phone: { type: String, trim: true },
+  address: addressSchema,
+  active: { type: Boolean, default: true }
 
 }, {
   collection: 'clients',
@@ -41,16 +41,16 @@ const clientSchema = new mongoose.Schema({
 
 
 
-// Historial de ventas del cliente
-clientSchema.virtual('ventas', {
+// Historial de compras del cliente
+clientSchema.virtual('purchases', {
   ref: 'Sale',
   localField: '_id',
   foreignField: 'client_id'
 });
 
 // Nombre completo
-clientSchema.virtual('nombre_completo').get(function () {
-  return `${this.nombre || ''} ${this.apellido || ''}`.trim();
+clientSchema.virtual('full_name').get(function () {
+  return `${this.first_name || ''} ${this.last_name || ''}`.trim();
 });
 
 
@@ -65,7 +65,7 @@ class ClientModel extends BaseModel {
   async findAll() {
     return await super.findAll([
       {
-        path: 'ventas',
+        path: 'purchases',
         populate: [
           {
             path: 'created_by',
@@ -83,7 +83,7 @@ class ClientModel extends BaseModel {
   async findById(id) {
     return await super.findById(id, [
       {
-        path: 'ventas',
+        path: 'purchases',
         populate: [
           {
             path: 'created_by',
