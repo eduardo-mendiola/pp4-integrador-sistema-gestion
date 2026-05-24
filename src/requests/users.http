@@ -20,9 +20,9 @@ Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Content-Type: application/json
 
 {
-  "username": "TESTjperez",
-  "password": "ContraseñaSegura123!",
-  "email": "juan.perez@email.com",
+  "username": "ezequiel@planetajuguete.com",
+  "password": "admin2069",
+  "email": "ezequiel@email.com",
   "role_id": "{{roleId}}",
   "person_id": "{{personId}}",
   "is_active": true

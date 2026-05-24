@@ -9,6 +9,7 @@ router.use(isAuthenticated);
 router.get('/', SaleController.getAll);
 router.get('/:id', SaleController.getById);
 router.post('/', SaleController.create);
+router.patch('/:id', SaleController.partialUpdate);
 router.put('/:id', SaleController.update);
 router.delete('/:id', SaleController.remove);
 
