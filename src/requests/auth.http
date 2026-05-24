@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:4000
+
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{$dotenv ADMIN_EMAIL}}",
+  "password": "{{$dotenv ADMIN_PASS}}"
+}
+
+
+### TEST: Ver si $dotenv funciona
+GET https://httpbin.org/headers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}

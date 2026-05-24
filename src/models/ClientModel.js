@@ -2,68 +2,59 @@ import mongoose from 'mongoose';
 import BaseModel from './BaseModel.js';
 
 const addressSchema = new mongoose.Schema({
-  street: String,
-  city: String,
-  state: String,
-  postal_code: String,
-  country: String,
-  number: String
-}, { _id: false });
-
-const billingInfoSchema = new mongoose.Schema({
-  payment_terms: String,
-  currency: String,
-  email: String
+  street: { type: String, trim: true },
+  number: { type: String, trim: true },
+  city: { type: String, trim: true },
+  state: { type: String, trim: true },
+  postal_code: { type: String, trim: true },
+  country: { type: String, trim: true, default: 'Argentina' }
 }, { _id: false });
 
 const clientSchema = new mongoose.Schema({
-  code: { type: String, unique: true },
-  client_type: { type: String, enum: ['person', 'company'], required: true },
-  name: { type: String },
-  first_name: { type: String },
-  last_name: { type: String },
-  id_type: { type: String, enum: ['DNI', 'CUIL', 'CUIT'] },
-  id_number: { type: String },
-  category: { type: String },
-  company_type: { type: String },
-  website: { type: String },
-  phone: { type: String },
+  client_code: { type: String, unique: true, required: true, trim: true },
+  document_type: { type: String, enum: ['DNI', 'CUIT', 'CUIL', 'PASAPORTE', 'CDI', 'LC'], required: true },
+  document_number: { type: String, required: true, trim: true },
+  client_type: {
+    type: String,
+    enum: [
+      'CONSUMIDOR_FINAL',
+      'RESPONSABLE_INSCRIPTO',
+      'MONOTRIBUTISTA',
+      'EXENTO'
+    ],
+    default: 'CONSUMIDOR_FINAL'
+  },
+  business_name: { type: String, trim: true},
+  first_name: { type: String, trim: true },
+  last_name: { type: String, trim: true },
+  email: { type: String, trim: true, lowercase: true },
+  phone: { type: String, trim: true },
   address: addressSchema,
-  billing_info: billingInfoSchema,
-  is_active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true }
+
 }, {
   collection: 'clients',
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
-  toObject: { virtuals: true },
-  toJSON: { virtuals: true }
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
 
-// Virtual populate: traer los contactos de este cliente
-clientSchema.virtual('contacts', {
-  ref: 'Contact',           
-  localField: '_id',        
-  foreignField: 'client_id' 
+
+// Historial de compras del cliente
+clientSchema.virtual('purchases', {
+  ref: 'Sale',
+  localField: '_id',
+  foreignField: 'client_id'
 });
 
-// Virtual populate: traer los proyectos de este cliente
-clientSchema.virtual('projects', {
-  ref: 'Project',           
-  localField: '_id',        
-  foreignField: 'client_id' 
+// Nombre completo
+clientSchema.virtual('full_name').get(function () {
+  return `${this.first_name || ''} ${this.last_name || ''}`.trim();
 });
 
 
-// Virtual auxiliar (lista de nombres de contactos)
-clientSchema.virtual('contacts_names').get(function () {
-  if (!this.contacts || this.contacts.length === 0) return 'Sin contactos';
-  return this.contacts.map(c => `${c.first_name} ${c.last_name} - Código: ${c.code}`).join(', ');
-});
-
-clientSchema.virtual('projects_titles').get(function () {
-  if (!this.projects || this.projects.length === 0) return 'Sin proyectos';
-  return this.projects.map(p => `${p.title} - Código: ${p.code}`).join(', ');
-});
+mongoose.models.Client || mongoose.model('Client', clientSchema);
 
 
 class ClientModel extends BaseModel {
@@ -72,17 +63,38 @@ class ClientModel extends BaseModel {
   }
 
   async findAll() {
-    // populate automático con contactos
-    return super.findAll([
-      'contacts', 
-       { path: 'projects', populate: { path: 'project_manager' } }
+    return await super.findAll([
+      {
+        path: 'purchases',
+        populate: [
+          {
+            path: 'employee_id',
+            select: 'username code'
+          },
+          {
+            path: 'items.product',
+            select: 'name sku precio_venta'
+          }
+        ]
+      }
     ]);
   }
 
   async findById(id) {
-    return super.findById(id, [
-      'contacts', 
-       { path: 'projects', populate: { path: 'project_manager' } }
+    return await super.findById(id, [
+      {
+        path: 'purchases',
+        populate: [
+          {
+            path: 'employee_id',
+            select: 'username code'
+          },
+          {
+            path: 'items.product',
+            select: 'name sku precio_venta'
+          }
+        ]
+      }
     ]);
   }
 }

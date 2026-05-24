@@ -5,10 +5,15 @@ import dbConnect from './src/config/db.js';
 const PORT = process.env.PORT || 3000;
 
 (async () => {
-  await dbConnect();
-  console.log('MongoDB connected');
+  try {
+    await dbConnect();
+    console.log('MongoDB connected');
 
-  app.listen(PORT, () => {
-    console.log(`API server running on http://localhost:${PORT}`);
-  });
+    app.listen(PORT, () => {
+      console.log(`API server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('DB connection error:', error);
+    process.exit(1);
+  }
 })();

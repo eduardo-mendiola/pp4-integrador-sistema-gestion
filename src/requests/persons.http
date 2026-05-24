@@ -1,0 +1,67 @@
+@baseUrl = http://localhost:4000
+@personId = 6a13418a7d265968c33f1d63
+
+### Get all persons
+GET {{baseUrl}}/api/persons
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get person by ID
+GET {{baseUrl}}/api/persons/{{personId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create person
+POST {{baseUrl}}/api/persons
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "dni": "30123456",
+  "first_name": "Test",
+  "last_name": "Pérez",
+  "email": "Test.perez@email.com",
+  "phone": "1123456789",
+  "address": {
+    "street": "Av. Corrientes",
+    "number": "1234",
+    "neighborhood": "San Nicolás",
+    "city": "Buenos Aires"
+  }
+}
+
+### Update person (PATCH - partial update)
+PATCH {{baseUrl}}/api/persons/{{personId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "phone": "1198765432",
+  "address": {
+    "city": "Córdoba"
+  }
+}
+
+### Update person (PUT - full replacement)
+PUT {{baseUrl}}/api/persons/{{personId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "dni": "30123456",
+  "first_name": "Juan",
+  "last_name": "Pérez Actualizado",
+  "email": "juan.p@nuevoemail.com",
+  "phone": "1123456789",
+  "address": {
+    "street": "Calle Nueva",
+    "number": "567",
+    "neighborhood": "Centro",
+    "city": "Rosario"
+  }
+}
+
+### Delete person
+DELETE {{baseUrl}}/api/persons/{{personId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json

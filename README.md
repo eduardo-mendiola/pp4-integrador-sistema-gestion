@@ -1023,11 +1023,13 @@ En modo producción:
 
 Una vez ejecutado, el sistema levanta el servidor Express y establece la conexión con la base de datos.
 
+Para iniciar la aplicación, desde la carpeta \client (cd client), se utiliza al igual que en el caso del servidor, los comandos __pnpm run dev__ o __pnpm start__.
+
 ### 8.6 Acceder desde el Navegador
 
-Con el servidor en ejecución, el sistema puede ser accedido desde un navegador web en la siguiente dirección:
+Con la aplicación en ejecución, el sistema puede ser accedido desde un navegador web en la siguiente dirección:
 
-http://localhost:3000
+http://localhost:5173
 
 Desde esta interfaz se accede a todas las funcionalidades del sistema, incluyendo autenticación, módulos operativos y dashboards.
 

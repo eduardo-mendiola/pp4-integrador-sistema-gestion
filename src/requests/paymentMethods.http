@@ -1,0 +1,53 @@
+@baseUrl = http://localhost:4000
+@paymentMethodId = 6a13297f36b47dc045a9fc91
+
+### Get all payment methods
+GET {{baseUrl}}/api/payment-methods
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get payment method by ID
+GET {{baseUrl}}/api/payment-methods/{{paymentMethodId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create payment method
+POST {{baseUrl}}/api/payment-methods
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Metodo de test",
+  "requires_auth": true,
+  "allows_installments": true,
+  "active": true,
+  "surcharge_percentage": 10
+}
+
+### Update payment method (PATCH - partial update)
+PATCH {{baseUrl}}/api/payment-methods/{{paymentMethodId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "surcharge_percentage": 3.0,
+  "active": false
+}
+
+### Update payment method (PUT - full replacement)
+PUT {{baseUrl}}/api/payment-methods/{{paymentMethodId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Test Actualizado",
+  "requires_auth": true,
+  "allows_installments": true,
+  "active": true,
+  "surcharge_percentage": 20.0
+}
+
+### Delete payment method
+DELETE {{baseUrl}}/api/payment-methods/{{paymentMethodId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json

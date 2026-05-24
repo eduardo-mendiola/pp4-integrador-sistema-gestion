@@ -1,0 +1,85 @@
+@baseUrl = http://localhost:4000
+
+### Get all clients
+GET {{baseUrl}}/api/clients
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+
+### Get client by ID (with purchases)
+GET {{baseUrl}}/api/clients/6a1269faf182234a2f2f61b2
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+
+### Create client
+POST {{baseUrl}}/api/clients
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "document_type": "DNI",
+  "document_number": "12345678",
+  "client_type": "CONSUMIDOR_FINAL",
+  "first_name": "Test",
+  "last_name": "User",
+  "email": "test@gmail.com",
+  "phone": "123456789",
+  "address": {
+    "street": "Test",
+    "number": "123",
+    "city": "Test City",
+    "state": "Test State",
+    "postal_code": "0000",
+    "country": "Argentina"
+  }
+}
+
+
+### Update client (PATCH - partial update)
+PATCH {{baseUrl}}/api/clients/6a1269faf182234a2f2f61b2
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "phone": "1123456789",
+  "email": "nuevoemail@gmail.com",
+  "address": {
+    "street": "Av. Siempre Viva",
+    "number": "742",
+    "city": "Springfield",
+    "state": "Buenos Aires",
+    "postal_code": "1425"
+  }
+}
+
+### Update client (PUT - full replacement)
+PUT {{baseUrl}}/api/clients/6a1269faf182234a2f2f61b2
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "code": "CLI-TEST-001",
+  "document_type": "DNI",
+  "document_number": "12345678",
+  "client_type": "RESPONSABLE_INSCRIPTO",
+  "first_name": "Test",
+  "last_name": "User Actualizado",
+  "email": "test@gmail.com",
+  "phone": "123456789",
+  "address": {
+    "street": "Calle Nueva",
+    "number": "456",
+    "city": "Ciudad Actualizada",
+    "state": "CABA",
+    "postal_code": "1000",
+    "country": "Argentina"
+  },
+  "active": true
+}
+
+### Delete client
+DELETE {{baseUrl}}/api/clients/ID_AQUI
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+
+

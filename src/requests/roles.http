@@ -1,0 +1,60 @@
+@baseUrl = http://localhost:4000
+@roleId = 6a134da44b72da12192346c5
+
+### Get all roles (sorted by created_at desc)
+GET {{baseUrl}}/api/roles
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get role by ID
+GET {{baseUrl}}/api/roles/{{roleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create role
+POST {{baseUrl}}/api/roles
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "TEST ROLE",
+  "description": "Acceso PARA TEST",
+  "permissions": ["users:read", "users:write", "products:read", "products:write", "roles:manage"],
+  "is_active": true
+}
+
+### Update role (PATCH - partial update: permissions & status)
+PATCH {{baseUrl}}/api/roles/{{roleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "permissions": ["users:read", "products:read", "sales:read"],
+  "is_active": false
+}
+
+### Update role (PATCH - partial update: only description)
+PATCH {{baseUrl}}/api/roles/{{roleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "description": "Rol actualizado para consultas básicas"
+}
+
+### Update role (PUT - full replacement)
+PUT {{baseUrl}}/api/roles/{{roleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Editor de Contenido",
+  "description": "Gestión de productos y promociones",
+  "permissions": ["products:read", "products:write", "promotions:read", "promotions:write"],
+  "is_active": true
+}
+
+### Delete role
+DELETE {{baseUrl}}/api/roles/{{roleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json

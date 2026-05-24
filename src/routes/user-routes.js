@@ -11,6 +11,7 @@ router.use(isAuthenticated);
 router.get('/', canManageUsers, UserController.getAll);
 router.get('/:id', canManageUsers, UserController.getById);
 router.post('/', canManageUsers, UserController.create);
+router.patch('/:id', canManageUsers, UserController.partialUpdate);
 router.put('/:id', canManageUsers, UserController.update);
 router.delete('/:id', canManageUsers, UserController.remove);
 

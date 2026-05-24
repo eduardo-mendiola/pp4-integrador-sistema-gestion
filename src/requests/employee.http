@@ -1,0 +1,67 @@
+@baseUrl = http://localhost:4000
+@employeeId = 6a13258cc5ff21a7435fbaaa
+
+### Get all employees
+GET {{baseUrl}}/api/employees
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get employee by ID
+GET {{baseUrl}}/api/employees/{{employeeId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create employee
+POST {{baseUrl}}/api/employees
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "person_id": "6a0c87e189bf688bfab9e788",
+  "hire_date": "2026-01-15T00:00:00.000Z",
+  "shift_schedule": "Tarde"
+}
+
+### Update employee (PATCH - partial update)
+PATCH {{baseUrl}}/api/employees/{{employeeId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "shift_schedule": "Mañana"
+}
+
+### Terminate employee (set end date)
+PATCH {{baseUrl}}/api/employees/{{employeeId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "termination_date": "2026-05-24T00:00:00.000Z"
+}
+
+### Reactivate employee (clear end date)
+PATCH {{baseUrl}}/api/employees/{{employeeId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "termination_date": null
+}
+
+### Update employee (PUT - full replacement)
+PUT {{baseUrl}}/api/employees/{{employeeId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "employee_code": "EMP-Test",
+  "person_id": "6a0d05de89bf688bfab9e78d",
+  "hire_date": "2026-01-15T00:00:00.000Z",
+  "shift_schedule": "Noche"
+}
+
+### Delete employee
+DELETE {{baseUrl}}/api/employees/{{employeeId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json

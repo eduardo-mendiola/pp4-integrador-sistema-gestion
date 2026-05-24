@@ -1,0 +1,95 @@
+@baseUrl = http://localhost:4000
+@productId = 6a1346e1eebe87d4da3a1ddb
+@categoryId = 6a0b85831161be6ddc3ce04d
+@supplierId = 6a0b84f72a2c6a4c8a4f2960
+
+### Get all products
+GET {{baseUrl}}/api/products
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get product by ID (with category and supplier populated)
+GET {{baseUrl}}/api/products/{{productId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create product
+POST {{baseUrl}}/api/products
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "TEST PRODUCTOS XYZ",
+  "sku": "TEST-PRODUCT-001",
+  "category": "{{categoryId}}",
+  "supplier": "{{supplierId}}",
+  "age_range": "14+",
+  "price": 129999.99,
+  "stock": 25,
+  "min_stock_alert": 5,
+  "metadata": {
+    "brand": "XYZ",
+    "warranty_months": 12,
+    "color": "Negro"
+  }
+}
+
+### Update product (PATCH - partial update: price and stock)
+PATCH {{baseUrl}}/api/products/{{productId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "price": 999999.99,
+  "stock": 30
+}
+
+### Update product (PATCH - partial update: metadata only)
+PATCH {{baseUrl}}/api/products/{{productId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "metadata": {
+    "brand": "XYZ Pro-UPDATE",
+    "warranty_months": 24,
+    "color": "Gris Espacial-UPDATE",
+    "featured": true
+  }
+}
+
+### Update product (PATCH - change category and supplier)
+PATCH {{baseUrl}}/api/products/{{productId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "category": "{{categoryId}}",
+  "supplier": "{{supplierId}}"
+}
+
+### Update product (PUT - full replacement)
+PUT {{baseUrl}}/api/products/{{productId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Notebook Gamer XYZ Pro",
+  "sku": "NB-GAMER-001-PRO",
+  "category": "{{categoryId}}",
+  "supplier": "{{supplierId}}",
+  "age_range": "16+",
+  "price": 149999.99,
+  "stock": 15,
+  "min_stock_alert": 3,
+  "metadata": {
+    "brand": "XYZ Pro",
+    "warranty_months": 24,
+    "color": "Gris Espacial"
+  }
+}
+
+### Delete product
+DELETE {{baseUrl}}/api/products/{{productId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json

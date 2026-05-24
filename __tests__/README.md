@@ -19,13 +19,13 @@ __tests__/
 │   └── testData.js          # VALID_PROJECT, FIXTURE_IDS, ERROR_MESSAGES
 │
 ├── integration/              # Tests de integración (endpoints completos)
-│   ├── projects.test.js     # POST /api/projects
-│   ├── projects-crud.test.js # GET, PUT, DELETE /api/projects
+│   ├── products.test.js     # POST /api/projects
+│   ├── products-crud.test.js # GET, PUT, DELETE /api/products
 │   ├── clients.test.js      # (agregar según necesidad)
 │   └── ...
 │
 └── unit/                     # Tests unitarios (lógica aislada)
-    ├── projectController.test.js  # Tests con mocks
+    ├── productController.test.js  # Tests con mocks
     ├── dateHelpers.test.js        # Tests de funciones puras
     └── ...
 ```
@@ -79,7 +79,7 @@ Funciones disponibles:
 Patrón Builder para crear datos de prueba de forma fluida:
 
 ```javascript
-import { ProjectBuilder } from '../builders/dataBuilders.js';
+import { ProductBuilder } from '../builders/dataBuilders.js';
 
 const project = new ProjectBuilder()
   .withName('Mi Proyecto')
@@ -88,27 +88,27 @@ const project = new ProjectBuilder()
   .build();
 
 // Para testing de validaciones
-const invalidProject = new ProjectBuilder()
+const invalidProject = new ProductBuilder()
   .buildWithout('name'); // Crea proyecto sin nombre
 ```
 
 **Builders disponibles:**
-- `ProjectBuilder`
+- `ProductBuilder`
 - `ClientBuilder`
 - `EmployeeBuilder`
-- `TaskBuilder`
+- `SaleBuilder`
 
 ### `fixtures/`
 
 Datos estáticos y consistentes:
 
 ```javascript
-import { VALID_PROJECT, FIXTURE_IDS, ERROR_MESSAGES } from '../fixtures/testData.js';
+import { VALID_PRODUCT, FIXTURE_IDS, ERROR_MESSAGES } from '../fixtures/testData.js';
 
 // Usar datos de fixture
 const response = await request(app)
   .post('/api/projects')
-  .send(VALID_PROJECT);
+  .send(VALID_PRODUCT);
 
 // IDs consistentes para debugging
 const project = await Project.findById(FIXTURE_IDS.project1);
@@ -129,11 +129,11 @@ Tests que verifican el comportamiento completo del sistema:
 
 **Ejemplo:**
 ```javascript
-// projects.test.js
+// product.test.js
 describe('POST /api/projects', () => {
   it('debe crear proyecto con datos válidos', async () => {
     const response = await request(app)
-      .post('/api/projects')
+      .post('/api/products')
       .send(validData)
       .expect(201);
     
@@ -154,15 +154,15 @@ Tests que verifican componentes aislados:
 
 **Ejemplo con mocks:**
 ```javascript
-// projectController.test.js
-jest.mock('../../src/models/ProjectModel.js');
+// productController.test.js
+jest.mock('../../src/models/ProductModel.js');
 
 it('debe retornar todos los proyectos', async () => {
   Project.findAll = jest.fn().mockResolvedValue(mockData);
   
-  await ProjectController.getAll(req, res);
+  await ProductController.getAll(req, res);
   
-  expect(Project.findAll).toHaveBeenCalled();
+  expect(Product.findAll).toHaveBeenCalled();
 });
 ```
 
@@ -179,17 +179,17 @@ it('debe formatear fecha correctamente', () => {
 
 ### Archivos de Test
 
-- **Integration**: `[entidad].test.js` (ej: `projects.test.js`)
-- **Unit**: `[componente].test.js` (ej: `projectController.test.js`)
+- **Integration**: `[entidad].test.js` (ej: `products.test.js`)
+- **Unit**: `[componente].test.js` (ej: `productController.test.js`)
 
 ### Suites de Tests (describe)
 
 ```javascript
 // Nivel superior: Tipo + Entidad
-describe('Integration Tests - Projects API', () => {
+describe('Integration Tests - Products API', () => {
   
   // Nivel 2: Endpoint o método específico
-  describe('POST /api/projects', () => {
+  describe('POST /api/products', () => {
     
     // Nivel 3: Escenario específico
     describe('Validación de campos requeridos', () => {
@@ -224,18 +224,18 @@ it('should do something')
 ### 1. Agregar Test de Integración
 
 ```javascript
-// __tests__/integration/projects.test.js
+// __tests__/integration/products.test.js
 
 import request from 'supertest';
 import app from '../../src/app.js';
 import { connectDB, clearDatabase, disconnectDB } from '../helpers/testHelpers.js';
 
-describe('Integration Tests - Projects', () => {
+describe('Integration Tests - Products', () => {
   beforeAll(async () => await connectDB());
   beforeEach(async () => await clearDatabase());
   afterAll(async () => await disconnectDB());
 
-  it('debe crear proyecto', async () => {
+  it('debe crear producto', async () => {
     // Test implementation
   });
 });
@@ -244,16 +244,16 @@ describe('Integration Tests - Projects', () => {
 ### 2. Agregar Test Unitario
 
 ```javascript
-// __tests__/unit/projectService.test.js
+// __tests__/unit/productService.test.js
 
-import { calculateProjectDuration } from '../../src/services/projectService.js';
+import { calculateProductoPrecio } from '../../src/services/projectService.js';
 
 describe('Unit Tests - Project Service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('debe calcular duración correctamente', () => {
+  it('debe calcular precio correctamente', () => {
     // Test implementation
   });
 });
@@ -265,7 +265,7 @@ describe('Unit Tests - Project Service', () => {
 // En el test
 import { ProjectBuilder } from '../builders/dataBuilders.js';
 
-const validProject = new ProjectBuilder()
+const validProject = new ProductBuilder()
   .withName('Test')
   .build();
 ```
@@ -274,11 +274,11 @@ const validProject = new ProjectBuilder()
 
 ```javascript
 // En el test
-import { VALID_PROJECT } from '../fixtures/testData.js';
+import { VALID_PRODUCT } from '../fixtures/testData.js';
 
 const response = await request(app)
-  .post('/api/projects')
-  .send(VALID_PROJECT);
+  .post('/api/products')
+  .send(VALID_PRODUCT);
 ```
 
 ## Comandos Útiles
@@ -294,7 +294,7 @@ npm test -- __tests__/integration
 npm test -- __tests__/unit
 
 # Ejecutar test específico
-npm test projects.test.js
+npm test products.test.js
 
 # Modo watch (desarrollo)
 npm run test:watch
@@ -305,17 +305,17 @@ npm run test:coverage
 
 ## Agregar Nuevas Entidades
 
-Para agregar tests de una nueva entidad (ej: `tasks`):
+Para agregar tests de una nueva entidad (ej: `sales`):
 
 1. **Crear Builder:**
 ```javascript
 // __tests__/builders/dataBuilders.js
-export class TaskBuilder {
+export class SaleBuilder {
   constructor() {
-    this.task = { /* defaults */ };
+    this.sale = { /* defaults */ };
   }
   // métodos builder
-  build() { return { ...this.task }; }
+  build() { return { ...this.sale }; }
 }
 ```
 
@@ -331,16 +331,16 @@ export const FIXTURE_IDS = {
 
 3. **Crear Integration Tests:**
 ```javascript
-// __tests__/integration/tasks.test.js
-describe('Integration Tests - Tasks API', () => {
+// __tests__/integration/sales.test.js
+describe('Integration Tests - Sales API', () => {
   // tests
 });
 ```
 
 4. **Crear Unit Tests (opcional):**
 ```javascript
-// __tests__/unit/taskController.test.js
-describe('Unit Tests - TaskController', () => {
+// __tests__/unit/saleController.test.js
+describe('Unit Tests - SaleController', () => {
   // tests con mocks
 });
 ```
@@ -358,4 +358,3 @@ describe('Unit Tests - TaskController', () => {
 
 ---
 
-**Para más información consulta [TESTING_GUIDE.md](../notes/TESTING_GUIDE.md)**

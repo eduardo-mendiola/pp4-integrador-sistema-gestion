@@ -28,8 +28,8 @@ const config = {
   columns: [
     { label: 'Nombre', value: (item) => item.name },
     { label: 'SKU', value: (item) => item.sku || '-' },
-    { label: 'Categoría', value: (item) => item.category || '-' },
-    { label: 'Proveedor', value: (item) => item.supplier || '-' },
+    { label: 'Categoría', value: (item) => item.category?.name || '-' },
+    { label: 'Proveedor', value: (item) => item.supplier?.name || '-' },
     { label: 'Precio', value: (item) => Number(item.price || 0).toFixed(2) },
     { label: 'Stock', value: (item) => item.stock ?? 0 }
   ]

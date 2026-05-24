@@ -1,10 +1,18 @@
 import mongoose from 'mongoose';
+import BaseModel from './BaseModel.js';
 
-const { Schema } = mongoose;
-
-const CategorySchema = new Schema({
+const categorySchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   description: { type: String, trim: true }
-}, { timestamps: true });
+}, {
+  collection: 'categories',
+  timestamps: true
+});
 
-export default mongoose.models.Category || mongoose.model('Category', CategorySchema);
+class CategoryModel extends BaseModel {
+  constructor() {
+    super(categorySchema, 'Category');
+  }
+}
+
+export default new CategoryModel();

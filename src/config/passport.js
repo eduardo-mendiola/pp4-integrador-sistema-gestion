@@ -11,7 +11,7 @@ passport.use(new LocalStrategy(
     try {
       const user = await UserModel.model.findOne({
         $or: [{ email }, { username: email }]
-      }).populate('role_id')
+      }).populate('role_id person_id')
 
       if (!user) {
         return done(null, false, { message: 'Usuario o contraseña incorrectos' })
@@ -41,7 +41,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await UserModel.model.findById(id)
-      .populate('role_id')
+      .populate('role_id person_id')
       .select('-password_hash')
 
     if (!user) {

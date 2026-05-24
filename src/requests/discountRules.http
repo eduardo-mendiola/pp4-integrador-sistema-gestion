@@ -1,0 +1,54 @@
+@baseUrl = http://localhost:4000
+
+### Get all discount rules
+GET {{baseUrl}}/api/discount-rules
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get discount rule by ID
+GET {{baseUrl}}/api/discount-rules/6a13104c73afcd7be568d0a3
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create discount rule
+POST {{baseUrl}}/api/discount-rules
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Descuento por inactividad 24 meses - Test",
+  "timeWithoutSaleMonths": 24,
+  "percentage": 70,
+  "active": true
+}
+
+### Update discount rule (PATCH - partial update)
+PATCH {{baseUrl}}/api/discount-rules/6a13108373afcd7be568d0b1
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "percentage": 15,
+  "active": false
+}
+
+### Update discount rule (PUT - full replacement)
+PUT {{baseUrl}}/api/discount-rules/6a13108373afcd7be568d0b1
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Descuento por inactividad 6 meses",
+  "timeWithoutSaleMonths": 6,
+  "percentage": 20,
+  "active": true
+}
+
+### Delete discount rule
+DELETE {{baseUrl}}/api/discount-rules/6a13108373afcd7be568d0b1
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+
+
+
