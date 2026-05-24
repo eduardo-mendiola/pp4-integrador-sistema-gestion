@@ -1,0 +1,74 @@
+@baseUrl = http://localhost:4000
+@supplierId = 6a1352ba56dbf5bbd1183782
+
+### Get all suppliers
+GET {{baseUrl}}/api/suppliers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get supplier by ID
+GET {{baseUrl}}/api/suppliers/{{supplierId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create supplier
+POST {{baseUrl}}/api/suppliers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "TechDistribuciones S.A.",
+  "contact_name": "Carlos López",
+  "phone": "1155556666",
+  "email": "contacto@techdistribuciones.com",
+  "address": "Av. Industrial 1234, Buenos Aires",
+  "metadata": {
+    "tax_id": "30-70123456-7",
+    "payment_terms": "30 días",
+    "is_wholesaler": true
+  }
+}
+
+### Update supplier (PATCH - partial update: phone & email)
+PATCH {{baseUrl}}/api/suppliers/{{supplierId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "phone": "1199887766",
+  "email": "nuevoemail@techdistribuciones.com"
+}
+
+### Update supplier (PATCH - partial update: metadata only)
+PATCH {{baseUrl}}/api/suppliers/{{supplierId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "metadata": {
+    "tax_id": "30-70123456-7",
+    "payment_terms": "60 días",
+    "notes": "Proveedor preferencial"
+  }
+}
+
+### Update supplier (PUT - full replacement)
+PUT {{baseUrl}}/api/suppliers/{{supplierId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "TechDistribuciones Pro",
+  "contact_name": "María García",
+  "phone": "1155556666",
+  "email": "contacto@techpro.com",
+  "address": "Calle Nueva 567, CABA",
+  "metadata": {
+    "tax_id": "30-70123456-7"
+  }
+}
+
+### Delete supplier
+DELETE {{baseUrl}}/api/suppliers/{{supplierId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
