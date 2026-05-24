@@ -1,4 +1,4 @@
-import Person from '../models/PersonModel.js';
+import Person from "../models/PersonModel.js";
 
 const PersonController = {
   create: async (req, res) => {
@@ -7,13 +7,12 @@ const PersonController = {
 
       return res.status(201).json({
         success: true,
-        data: person
+        data: person,
       });
-
     } catch (error) {
       return res.status(400).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   },
@@ -24,13 +23,12 @@ const PersonController = {
 
       return res.json({
         success: true,
-        data: persons
+        data: persons,
       });
-
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   },
@@ -42,20 +40,95 @@ const PersonController = {
       if (!person) {
         return res.status(404).json({
           success: false,
-          message: 'Persona no encontrada'
+          message: "Persona no encontrada",
         });
       }
 
       return res.json({
         success: true,
-        data: person
+        data: person,
       });
-
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
+    }
+  },
+
+  partialUpdate: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updateData = { ...req.body };
+
+      // Sanitizar campos protegidos/identificadores
+      delete updateData._id;
+      delete updateData.dni; // Identificador único, no modificable
+      delete updateData.created_at;
+      delete updateData.updated_at;
+
+      // Trim en campos de texto simples
+      ["first_name", "last_name", "email", "phone"].forEach((field) => {
+        if (updateData[field]) updateData[field] = updateData[field].trim();
+      });
+
+      // Normalizar email a minúsculas
+      if (updateData.email) {
+        updateData.email = updateData.email.toLowerCase();
+      }
+
+      // Merge del subdocumento address para no perder campos no enviados
+      if (updateData.address && typeof updateData.address === "object") {
+        ["street", "number", "neighborhood", "city"].forEach((field) => {
+          if (updateData.address[field] !== undefined) {
+            updateData.address[field] =
+              updateData.address[field]?.toString().trim() || "";
+          }
+        });
+
+        // Obtener address actual y combinarlo con el enviado
+        const currentPerson = await Person.model.findById(id);
+        if (currentPerson?.address) {
+          updateData.address = {
+            ...currentPerson.address.toObject(),
+            ...updateData.address,
+          };
+        }
+      }
+
+      // Usar el método patch del BaseModel
+      const updatedPerson = await Person.patch(id, updateData);
+
+      if (!updatedPerson) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Persona no encontrada" });
+      }
+
+      return res.json({ success: true, data: updatedPerson });
+    } catch (error) {
+      console.error("Error en partialUpdate person:", error);
+
+      // Error de unicidad (DNI único)
+      if (error.code === 11000) {
+        return res
+          .status(409)
+          .json({
+            success: false,
+            message: "Ya existe una persona con ese DNI",
+          });
+      }
+
+      // Error de validación de Mongoose
+      if (error.name === "ValidationError") {
+        return res.status(400).json({
+          success: false,
+          message: "Error de validación",
+          errors: Object.values(error.errors).map((e) => e.message),
+        });
+      }
+
+      return res.status(400).json({ success: false, message: error.message });
     }
   },
 
@@ -66,19 +139,18 @@ const PersonController = {
       if (!person) {
         return res.status(404).json({
           success: false,
-          message: 'Persona no encontrada'
+          message: "Persona no encontrada",
         });
       }
 
       return res.json({
         success: true,
-        data: person
+        data: person,
       });
-
     } catch (error) {
       return res.status(400).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   },
@@ -90,22 +162,21 @@ const PersonController = {
       if (!deleted) {
         return res.status(404).json({
           success: false,
-          message: 'Persona no encontrada'
+          message: "Persona no encontrada",
         });
       }
 
       return res.json({
         success: true,
-        message: 'Persona eliminada'
+        message: "Persona eliminada",
       });
-
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
-  }
+  },
 };
 
 export default PersonController;
