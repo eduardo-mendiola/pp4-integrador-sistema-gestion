@@ -1,0 +1,67 @@
+@baseUrl = http://localhost:4000
+@promotionId = 6a134aaaa21c15952c3a326f
+@productId = 6a0b893e9acdea0d123badbe
+@discountRuleId = 6a13101c73afcd7be568d09a
+
+### Get all promotions (with populated product & rule)
+GET {{baseUrl}}/api/promotions
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get promotion by ID
+GET {{baseUrl}}/api/promotions/{{promotionId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create promotion
+POST {{baseUrl}}/api/promotions
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Promo TEST 2026",
+  "productId": "{{productId}}",
+  "discountRuleId": "{{discountRuleId}}",
+  "startDate": "2026-06-01T00:00:00.000Z",
+  "durationDays": 50,
+  "active": true
+}
+
+### Update promotion (PATCH - partial update: duration & active)
+PATCH {{baseUrl}}/api/promotions/{{promotionId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "durationDays": 45,
+  "active": false
+}
+
+### Update promotion (PATCH - auto-calculate endDate)
+PATCH {{baseUrl}}/api/promotions/{{promotionId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "startDate": "2026-07-01T00:00:00.000Z",
+  "durationDays": 15
+}
+
+### Update promotion (PUT - full replacement)
+PUT {{baseUrl}}/api/promotions/{{promotionId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Promo Black Friday",
+  "productId": "{{productId}}",
+  "discountRuleId": "{{discountRuleId}}",
+  "startDate": "2026-11-25T00:00:00.000Z",
+  "durationDays": 7,
+  "active": true
+}
+
+### Delete promotion
+DELETE {{baseUrl}}/api/promotions/{{promotionId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
