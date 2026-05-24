@@ -9,6 +9,7 @@ router.use(isAuthenticated);
 router.get('/', PersonController.getAll);
 router.get('/:id', PersonController.getById);
 router.post('/', PersonController.create);
+router.patch('/:id', PersonController.partialUpdate);
 router.put('/:id', PersonController.update);
 router.delete('/:id', PersonController.remove);
 
