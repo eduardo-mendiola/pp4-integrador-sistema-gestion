@@ -52,8 +52,8 @@ const ClientController = {
       const payload = { ...req.body };
 
       // Generar código automático
-      if (!payload.code) {
-        payload.code = codeGenerator.generateCodeFromId(
+      if (!payload.client_code) {
+        payload.client_code = codeGenerator.generateCodeFromId(
           new mongoose.Types.ObjectId(),
           "CLI-",
         );
