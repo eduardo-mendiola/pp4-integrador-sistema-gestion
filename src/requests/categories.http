@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:4000
+@categoryId = 6a0b85831161be6ddc3ce044
+
+### Get all categories
+GET {{baseUrl}}/api/categories
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get category by ID
+GET {{baseUrl}}/api/categories/{{categoryId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create category
+POST {{baseUrl}}/api/categories
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Electrónica",
+  "description": "Productos electrónicos y tecnología"
+}
+
+### Update category (PATCH - partial update)
+PATCH {{baseUrl}}/api/categories/{{categoryId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "description": "Actualizado: productos electrónicos, gadgets y accesorios"
+}
+
+### Update category (PUT - full replacement)
+PUT {{baseUrl}}/api/categories/{{categoryId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "name": "Electrónica y Tecnología",
+  "description": "Productos electrónicos, gadgets, accesorios y componentes"
+}
+
+### Delete category
+DELETE {{baseUrl}}/api/categories/{{categoryId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
