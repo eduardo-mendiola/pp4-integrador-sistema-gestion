@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import BaseModel from "./BaseModel.js";
 
 const discountRuleSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
@@ -7,4 +8,13 @@ const discountRuleSchema = new mongoose.Schema({
   active: { type: Boolean, default: true }
 }, { timestamps: true });
 
-export default mongoose.model("DiscountRule", discountRuleSchema);
+
+mongoose.models.DiscountRule || mongoose.model("DiscountRule", discountRuleSchema);
+
+class DiscountRuleModel extends BaseModel {
+  constructor() {
+    super(discountRuleSchema, "DiscountRule");
+  }
+}
+
+export default new DiscountRuleModel();
