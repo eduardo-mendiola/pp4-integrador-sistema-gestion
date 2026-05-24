@@ -11,7 +11,7 @@ const addressSchema = new mongoose.Schema({
 }, { _id: false });
 
 const clientSchema = new mongoose.Schema({
-  code: { type: String, unique: true, required: true, trim: true },
+  client_code: { type: String, unique: true, required: true, trim: true },
   document_type: { type: String, enum: ['DNI', 'CUIT', 'CUIL', 'PASAPORTE', 'CDI', 'LC'], required: true },
   document_number: { type: String, required: true, trim: true },
   client_type: {
