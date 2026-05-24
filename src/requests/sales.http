@@ -1,0 +1,103 @@
+@baseUrl = http://localhost:4000
+@saleId = 6a0d09a889bf688bfab9e797
+@clientId = 6a1269faf182234a2f2f61b2
+@employeeId = 6a13222968ec56080fc2adc5
+@paymentMethodId = 6a13296f36b47dc045a9fc88
+@productId1 = 6a0b893e9acdea0d123badc0
+@productId2 = 6a0b893e9acdea0d123badc1
+
+### Get all sales (with populated relations)
+GET {{baseUrl}}/api/sales
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get sale by ID
+GET {{baseUrl}}/api/sales/{{saleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create sale
+POST {{baseUrl}}/api/sales
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "client_id": "{{clientId}}",
+  "employee_id": "{{employeeId}}",
+  "items": [
+    { "productId": "{{productId1}}", "quantity": 2, "price": 1500, "subtotal": 3000 },
+    { "productId": "{{productId2}}", "quantity": 1, "price": 2500, "subtotal": 2500 }
+  ],
+  "payments": [
+    { "method": "{{paymentMethodId}}", "amount": 2000, "status": "CONFIRMED" }
+  ],
+  "metadata": { "invoice_type": "B" }
+}
+
+### Update status: Mark as PAID
+PATCH {{baseUrl}}/api/sales/{{saleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{ "status": "PAID" }
+
+### Update payments: Add reference & split payments
+PATCH {{baseUrl}}/api/sales/{{saleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "payments": [
+    { "method": "{{paymentMethodId}}", "amount": 2000, "reference": "TX-998877", "status": "CONFIRMED" },
+    { "method": "{{paymentMethodId}}", "amount": 3500, "reference": "EFECTIVO", "status": "CONFIRMED" }
+  ]
+}
+
+### Update metadata: Add internal notes (merge test)
+PATCH {{baseUrl}}/api/sales/{{saleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "metadata": {
+    "notes": "Entrega programada para el lunes",
+    "external_ref": "FACT-2026-045"
+  }
+}
+
+### Cancel sale (Soft Delete / Status Change)
+PATCH {{baseUrl}}/api/sales/{{saleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{ "status": "CANCELLED" }
+
+### Try to modify a CANCELLED sale (Should return 400)
+PATCH {{baseUrl}}/api/sales/{{saleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{ "status": "PENDING" }
+
+### Update sale (PUT - Full replacement)
+PUT {{baseUrl}}/api/sales/{{saleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "client_id": "{{clientId}}",
+  "employee_id": "{{employeeId}}",
+  "items": [
+    { "productId": "{{productId}}", "quantity": 1, "price": 1500, "subtotal": 1500 }
+  ],
+  "payments": [
+    { "method": "{{paymentMethodId}}", "amount": 1500, "status": "CONFIRMED" }
+  ],
+  "total": 1500,
+  "status": "PAID"
+}
+
+### Delete sale (Hard delete - Use with caution)
+DELETE {{baseUrl}}/api/sales/{{saleId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json

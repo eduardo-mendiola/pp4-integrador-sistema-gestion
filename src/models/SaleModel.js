@@ -16,7 +16,7 @@ const saleSchema = new mongoose.Schema({
   total: { type: Number, required: true },
 
   payments: [{
-    method: { type: mongoose.Schema.Types.ObjectId, ref: 'MedioPago', required: true },
+    method: { type: mongoose.Schema.Types.ObjectId, ref: 'PaymentMethod', required: true },
     amount: { type: Number, required: true },
     reference: String,
     status: { type: String, enum: ['PENDING', 'CONFIRMED', 'REJECTED'], default: 'CONFIRMED' }
