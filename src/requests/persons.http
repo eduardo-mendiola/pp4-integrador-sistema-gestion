@@ -18,9 +18,9 @@ Content-Type: application/json
 
 {
   "dni": "30123456",
-  "first_name": "Juan",
+  "first_name": "Test",
   "last_name": "Pérez",
-  "email": "juan.perez@email.com",
+  "email": "Test.perez@email.com",
   "phone": "1123456789",
   "address": {
     "street": "Av. Corrientes",

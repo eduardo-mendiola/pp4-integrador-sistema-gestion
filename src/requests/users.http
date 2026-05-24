@@ -1,0 +1,106 @@
+@baseUrl = http://localhost:4000
+@userId = 6a05c7418cbd2dccea3be2ef
+@roleId = 6a05c740a762ee1708c56e75
+@personId = 6a13558beeccd8f1f0e31ff5
+@fallbackRoleId = 6a0d05de89bf688bfab9e78f
+
+### Get all users (with populated relations, excluding password_hash)
+GET {{baseUrl}}/api/users
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get user by ID
+GET {{baseUrl}}/api/users/{{userId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Create user (with password auto-hash)
+POST {{baseUrl}}/api/users
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "username": "TESTjperez",
+  "password": "ContraseñaSegura123!",
+  "email": "juan.perez@email.com",
+  "role_id": "{{roleId}}",
+  "person_id": "{{personId}}",
+  "is_active": true
+}
+
+### Update user (PATCH - change role only)
+PATCH {{baseUrl}}/api/users/{{userId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "role_id": "{{roleId}}"
+}
+
+### Update user (PATCH - change password, auto-hashed)
+PATCH {{baseUrl}}/api/users/{{userId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "password": "NuevaContraseña456!"
+}
+
+### Update user (PATCH - activate temporary role for 30 days)
+PATCH {{baseUrl}}/api/users/{{userId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "is_temporary_role": true,
+  "role_duration_value": 30,
+  "role_duration_unit": "days",
+  "fallback_role_id": "{{fallbackRoleId}}"
+}
+
+### Update user (PATCH - deactivate temporary role)
+PATCH {{baseUrl}}/api/users/{{userId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "is_temporary_role": false
+}
+
+### Update user (PATCH - soft delete / deactivate account)
+PATCH {{baseUrl}}/api/users/{{userId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "is_active": false
+}
+
+### Update user (PATCH - update last_login manually)
+PATCH {{baseUrl}}/api/users/{{userId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "last_login": "2026-05-24T20:00:00.000Z"
+}
+
+### Update user (PUT - full replacement)
+PUT {{baseUrl}}/api/users/{{userId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "username": "jperez_updated",
+  "password": "OtraContraseña789!",
+  "email": "juan.p@nuevoemail.com",
+  "role_id": "{{roleId}}",
+  "person_id": "{{personId}}",
+  "is_active": true,
+  "is_temporary_role": false
+}
+
+### Delete user (hard delete)
+DELETE {{baseUrl}}/api/users/{{userId}}
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
