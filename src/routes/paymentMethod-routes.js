@@ -9,6 +9,7 @@ router.use(isAuthenticated);
 router.get('/', PaymentMethodController.getAll);
 router.get('/:id', PaymentMethodController.getById);
 router.post('/', PaymentMethodController.create);
+router.patch('/:id', PaymentMethodController.partialUpdate);
 router.put('/:id', PaymentMethodController.update);
 router.delete('/:id', PaymentMethodController.remove);
 
