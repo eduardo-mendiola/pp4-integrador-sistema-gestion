@@ -2,6 +2,7 @@ import Employee from '../models/EmployeeModel.js';
 import EmployeeService from '../services/EmployeeService.js';
 
 const EmployeeController = {
+  
   create: async (req, res) => {
     try {
       const employee = await Employee.create(req.body);

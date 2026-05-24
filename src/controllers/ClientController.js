@@ -104,7 +104,6 @@ const ClientController = {
           },
         );
 
-        // Merge con el address existente para no perder campos no enviados
         const currentClient = await ClientModel.model.findById(id);
         if (currentClient?.address) {
           updateData.address = {
@@ -114,7 +113,6 @@ const ClientController = {
         }
       }
 
-      // Normalizar email a lowercase si se envía
       if (updateData.email) {
         updateData.email = updateData.email.toLowerCase();
       }

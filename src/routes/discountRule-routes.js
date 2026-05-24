@@ -1,15 +1,16 @@
 import express from 'express';
-import CategoryController from '../controllers/CategoryController.js';
+import DiscountRuleController from '../controllers/DiscountRuleController.js';
 import { isAuthenticated } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.use(isAuthenticated);
 
-router.get('/', CategoryController.getAll);
-router.get('/:id', CategoryController.getById);
-router.post('/', CategoryController.create);
-router.put('/:id', CategoryController.update);
-router.delete('/:id', CategoryController.remove);
+router.get('/', DiscountRuleController.getAll);
+router.get('/:id', DiscountRuleController.getById);
+router.post('/', DiscountRuleController.create);
+router.patch('/:id', DiscountRuleController.partialUpdate);
+router.put('/:id', DiscountRuleController.update);
+router.delete('/:id', DiscountRuleController.delete);
 
 export default router;
