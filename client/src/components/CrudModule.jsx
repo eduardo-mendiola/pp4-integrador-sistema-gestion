@@ -11,6 +11,7 @@ export default function CrudModule({ config }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
@@ -41,6 +42,17 @@ export default function CrudModule({ config }) {
   const resetForm = () => {
     setForm(config.initialValues);
     setEditingId('');
+  };
+
+  const openModal = () => {
+    setError('');
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setError('');
+    resetForm();
   };
 
   const handleChange = (event) => {
@@ -77,6 +89,10 @@ export default function CrudModule({ config }) {
       });
 
       await loadData();
+
+      if (config.useModal) {
+        setModalOpen(false);
+      }
       resetForm();
     } catch (submitError) {
       setError(submitError.message);
@@ -91,14 +107,17 @@ export default function CrudModule({ config }) {
 
     if (config.mapItemToForm) {
       setForm(config.mapItemToForm(item));
-      return;
+    } else {
+      const nextForm = {};
+      Object.keys(config.initialValues).forEach((key) => {
+        nextForm[key] = item[key];
+      });
+      setForm(nextForm);
     }
 
-    const nextForm = {};
-    Object.keys(config.initialValues).forEach((key) => {
-      nextForm[key] = item[key];
-    });
-    setForm(nextForm);
+    if (config.useModal) {
+      openModal();
+    }
   };
 
   const handleDelete = async (id) => {
@@ -157,6 +176,36 @@ export default function CrudModule({ config }) {
     return <input name={field.name} id={field.name} type={field.type || 'text'} step={field.step} onChange={handleChange} value={value} />;
   };
 
+  const renderFormContent = () => (
+    <form className="crud-form" onSubmit={handleSubmit}>
+      <div className="form-grid">
+        {config.fields.map((field) => (
+          <div key={field.name} className={field.type === 'textarea' ? 'field-span-2' : ''}>
+            {field.type !== 'checkbox' ? <label htmlFor={field.name}>{field.label}</label> : null}
+            {renderField(field)}
+          </div>
+        ))}
+      </div>
+
+      <div className="form-actions">
+        <button type="submit" disabled={saving}>
+          {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear'}
+        </button>
+        {config.useModal ? (
+          <button type="button" className="secondary-button" onClick={closeModal}>
+            Cancelar
+          </button>
+        ) : (
+          editingId ? (
+            <button type="button" className="secondary-button" onClick={resetForm}>
+              Cancelar edición
+            </button>
+          ) : null
+        )}
+      </div>
+    </form>
+  );
+
   if (loading) {
     return <div className="state-box">Cargando {config.title.toLowerCase()}...</div>;
   }
@@ -169,34 +218,30 @@ export default function CrudModule({ config }) {
           <h2>{config.title}</h2>
           <p className="section-description">{config.description}</p>
         </div>
+        {config.useModal ? (
+          <button
+            type="button"
+            className="btn-add"
+            onClick={() => { resetForm(); openModal(); }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Nuevo {config.singleTitle || config.title}
+          </button>
+        ) : null}
       </header>
 
-      <div className="panel">
-        <form className="crud-form" onSubmit={handleSubmit}>
-          <div className="form-grid">
-            {config.fields.map((field) => (
-              <div key={field.name} className={field.type === 'textarea' ? 'field-span-2' : ''}>
-                {field.type !== 'checkbox' ? <label htmlFor={field.name}>{field.label}</label> : null}
-                {renderField(field)}
-              </div>
-            ))}
-          </div>
+      {/* Formulario inline — sólo si NO usa modal */}
+      {!config.useModal ? (
+        <div className="panel">
+          {renderFormContent()}
+          {error ? <div className="error-banner">{error}</div> : null}
+        </div>
+      ) : null}
 
-          <div className="form-actions">
-            <button type="submit" disabled={saving}>
-              {editingId ? 'Actualizar' : 'Crear'}
-            </button>
-            {editingId ? (
-              <button type="button" className="secondary-button" onClick={resetForm}>
-                Cancelar edición
-              </button>
-            ) : null}
-          </div>
-        </form>
-
-        {error ? <div className="error-banner">{error}</div> : null}
-      </div>
-
+      {/* Tabla de registros */}
       <div className="panel">
         <div className="table-header">
           <h3>Registros</h3>
@@ -213,7 +258,7 @@ export default function CrudModule({ config }) {
                 {config.columns.map((column) => (
                   <th key={column.label}>{column.label}</th>
                 ))}
-                <th>Acciones</th>
+                <th>Opciones</th>
               </tr>
             </thead>
 
@@ -231,11 +276,30 @@ export default function CrudModule({ config }) {
                     ))}
                     <td>
                       <div className="row-actions">
-                        <button type="button" className="secondary-button" onClick={() => handleEdit(item)}>
-                          Editar
+                        <button
+                          type="button"
+                          className="action-btn action-btn--edit"
+                          title="Editar"
+                          onClick={() => handleEdit(item)}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                          </svg>
                         </button>
-                        <button type="button" className="danger-button" onClick={() => handleDelete(item._id || item.id)}>
-                          Eliminar
+                        <button
+                          type="button"
+                          className="action-btn action-btn--delete"
+                          title="Eliminar"
+                          onClick={() => handleDelete(item._id || item.id)}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                            <path d="M10 11v6" />
+                            <path d="M14 11v6" />
+                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                          </svg>
                         </button>
                       </div>
                     </td>
@@ -246,6 +310,30 @@ export default function CrudModule({ config }) {
           </table>
         </div>
       </div>
+
+      {/* Modal — sólo si config.useModal está activo */}
+      {config.useModal && modalOpen ? (
+        <div className="modal-overlay" onClick={closeModal} role="dialog" aria-modal="true">
+          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">
+                {editingId ? 'Editar' : 'Nuevo'} {config.singleTitle || config.title}
+              </h3>
+              <button type="button" className="modal-close" title="Cerrar" onClick={closeModal}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="modal-body">
+              {renderFormContent()}
+              {error ? <div className="error-banner">{error}</div> : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

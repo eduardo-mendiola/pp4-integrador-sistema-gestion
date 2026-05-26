@@ -5,6 +5,7 @@ const config = {
   title: 'Ventas',
   description: 'Registro básico de ventas con items en JSON.',
   endpoint: '/api/sales',
+  useModal: true,
   initialValues: {
     customer_name: '',
     items_json: '[]',

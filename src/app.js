@@ -14,6 +14,7 @@ import employeeRoutes from './routes/employee-routes.js'
 import discountRulesRoutes from './routes/discountRule-routes.js'
 import paymentMethodRoutes from './routes/paymentMethod-routes.js'
 import promotionRoutes from './routes/promotion-routes.js'
+import supplierRoutes from './routes/supplier-routes.js'
 
 
 const app = express();
@@ -59,6 +60,7 @@ app.use('/api/clients', clientRoutes)
 app.use('/api/sales', saleRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/roles', roleRoutes)
+app.use('/api/suppliers', supplierRoutes)
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))

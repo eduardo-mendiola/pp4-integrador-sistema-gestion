@@ -5,6 +5,7 @@ const config = {
   title: 'Clientes',
   description: 'Gestión mínima de clientes existentes.',
   endpoint: '/api/clients',
+  useModal: true,
   initialValues: {
     client_type: 'company',
     name: '',

@@ -72,10 +72,10 @@ importers:
       react-router-dom:
         specifier: ^6.26.2
         version: 6.30.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      tecnova_api_restful:
-        specifier: file:..
-        version: file:(mongodb@6.21.0)
     devDependencies:
+      esbuild:
+        specifier: 0.19.12
+        version: 0.19.12
       vite:
         specifier: 5.0.0
         version: 5.0.0(@types/node@25.8.0)
@@ -2128,9 +2128,6 @@ packages:
 
   tar-stream@3.2.0:
     resolution: {integrity: sha512-ojzvCvVaNp6aOTFmG7jaRD0meowIAuPc3cMMhSgKiVWws1GyHbGd/xvnyuRKcKlMpt3qvxx6r0hreCNITP9hIg==}
-
-  'tecnova_api_restful@file:':
-    resolution: {directory: '', type: directory}
 
   teex@1.0.1:
     resolution: {integrity: sha512-eYE6iEI62Ni1H8oIa7KlDU6uQBtqr4Eajni3wX7rpfXD8ysFx8z0+dri+KWEPWpBsxXfxu58x/0jvTVT1ekOSg==}
@@ -4642,32 +4639,6 @@ snapshots:
       - bare-abort-controller
       - bare-buffer
       - react-native-b4a
-
-  tecnova_api_restful@file:(mongodb@6.21.0):
-    dependencies:
-      bcrypt: 6.0.0
-      connect-mongo: 5.1.0(express-session@1.19.0)(mongodb@6.21.0)
-      express: 5.1.0
-      express-session: 1.19.0
-      method-override: 3.0.0
-      mongoose: 8.24.0
-      node-cron: 4.2.1
-      passport: 0.7.0
-      passport-local: 1.0.0
-      socket.io: 4.8.3
-      socket.io-client: 4.8.3
-    transitivePeerDependencies:
-      - '@aws-sdk/credential-providers'
-      - '@mongodb-js/zstd'
-      - bufferutil
-      - gcp-metadata
-      - kerberos
-      - mongodb
-      - mongodb-client-encryption
-      - snappy
-      - socks
-      - supports-color
-      - utf-8-validate
 
   teex@1.0.1:
     dependencies:

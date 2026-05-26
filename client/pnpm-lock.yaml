@@ -15,9 +15,12 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       react-router-dom:
-        specifier: ^6.30.3
+        specifier: ^6.26.2
         version: 6.30.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     devDependencies:
+      esbuild:
+        specifier: 0.19.12
+        version: 0.19.12
       vite:
         specifier: 5.0.0
         version: 5.0.0
