@@ -8,6 +8,7 @@ export default function LoginPage() {
   const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -33,27 +34,67 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="login-screen">
+    <div className="login-page-bg">
       <section className="login-card">
-        <div>
-          <p className="eyebrow">Acceso al sistema</p>
-          <h1>TecnoFlow</h1>
-          <p className="section-description">Ingresá con tu usuario para continuar.</p>
+        
+        {/* Logo y Título */}
+        <img src="/images/planeta_juguete_logo.png" alt="Logo" style={{ width: '12.5rem', margin: '1rem auto 2rem' }} />
+        {/* <h1 className="brand-name">JUGUETES MÁGICOS</h1> */}
+
+        <div className="login-header text-center">
+          <h2>Ingreso a (nombre de la app)</h2>
+          <p>Plataforma de gestión POS.</p>
         </div>
 
-        <form className="login-form" onSubmit={handleSubmit}>
-          <label htmlFor="email">Email o usuario</label>
-          <input id="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="username" required />
+        {/* Formulario */}
+        <div className="form-container">
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              className="form-control custom-input"
+              placeholder="Usuario o Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-          <label htmlFor="password">Contraseña</label>
-          <input id="password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" required />
+            <div className="position-relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control custom-input"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <span 
+                className="position-absolute top-50 end-0 translate-middle-y me-3"
+                style={{ cursor: 'pointer', color: '#6c757d', transform: 'translateY(-60%)' }}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
+              </span>
+            </div>
 
-          <button type="submit" disabled={submitting}>
-            {submitting ? 'Ingresando...' : 'Ingresar'}
-          </button>
+            <a href="#" className="forgot-link">¿Olvidaste tu Contraseña?</a>
 
-          {error ? <div className="error-banner">{error}</div> : null}
-        </form>
+            <button type="submit" className="btn btn-ingresar w-100" disabled={submitting}>
+              {submitting ? 'Ingresando...' : 'Ingresar'}
+            </button>
+          </form>
+
+          {error && <div className="alert alert-danger mt-3 py-1 small text-center">{error}</div>}
+        </div>
+
+        {/* Footer */}
+        <footer className="login-footer">
+          <p className="mb-1">Términos de Servicio y Privacidad</p>
+          <div className="d-flex align-items-center justify-content-center gap-1">
+            <span>Powered by</span>
+            <img src="/images/aws.svg" alt="AWS" style={{ height: '1.5rem' }} />
+          </div>
+        </footer>
+
       </section>
     </div>
   );
