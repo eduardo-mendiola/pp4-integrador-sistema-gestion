@@ -12,6 +12,16 @@ import CategoriesPage from '../pages/categories/CategoriesPage.jsx';
 import ClientsPage from '../pages/clients/ClientsPage.jsx';
 import SalesPage from '../pages/sales/SalesPage.jsx';
 import UsersPage from '../pages/users/UsersPage.jsx';
+import RolesPage from '../pages/roles/RolesPage.jsx';
+import EmpleadosPage from '../pages/empleados/EmpleadosPage.jsx';
+import ProveedoresPage from '../pages/proveedores/ProveedoresPage.jsx';
+import PagosMetodosPage from '../pages/pagos/PagosMetodosPage.jsx';
+import PromocionsPage from '../pages/promociones/PromocionsPage.jsx';
+import DescuentosPage from '../pages/promociones/DescuentosPage.jsx';
+import StockPage from '../pages/products/StockPage.jsx';
+import NewSalePage from '../pages/sales/NewSalePage.jsx';
+import ReportesPage from '../pages/ReportesPage.jsx';
+import ConfiguracionPage from '../pages/ConfiguracionPage.jsx';
 
 const pageByKey = {
   products: ProductsPage,
@@ -37,10 +47,55 @@ export default function AppRouter() {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
+        
+        {/* Usuarios */}
+        <Route path="usuarios" element={<ProtectedRoute><UsersPage /></ProtectedRoute>} />
+        <Route path="roles" element={<ProtectedRoute><RolesPage /></ProtectedRoute>} />
+        <Route path="empleados" element={<ProtectedRoute><EmpleadosPage /></ProtectedRoute>} />
+        
+        {/* Clientes */}
+        <Route path="clientes" element={<ProtectedRoute><ClientsPage /></ProtectedRoute>} />
+        
+        {/* Ventas */}
+        <Route path="ventas" element={<ProtectedRoute><SalesPage /></ProtectedRoute>} />
+        <Route path="ventas/nueva" element={<ProtectedRoute><NewSalePage /></ProtectedRoute>} />
+        <Route path="ventas/pagos" element={<ProtectedRoute><SalesPage /></ProtectedRoute>} />
+        
+        {/* Productos */}
+        <Route path="productos" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
+        <Route path="productos/stock" element={<ProtectedRoute><StockPage /></ProtectedRoute>} />
+        <Route path="categorias" element={<ProtectedRoute><CategoriesPage /></ProtectedRoute>} />
+        
+        {/* Proveedores */}
+        <Route path="proveedores" element={<ProtectedRoute><ProveedoresPage /></ProtectedRoute>} />
+        
+        {/* Pagos */}
+        <Route path="pagos/metodos" element={<ProtectedRoute><PagosMetodosPage /></ProtectedRoute>} />
+        
+        {/* Promociones */}
+        <Route path="promociones" element={<ProtectedRoute><PromocionsPage /></ProtectedRoute>} />
+        <Route path="promociones/descuentos" element={<ProtectedRoute><DescuentosPage /></ProtectedRoute>} />
+        
+        {/* Reportes */}
+        <Route path="reportes" element={<ProtectedRoute><ReportesPage /></ProtectedRoute>} />
+        
+        {/* Configuración */}
+        <Route path="configuracion" element={<ProtectedRoute><ConfiguracionPage /></ProtectedRoute>} />
+        
+        {/* Módulos dinámicos del moduleCards */}
         {moduleCards
           .filter((module) => module.key !== 'dashboard')
           .map((module) => {
-            const Page = pageByKey[module.key];
+            const PageMap = {
+              products: ProductsPage,
+              categories: CategoriesPage,
+              clients: ClientsPage,
+              sales: SalesPage,
+              users: UsersPage
+            };
+            const Page = PageMap[module.key];
+            
+            if (!Page) return null;
 
             return (
               <Route
