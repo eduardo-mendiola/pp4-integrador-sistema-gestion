@@ -99,6 +99,10 @@ label {
     position: relative;
 }
 
+.main-area.no-padding {
+    padding: 0;
+}
+
 .module-grid {
 	display: grid;
 	gap: 1rem;

@@ -1,0 +1,161 @@
+/* Details Panel */
+.sales-details-panel {
+  width: 380px;
+  background-color: #fff;
+  margin: 16px;
+  margin-left: 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sales-details-header {
+  padding: 20px;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.sales-details-header h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.sales-product-image {
+  width: 100%;
+  height: 250px;
+  object-fit: contain;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.sales-details-info {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sales-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f4f8;
+}
+
+.sales-detail-row:last-child {
+  border-bottom: none;
+}
+
+.sales-detail-label {
+  color: #8898aa;
+  font-size: 14px;
+}
+
+.sales-detail-value {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.sales-detail-value.highlight {
+  color: #2dce89;
+}
+
+.sales-check-stock-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 16px;
+  background-color: #fff;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #525f7f;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sales-check-stock-btn:hover {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+/* Payment Buttons */
+.sales-payment-section {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e1e8ed;
+}
+
+.sales-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sales-payment-btn {
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sales-payment-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sales-payment-btn:active {
+  transform: translateY(0);
+}
+
+.sales-payment-btn.efectivo {
+  background-color: #8b9dc9;
+  color: white;
+}
+
+.sales-payment-btn.tarjeta {
+  background-color: #7de2f9;
+  color: white;
+}
+
+.sales-payment-btn.debito {
+  background-color: #fbaf5d;
+  color: white;
+}
+
+.sales-payment-btn.transferencia {
+  background-color: #8b9d5d;
+  color: white;
+}
+
+.sales-payment-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 1024px) {
+  .sales-details-panel {
+    width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sales-details-panel {
+    width: 100%;
+    margin: 8px 16px;
+    max-height: 300px;
+  }
+}

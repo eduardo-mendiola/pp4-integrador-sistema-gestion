@@ -16,7 +16,6 @@ export default function AppShell() {
         <Outlet />
       </main>
 
-      {/* El modal se renderiza AQUÍ, fuera del header */}
       {selectedProduct && (
         <ProductModal
           product={selectedProduct}
