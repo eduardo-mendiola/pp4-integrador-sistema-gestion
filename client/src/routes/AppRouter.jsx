@@ -19,7 +19,7 @@ import PagosMetodosPage from '../pages/pagos/PagosMetodosPage.jsx';
 import PromocionsPage from '../pages/promociones/PromocionsPage.jsx';
 import DescuentosPage from '../pages/promociones/DescuentosPage.jsx';
 import StockPage from '../pages/products/StockPage.jsx';
-import NewSalePage from '../pages/sales/NewSalePage.jsx';
+import NewSalesPage from '../pages/sales/NewSalesPage/NewSalePage.jsx';
 import ReportesPage from '../pages/ReportesPage.jsx';
 import ConfiguracionPage from '../pages/ConfiguracionPage.jsx';
 
@@ -50,7 +50,7 @@ export default function AppRouter() {
         
         {/* Ventas */}
         <Route path="ventas" element={<ProtectedRoute><SalesPage /></ProtectedRoute>} />
-        <Route path="ventas/nueva" element={<ProtectedRoute><NewSalePage /></ProtectedRoute>} />
+        <Route path="ventas/nueva" element={<ProtectedRoute><NewSalesPage /></ProtectedRoute>} />
         <Route path="ventas/pagos" element={<ProtectedRoute><SalesPage /></ProtectedRoute>} />
         
         {/* Productos */}
