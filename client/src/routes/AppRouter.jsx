@@ -23,14 +23,6 @@ import NewSalePage from '../pages/sales/NewSalePage.jsx';
 import ReportesPage from '../pages/ReportesPage.jsx';
 import ConfiguracionPage from '../pages/ConfiguracionPage.jsx';
 
-const pageByKey = {
-  products: ProductsPage,
-  categories: CategoriesPage,
-  clients: ClientsPage,
-  sales: SalesPage,
-  users: UsersPage
-};
-
 export default function AppRouter() {
   return (
     <Routes>
@@ -109,9 +101,10 @@ export default function AppRouter() {
               />
             );
           })}
-      </Route>
 
-      <Route path="*" element={<NotFoundPage />} />
+        {/* Catch-all dentro del AppShell */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   );
 }
