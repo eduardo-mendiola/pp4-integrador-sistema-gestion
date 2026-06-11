@@ -9,6 +9,7 @@ import SalesMessage from '../../../components/Sales/SalesMessage/SalesMessage';
 import ClientModal from '../../../components/Sales/ClientModal/ClientModal';
 import PaymentMethodModal from '../../../components/Sales/PaymentMethodModal/PaymentMethodModal';
 import PaymentProcessModal from '../../../components/Sales/PaymentProcessModal/PaymentProcessModal';
+import ReceiptModal from '../../../components/Sales/ReceiptModal/ReceiptModal';
 import './NewSalePage.css';
 
 export default function NewSalePage() {
@@ -125,6 +126,13 @@ export default function NewSalePage() {
         loading={sales.loading}
         onClose={sales.closePaymentProcessModal}
         onProcess={handleProcessPayment}
+      />
+
+      <ReceiptModal
+        isOpen={sales.showReceiptModal}
+        sale={sales.lastSale}
+        onNewSale={sales.handleNewSale}
+        onClose={() => sales.setShowReceiptModal(false)}
       />
     </div>
   );
