@@ -8,7 +8,7 @@ const DashboardPage = () => {
     {
       title: "Ventas",
       items: [
-        { label: "VENTAS", path: "/ventas", color: "blue-card" },
+        { label: "VENTAS", path: "/ventas/nueva", color: "blue-card" },
         { label: "CLIENTES", path: "/clientes", color: "blue-card" },
         { label: "CAMBIOS Y DEVOLUCIONES", path: "/devoluciones", color: "blue-card" },
       ]
