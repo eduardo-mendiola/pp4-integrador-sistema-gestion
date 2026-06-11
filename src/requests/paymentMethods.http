@@ -17,11 +17,11 @@ Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Content-Type: application/json
 
 {
-  "name": "Metodo de test",
+  "name": "transfer",
   "requires_auth": true,
   "allows_installments": true,
   "active": true,
-  "surcharge_percentage": 10
+  "surcharge_percentage": 0
 }
 
 ### Update payment method (PATCH - partial update)

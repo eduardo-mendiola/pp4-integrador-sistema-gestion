@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../../services/api.js";
 
+// Mapeo de métodos de pago del frontend a ObjectIds del backend
+const PAYMENT_METHOD_IDS = {
+  cash: "6a2a413493ebd9bb34545eeb",
+  credit_card: "6a13292f36b47dc045a9fc7a",
+  debit_card: "6a13296f36b47dc045a9fc88",
+  transfer: "6a2a414593ebd9bb34545ef0",
+};
+
 export default function useSalesLogic() {
   // Estado para productos disponibles
   const [availableProducts, setAvailableProducts] = useState([]);
@@ -24,12 +32,16 @@ export default function useSalesLogic() {
   const [showPaymentProcessModal, setShowPaymentProcessModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
+  // Estado para modal de recibo
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+  const [lastSale, setLastSale] = useState(null);
+
   // Cargar productos al iniciar
   useEffect(() => {
     loadProducts();
   }, []);
 
-  // Calcular totales
+  // Calcular totales (solo para mostrar en el frontend)
   const calculateTotals = () => {
     const subtotal = cartItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
@@ -185,7 +197,7 @@ export default function useSalesLogic() {
     setSelectedItem(item);
   };
 
-  // Procesar pago - ahora recibe el cliente como parámetro
+  // Procesar pago - ajustado al formato del backend
   const processPayment = async (client, paymentMethod, paymentData = {}) => {
     if (cartItems.length === 0) {
       setMessage({ type: "error", text: "Agrega productos al carrito" });
@@ -200,26 +212,58 @@ export default function useSalesLogic() {
     setLoading(true);
 
     try {
+      // Mapear items al formato esperado por el backend
+      const items = cartItems.map((item) => ({
+        productId: item._id,
+        quantity: item.quantity,
+      }));
+
+      // Obtener el ObjectId del método de pago
+      const paymentMethodId = PAYMENT_METHOD_IDS[paymentMethod];
+
+      if (!paymentMethodId) {
+        setMessage({ type: "error", text: "Método de pago no válido" });
+        setLoading(false);
+        return { success: false };
+      }
+
+      // Calcular monto total
+      const totalAmount = totals.total;
+
+      // Crear referencia de pago según el método
+      let paymentReference = "";
+      if (paymentMethod === "cash" && paymentData.amount_received) {
+        paymentReference = `Recibido: $${paymentData.amount_received}, Vuelto: $${paymentData.change || 0}`;
+      } else if (
+        (paymentMethod === "credit_card" || paymentMethod === "debit_card") &&
+        paymentData.card_number
+      ) {
+        const cleanNumber = paymentData.card_number.replace(/\s/g, "");
+        paymentReference = `Tarjeta terminada en ${cleanNumber.slice(-4)}`;
+      } else if (paymentMethod === "transfer") {
+        paymentReference =
+          paymentData.transfer_reference || "Transferencia bancaria";
+      }
+
+      // Payload ajustado al formato del backend
+      // NO enviamos employee_id: el backend lo resuelve desde req.user (cookie de sesión)
       const payload = {
         client_id: client._id,
-        customer_name: client.business_name || 
-          `${client.first_name || ''} ${client.last_name || ''}`.trim(),
-        items: cartItems.map((item) => ({
-          product_id: item._id,
-          sku: item.sku,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price,
-          discount: item.discount,
-        })),
-        subtotal: totals.subtotal,
-        discount: totals.discount,
-        tax: totals.tax,
-        total: totals.total,
-        payment_method: paymentMethod,
-        payment_data: paymentData,
+        items: items,
+        payments: [
+          {
+            method: paymentMethodId,
+            amount: totalAmount,
+            reference: paymentReference,
+            status: "CONFIRMED",
+          },
+        ],
         metadata: {
-          date: new Date().toISOString(),
+          customer_name:
+            client.business_name ||
+            `${client.first_name || ""} ${client.last_name || ""}`.trim(),
+          payment_details: paymentData,
+          processed_at: new Date().toISOString(),
         },
       };
 
@@ -230,20 +274,25 @@ export default function useSalesLogic() {
       });
 
       const saleData = response.data || response;
-      
+
+      // Guardar la venta para el recibo
+      setLastSale(saleData);
+      setShowPaymentProcessModal(false);
+      setShowReceiptModal(true);
+
       setMessage({ type: "success", text: "✓ Venta creada exitosamente" });
 
-      // Limpiar carrito pero NO el cliente (por si quiere hacer otra venta)
+      // Limpiar carrito pero NO el cliente
       setCartItems([]);
       setEditingQuantities({});
       setSelectedItem(null);
-      setShowPaymentProcessModal(false);
       setSelectedPaymentMethod(null);
 
       setTimeout(() => setMessage(""), 5000);
-      
+
       return { success: true, sale: saleData };
     } catch (error) {
+      console.error("Error al procesar pago:", error);
       setMessage({ type: "error", text: "✗ Error: " + error.message });
       return { success: false, error: error.message };
     } finally {
@@ -290,6 +339,12 @@ export default function useSalesLogic() {
     setSelectedPaymentMethod(null);
   };
 
+  // Nueva venta desde el recibo
+  const handleNewSale = () => {
+    setLastSale(null);
+    setShowReceiptModal(false);
+  };
+
   return {
     searchQuery,
     cartItems,
@@ -319,5 +374,10 @@ export default function useSalesLogic() {
     handleSelectPaymentMethod,
     closePaymentProcessModal,
     setShowPaymentModal,
+    // Modal de recibo
+    showReceiptModal,
+    lastSale,
+    handleNewSale,
+    setShowReceiptModal,
   };
 }
