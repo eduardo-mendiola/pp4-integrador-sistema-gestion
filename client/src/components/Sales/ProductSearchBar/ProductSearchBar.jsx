@@ -1,14 +1,20 @@
 import React from 'react';
+import ClientSelector from '../ClientSelector/ClientSelector';
 import './ProductSearchBar.css';
 
 export default function ProductSearchBar({
   searchQuery,
   onSearchChange,
-  customerName,
-  onCustomerChange,
   filteredProducts,
   onProductSelect,
-  showResults
+  showResults,
+  // Client props
+  selectedClient,
+  onAddClient,
+  onViewClient,
+  onEditClient,
+  onChangeClient,
+  onClearClient
 }) {
   return (
     <div className="sales-search-bar">
@@ -52,12 +58,13 @@ export default function ProductSearchBar({
         )}
       </div>
       
-      <input
-        type="text"
-        placeholder="Nombre del cliente"
-        value={customerName}
-        onChange={(e) => onCustomerChange(e.target.value)}
-        className="sales-customer-input"
+      <ClientSelector
+        selectedClient={selectedClient}
+        onAddClient={onAddClient}
+        onViewClient={onViewClient}
+        onEditClient={onEditClient}
+        onChangeClient={onChangeClient}
+        onClearClient={onClearClient}
       />
     </div>
   );

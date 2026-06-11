@@ -1,27 +1,23 @@
 import React, { useEffect } from 'react';
 import useSalesLogic from './useSalesLogic';
+import useClientLogic from './useClientLogic';
 import ProductSearchBar from '../../../components/Sales/ProductSearchBar/ProductSearchBar';
 import CartTable from '../../../components/Sales/CartTable/CartTable';
 import ProductDetailsPanel from '../../../components/Sales/ProductDetailsPanel/ProductDetailsPanel';
 import SalesFooter from '../../../components/Sales/SalesFooter/SalesFooter';
 import SalesMessage from '../../../components/Sales/SalesMessage/SalesMessage';
+import ClientModal from '../../../components/Sales/ClientModal/ClientModal';
 import './NewSalePage.css';
 
 export default function NewSalePage() {
   const sales = useSalesLogic();
+  const client = useClientLogic();
 
-  // Eliminar padding del main-area para usar todo el espacio
   useEffect(() => {
     const mainArea = document.querySelector('.main-area');
-
-    if (mainArea) {
-      mainArea.classList.add('no-padding');
-    }
-
+    if (mainArea) mainArea.classList.add('no-padding');
     return () => {
-      if (mainArea) {
-        mainArea.classList.remove('no-padding');
-      }
+      if (mainArea) mainArea.classList.remove('no-padding');
     };
   }, []);
 
@@ -30,11 +26,16 @@ export default function NewSalePage() {
       <ProductSearchBar
         searchQuery={sales.searchQuery}
         onSearchChange={sales.handleSearch}
-        customerName={sales.customerName}
-        onCustomerChange={sales.setCustomerName}
         filteredProducts={sales.filteredProducts}
         onProductSelect={sales.addToCart}
         showResults={sales.showSearchResults}
+        // Client props
+        selectedClient={client.selectedClient}
+        onAddClient={() => client.openModal('search')}
+        onViewClient={client.viewClient}
+        onEditClient={client.editClient}
+        onChangeClient={client.changeClient}
+        onClearClient={client.clearClient}
       />
 
       <SalesMessage
@@ -69,6 +70,21 @@ export default function NewSalePage() {
         loading={sales.loading}
         onCancel={sales.clearSale}
         onPay={() => sales.processPayment('cash')}
+      />
+
+      {/* Modal de cliente */}
+      <ClientModal
+        isOpen={client.isModalOpen}
+        mode={client.modalMode}
+        client={client.selectedClient}
+        clients={client.clients}
+        loading={client.loadingClients}
+        saving={client.saving}
+        onClose={client.closeModal}
+        onSelect={client.selectClient}
+        onCreate={client.createClient}
+        onUpdate={client.updateClient}
+        onModeChange={client.setModalMode}
       />
     </div>
   );
