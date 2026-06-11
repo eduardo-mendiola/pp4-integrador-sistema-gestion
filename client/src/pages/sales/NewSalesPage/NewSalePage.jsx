@@ -7,6 +7,7 @@ import ProductDetailsPanel from '../../../components/Sales/ProductDetailsPanel/P
 import SalesFooter from '../../../components/Sales/SalesFooter/SalesFooter';
 import SalesMessage from '../../../components/Sales/SalesMessage/SalesMessage';
 import ClientModal from '../../../components/Sales/ClientModal/ClientModal';
+import PaymentMethodModal from '../../../components/Sales/PaymentMethodModal/PaymentMethodModal';
 import './NewSalePage.css';
 
 export default function NewSalePage() {
@@ -21,6 +22,19 @@ export default function NewSalePage() {
     };
   }, []);
 
+  // Handler para el botón PAGAR con validación
+  const handlePayClick = () => {
+    if (sales.cartItems.length === 0) {
+      sales.setMessage({ type: 'error', text: 'Agrega productos al carrito' });
+      return;
+    }
+    if (!client.selectedClient) {
+      sales.setMessage({ type: 'error', text: 'Seleccione un cliente para continuar' });
+      return;
+    }
+    sales.openPaymentModal();
+  };
+
   return (
     <div className="sales-container">
       <ProductSearchBar
@@ -29,7 +43,6 @@ export default function NewSalePage() {
         filteredProducts={sales.filteredProducts}
         onProductSelect={sales.addToCart}
         showResults={sales.showSearchResults}
-        // Client props
         selectedClient={client.selectedClient}
         onAddClient={() => client.openModal('search')}
         onViewClient={client.viewClient}
@@ -58,9 +71,6 @@ export default function NewSalePage() {
 
         <ProductDetailsPanel
           selectedItem={sales.selectedItem}
-          loading={sales.loading}
-          onPayment={sales.processPayment}
-          onCheckStock={() => console.log('Check stock clicked')}
         />
       </div>
 
@@ -69,7 +79,7 @@ export default function NewSalePage() {
         itemsCount={sales.cartItems.length}
         loading={sales.loading}
         onCancel={sales.clearSale}
-        onPay={() => sales.processPayment('cash')}
+        onPay={handlePayClick}
       />
 
       {/* Modal de cliente */}
@@ -85,6 +95,14 @@ export default function NewSalePage() {
         onCreate={client.createClient}
         onUpdate={client.updateClient}
         onModeChange={client.setModalMode}
+      />
+
+      {/* Modal de selección de método de pago */}
+      <PaymentMethodModal
+        isOpen={sales.showPaymentModal}
+        onClose={() => sales.setShowPaymentModal(false)}
+        onSelectMethod={sales.handleSelectPaymentMethod}
+        total={sales.totals.total}
       />
     </div>
   );
