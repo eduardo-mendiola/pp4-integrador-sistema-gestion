@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Sale from "../models/SaleModel.js";
 import ProductModel from "../models/ProductModel.js";
 import Promotion from "../models/PromotionModel.js";
@@ -104,11 +105,51 @@ const SaleController = {
       const items = normalizeItems(req.body.items);
       const payments = normalizePayments(req.body.payments);
 
+      // Obtener el modelo nativo de Mongoose directamente
+      const ProductNative = mongoose.model("Product");
+
+      // Validar stock disponible ANTES de procesar la venta
+      const productIds = items.map((i) => i.productId);
+      const products = await ProductNative.find({
+        _id: { $in: productIds },
+      }).lean();
+
+      if (products.length !== items.length) {
+        return res.status(400).json({
+          success: false,
+          message: "Uno o más productos no existen",
+        });
+      }
+
+      const productMap = Object.fromEntries(
+        products.map((p) => [p._id.toString(), p]),
+      );
+
+      // Validar stock suficiente para cada item
+      for (const item of items) {
+        const product = productMap[item.productId.toString()];
+        if (!product) {
+          return res.status(400).json({
+            success: false,
+            message: `Producto ${item.productId} no encontrado`,
+          });
+        }
+        if (product.stock < item.quantity) {
+          return res.status(400).json({
+            success: false,
+            message: `Stock insuficiente para "${product.name}". Disponible: ${product.stock}, Solicitado: ${item.quantity}`,
+          });
+        }
+      }
+
+      // Enriquecer items con precios (calcula subtotal)
       const normalizedItems = await enrichItemsWithPricing(items);
 
+      // Calcular total
       const total = normalizedItems.reduce((acc, i) => acc + i.subtotal, 0);
       const paidAmount = payments.reduce((acc, p) => acc + p.amount, 0);
 
+      // Crear la venta
       const sale = await Sale.create({
         ...req.body,
         items: normalizedItems,
@@ -118,8 +159,28 @@ const SaleController = {
         employee_id: req.user?._id || req.body.employee_id,
       });
 
-      return res.status(201).json({ success: true, data: sale });
+      // Si la venta está PAID, descontar stock de cada producto
+      if (sale.status === "PAID") {
+        try {
+          const bulkOps = normalizedItems.map((item) => ({
+            updateOne: {
+              filter: { _id: item.product },
+              update: { $inc: { stock: -item.quantity } },
+            },
+          }));
+
+          await ProductNative.bulkWrite(bulkOps);
+        } catch (stockError) {
+          console.error("Error al actualizar stock:", stockError);
+        }
+      }
+
+      // El findById del SaleModel ya popula automáticamente
+      const populatedSale = await Sale.findById(sale._id);
+
+      return res.status(201).json({ success: true, data: populatedSale });
     } catch (error) {
+      console.error("Error al crear venta:", error);
       return res.status(400).json({ success: false, message: error.message });
     }
   },

@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:4000
-@productId = 6a0b893e9acdea0d123badbf
+@productId = 6a0b893e9acdea0d123badc1
 @categoryId = 6a0b85831161be6ddc3ce04d
 @supplierId = 6a0b84f72a2c6a4c8a4f2960
 
@@ -40,8 +40,7 @@ Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Content-Type: application/json
 
 {
-  "price": 999999.99,
-  "stock": 30
+  "stock": 39
 }
 
 ### Update product (PATCH - partial update: metadata only)
