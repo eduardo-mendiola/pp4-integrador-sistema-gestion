@@ -1,0 +1,135 @@
+.payment-process-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  animation: ppFadeIn 0.2s ease-out;
+}
+
+@keyframes ppFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.payment-process-modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: ppSlideUp 0.3s ease-out;
+}
+
+@keyframes ppSlideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.payment-process-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e1e8ed;
+  background: #f8f9fa;
+  border-radius: 12px 12px 0 0;
+}
+
+.payment-process-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.payment-process-icon {
+  font-size: 28px;
+}
+
+.payment-process-title h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.payment-process-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.payment-process-close:hover {
+  background: #e9ecef;
+}
+
+.payment-process-summary {
+  padding: 16px 24px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.payment-process-summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.payment-process-summary-row strong {
+  color: #333;
+}
+
+.payment-process-summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0 0 0;
+  margin-top: 8px;
+  border-top: 2px solid #e1e8ed;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.payment-process-total-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #007bff;
+}
+
+.payment-process-body {
+  padding: 24px;
+}
+
+@media (max-width: 480px) {
+  .payment-process-modal {
+    width: 95%;
+    margin: 16px;
+  }
+  
+  .payment-process-header {
+    padding: 16px 20px;
+  }
+  
+  .payment-process-summary {
+    padding: 12px 20px;
+  }
+  
+  .payment-process-body {
+    padding: 20px;
+  }
+}

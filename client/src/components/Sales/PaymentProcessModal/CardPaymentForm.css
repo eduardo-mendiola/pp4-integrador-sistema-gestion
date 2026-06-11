@@ -1,0 +1,91 @@
+.card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-form-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-form-input {
+  padding: 12px 14px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.card-form-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.card-form-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+}
+
+.card-form-select {
+  cursor: pointer;
+}
+
+.card-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.card-form-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card-form-btn.cancel {
+  background: #6c757d;
+  color: white;
+}
+
+.card-form-btn.cancel:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.card-form-btn.process {
+  background: #007bff;
+  color: white;
+}
+
+.card-form-btn.process:hover:not(:disabled) {
+  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.card-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 480px) {
+  .card-form-row {
+    grid-template-columns: 1fr;
+  }
+}

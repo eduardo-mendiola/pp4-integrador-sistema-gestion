@@ -1,0 +1,155 @@
+.transfer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.transfer-form-info {
+  padding: 12px 16px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+}
+
+.transfer-form-info-text {
+  margin: 0;
+  font-size: 14px;
+  color: #856404;
+  line-height: 1.5;
+}
+
+.transfer-form-bank {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transfer-form-bank-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.transfer-form-bank-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.transfer-form-bank-label {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.transfer-form-bank-value {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transfer-form-copyable {
+  font-family: monospace;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #e1e8ed;
+}
+
+.transfer-form-copy-btn {
+  padding: 4px 8px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.transfer-form-copy-btn:hover {
+  background: #0056b3;
+}
+
+.transfer-form-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #e7f3ff;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.transfer-form-amount-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #007bff;
+}
+
+.transfer-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.transfer-form-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.transfer-form-btn.cancel {
+  background: #6c757d;
+  color: white;
+}
+
+.transfer-form-btn.cancel:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.transfer-form-btn.process {
+  background: #28a745;
+  color: white;
+}
+
+.transfer-form-btn.process:hover:not(:disabled) {
+  background: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.transfer-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 480px) {
+  .transfer-form-bank-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .transfer-form-amount {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}

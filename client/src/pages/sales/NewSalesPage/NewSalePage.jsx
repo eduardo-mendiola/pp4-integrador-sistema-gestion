@@ -8,6 +8,7 @@ import SalesFooter from '../../../components/Sales/SalesFooter/SalesFooter';
 import SalesMessage from '../../../components/Sales/SalesMessage/SalesMessage';
 import ClientModal from '../../../components/Sales/ClientModal/ClientModal';
 import PaymentMethodModal from '../../../components/Sales/PaymentMethodModal/PaymentMethodModal';
+import PaymentProcessModal from '../../../components/Sales/PaymentProcessModal/PaymentProcessModal';
 import './NewSalePage.css';
 
 export default function NewSalePage() {
@@ -22,7 +23,6 @@ export default function NewSalePage() {
     };
   }, []);
 
-  // Handler para el botón PAGAR con validación
   const handlePayClick = () => {
     if (sales.cartItems.length === 0) {
       sales.setMessage({ type: 'error', text: 'Agrega productos al carrito' });
@@ -33,6 +33,19 @@ export default function NewSalePage() {
       return;
     }
     sales.openPaymentModal();
+  };
+
+  const handleProcessPayment = async (paymentData) => {
+    const result = await sales.processPayment(
+      client.selectedClient,
+      sales.selectedPaymentMethod,
+      paymentData
+    );
+    
+    if (result.success) {
+      // Aquí en FASE 3 abriremos el modal de comprobante
+      console.log('Pago procesado exitosamente:', result.sale);
+    }
   };
 
   return (
@@ -82,7 +95,6 @@ export default function NewSalePage() {
         onPay={handlePayClick}
       />
 
-      {/* Modal de cliente */}
       <ClientModal
         isOpen={client.isModalOpen}
         mode={client.modalMode}
@@ -97,12 +109,22 @@ export default function NewSalePage() {
         onModeChange={client.setModalMode}
       />
 
-      {/* Modal de selección de método de pago */}
       <PaymentMethodModal
         isOpen={sales.showPaymentModal}
         onClose={() => sales.setShowPaymentModal(false)}
         onSelectMethod={sales.handleSelectPaymentMethod}
         total={sales.totals.total}
+      />
+
+      <PaymentProcessModal
+        isOpen={sales.showPaymentProcessModal}
+        method={sales.selectedPaymentMethod}
+        total={sales.totals.total}
+        client={client.selectedClient}
+        items={sales.cartItems}
+        loading={sales.loading}
+        onClose={sales.closePaymentProcessModal}
+        onProcess={handleProcessPayment}
       />
     </div>
   );
