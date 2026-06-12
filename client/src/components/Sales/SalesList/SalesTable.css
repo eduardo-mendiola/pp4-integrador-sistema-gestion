@@ -1,0 +1,146 @@
+.sales-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sales-table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.sales-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 16px !important;
+  text-transform: uppercase;
+  color: #525f7f;
+  letter-spacing: 0.5px;
+}
+
+.sales-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f0f4f8;
+  font-size: 16px;
+  color: #333;
+}
+
+.sales-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.sales-table-total {
+  font-weight: 700;
+  color: #007bff;
+  font-size: 20px;
+}
+
+.sales-table-status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sales-table-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+  color: #8898aa;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.sales-table-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.sales-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #8898aa;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.sales-table-empty svg {
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.sales-table-empty p {
+  margin: 0;
+  font-size: 20px;
+}
+
+.sales-table th.text-center,
+.sales-table td.text-center {
+  text-align: center;
+}
+
+.sales-table-view-btn {
+  padding: 6px 14px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.sales-table-view-btn:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+}
+
+.sales-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sales-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+  .sales-table th,
+  .sales-table td {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+  
+  .sales-table-status {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
