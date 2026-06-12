@@ -8,16 +8,22 @@ export default function CartTable({
   editingQuantities,
   onSelectItem,
   onRemoveItem,
+  onToggleActive,
   onQuantityFocus,
   onQuantityChange,
   onQuantityBlur,
   onQuantityKeyDown
 }) {
+  // Contar items activos
+  const activeItemsCount = items.filter(item => item.active !== false).length;
+  
   return (
     <div className="sales-products-panel">
       <div className="sales-products-header">
         <h3>Productos</h3>
-        <span className="sales-items-count">{items.length} items</span>
+        <span className="sales-items-count">
+          {activeItemsCount} de {items.length} activos
+        </span>
       </div>
 
       {items.length === 0 ? (
@@ -50,6 +56,7 @@ export default function CartTable({
                   editingQuantity={editingQuantities[item._id]}
                   onSelect={onSelectItem}
                   onRemove={onRemoveItem}
+                  onToggleActive={onToggleActive}
                   onQuantityFocus={onQuantityFocus}
                   onQuantityChange={onQuantityChange}
                   onQuantityBlur={onQuantityBlur}

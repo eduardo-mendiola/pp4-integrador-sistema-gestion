@@ -201,3 +201,29 @@
   font-size: 16px;
   margin: 0;
 }
+
+/* Fila inactiva (desmarcada) */
+.sales-table tbody tr.inactive {
+  opacity: 0.5;
+  background-color: #f8f9fa;
+}
+
+.sales-table tbody tr.inactive:hover {
+  background-color: #e9ecef;
+}
+
+.sales-table tbody tr.inactive .sales-product-name,
+.sales-table tbody tr.inactive .sales-product-sku {
+  text-decoration: line-through;
+  color: #adb5bd;
+}
+
+.sales-table tbody tr.inactive .sales-price,
+.sales-table tbody tr.inactive .sales-price-final {
+  color: #adb5bd;
+}
+
+.sales-table tbody tr.inactive .sales-quantity-input {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}

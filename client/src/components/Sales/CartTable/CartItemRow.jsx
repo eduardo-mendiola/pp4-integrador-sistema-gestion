@@ -7,22 +7,29 @@ export default function CartItemRow({
   editingQuantity,
   onSelect,
   onRemove,
+  onToggleActive,
   onQuantityFocus,
   onQuantityChange,
   onQuantityBlur,
   onQuantityKeyDown
 }) {
+  const isActive = item.active !== false;
+  
   return (
     <tr 
-      className={isSelected ? 'selected' : ''}
+      className={`${isSelected ? 'selected' : ''} ${!isActive ? 'inactive' : ''}`}
       onClick={() => onSelect(item)}
     >
       <td>
         <input 
           type="checkbox" 
           className="sales-checkbox"
-          checked={true}
-          onChange={() => {}}
+          checked={isActive}
+          onChange={(e) => {
+            e.stopPropagation();
+            onToggleActive(item._id);
+          }}
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td>
@@ -47,21 +54,22 @@ export default function CartItemRow({
           onKeyDown={(e) => onQuantityKeyDown(e, item._id)}
           min="1"
           onClick={(e) => e.stopPropagation()}
+          disabled={!isActive}
         />
       </td>
       <td className="text-right">
         {item.originalPrice > item.price && (
           <span className="sales-price-original">
-            ${item.originalPrice.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+            ${item.originalPrice.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
           </span>
         )}
         <span className="sales-price-final">
-          ${item.price.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+          ${item.price.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
         </span>
       </td>
       <td className="text-right">
         <span className="sales-price">
-          ${(item.price * item.quantity).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+          ${(item.price * item.quantity).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
         </span>
       </td>
       <td className="text-center">

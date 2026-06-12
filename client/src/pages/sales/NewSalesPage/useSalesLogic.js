@@ -6,7 +6,7 @@ const PAYMENT_METHOD_IDS = {
   cash: "6a2a413493ebd9bb34545eeb",
   credit_card: "6a13292f36b47dc045a9fc7a",
   debit_card: "6a13296f36b47dc045a9fc88",
-  transfer: "6a2a414593ebd9bb34545ef0",
+  transfer: "6a2a414593ebd9bb34545ef0"
 };
 
 export default function useSalesLogic() {
@@ -41,13 +41,15 @@ export default function useSalesLogic() {
     loadProducts();
   }, []);
 
-  // Calcular totales (solo para mostrar en el frontend)
+  // Calcular totales - SOLO considera items activos
   const calculateTotals = () => {
-    const subtotal = cartItems.reduce(
+    const activeItems = cartItems.filter((item) => item.active !== false);
+
+    const subtotal = activeItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0,
     );
-    const discount = cartItems.reduce(
+    const discount = activeItems.reduce(
       (sum, item) => sum + (item.discount || 0),
       0,
     );
@@ -88,7 +90,7 @@ export default function useSalesLogic() {
     }
   };
 
-  // Agregar producto al carrito
+  // Agregar producto al carrito - ahora incluye campo active
   const addToCart = (product) => {
     setCartItems((prevCart) => {
       const existingItemIndex = prevCart.findIndex(
@@ -100,6 +102,7 @@ export default function useSalesLogic() {
         newCart[existingItemIndex] = {
           ...newCart[existingItemIndex],
           quantity: newCart[existingItemIndex].quantity + 1,
+          active: true, // Reactivar si estaba desmarcado
         };
         return newCart;
       } else {
@@ -113,6 +116,7 @@ export default function useSalesLogic() {
           quantity: 1,
           image: product.image,
           stock: product.stock,
+          active: true, // ← NUEVO: activo por defecto
         };
         return [...prevCart, newItem];
       }
@@ -137,6 +141,15 @@ export default function useSalesLogic() {
     if (selectedItem?._id === itemId) {
       setSelectedItem(null);
     }
+  };
+
+  // Toggle activo/inactivo de un item - NUEVA FUNCIÓN
+  const toggleItemActive = (itemId) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item._id === itemId ? { ...item, active: !item.active } : item,
+      ),
+    );
   };
 
   // Actualizar cantidad
@@ -199,8 +212,14 @@ export default function useSalesLogic() {
 
   // Procesar pago - ajustado al formato del backend
   const processPayment = async (client, paymentMethod, paymentData = {}) => {
-    if (cartItems.length === 0) {
-      setMessage({ type: "error", text: "Agrega productos al carrito" });
+    // Filtrar solo items activos
+    const activeItems = cartItems.filter((item) => item.active !== false);
+
+    if (activeItems.length === 0) {
+      setMessage({
+        type: "error",
+        text: "No hay productos activos en el carrito",
+      });
       return { success: false };
     }
 
@@ -212,8 +231,8 @@ export default function useSalesLogic() {
     setLoading(true);
 
     try {
-      // Mapear items al formato esperado por el backend
-      const items = cartItems.map((item) => ({
+      // Mapear SOLO items activos al formato esperado por el backend
+      const items = activeItems.map((item) => ({
         productId: item._id,
         quantity: item.quantity,
       }));
@@ -227,7 +246,7 @@ export default function useSalesLogic() {
         return { success: false };
       }
 
-      // Calcular monto total
+      // Calcular monto total (ya calculado con solo items activos)
       const totalAmount = totals.total;
 
       // Crear referencia de pago según el método
@@ -246,7 +265,6 @@ export default function useSalesLogic() {
       }
 
       // Payload ajustado al formato del backend
-      // NO enviamos employee_id: el backend lo resuelve desde req.user (cookie de sesión)
       const payload = {
         client_id: client._id,
         items: items,
@@ -359,6 +377,7 @@ export default function useSalesLogic() {
     handleSearch,
     addToCart,
     removeFromCart,
+    toggleItemActive,
     handleQuantityFocus,
     handleQuantityChange,
     handleQuantityBlur,
