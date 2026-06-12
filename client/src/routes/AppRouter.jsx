@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import AppShell from '../components/AppShell.jsx';
+import AppShell from '../components/AppShell/AppShell.jsx';
 import ProtectedRoute from '../components/ProtectedRoute.jsx';
 import { moduleCards } from '../config/modules.js';
 import AccessDeniedPage from '../pages/AccessDeniedPage.jsx';
