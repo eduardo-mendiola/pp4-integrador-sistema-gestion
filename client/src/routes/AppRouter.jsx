@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import AppShell from '../components/AppShell.jsx';
+import AppShell from '../components/AppShell/AppShell.jsx';
 import ProtectedRoute from '../components/ProtectedRoute.jsx';
 import { moduleCards } from '../config/modules.js';
 import AccessDeniedPage from '../pages/AccessDeniedPage.jsx';
@@ -10,7 +10,7 @@ import NotFoundPage from '../pages/NotFoundPage.jsx';
 import ProductsPage from '../pages/products/ProductsPage.jsx';
 import CategoriesPage from '../pages/categories/CategoriesPage.jsx';
 import ClientsPage from '../pages/clients/ClientsPage.jsx';
-import SalesPage from '../pages/sales/SalesPage.jsx';
+import SalesListPage from '../pages/sales/SalesListPage/SalesListPage.jsx';
 import UsersPage from '../pages/users/UsersPage.jsx';
 import RolesPage from '../pages/roles/RolesPage.jsx';
 import EmpleadosPage from '../pages/empleados/EmpleadosPage.jsx';
@@ -49,9 +49,9 @@ export default function AppRouter() {
         <Route path="clientes" element={<ProtectedRoute><ClientsPage /></ProtectedRoute>} />
         
         {/* Ventas */}
-        <Route path="ventas" element={<ProtectedRoute><SalesPage /></ProtectedRoute>} />
+        <Route path="ventas" element={<ProtectedRoute><SalesListPage /></ProtectedRoute>} />
         <Route path="ventas/nueva" element={<ProtectedRoute><NewSalesPage /></ProtectedRoute>} />
-        <Route path="ventas/pagos" element={<ProtectedRoute><SalesPage /></ProtectedRoute>} />
+        <Route path="ventas/pagos" element={<ProtectedRoute><SalesListPage /></ProtectedRoute>} />
         
         {/* Productos */}
         <Route path="productos" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
@@ -82,7 +82,7 @@ export default function AppRouter() {
               products: ProductsPage,
               categories: CategoriesPage,
               clients: ClientsPage,
-              sales: SalesPage,
+              sales: SalesListPage,
               users: UsersPage
             };
             const Page = PageMap[module.key];

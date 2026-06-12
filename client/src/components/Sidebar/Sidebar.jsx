@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
-import { menuConfig } from '../../config/menuConfig.js';
+import { menuConfig } from './menuConfig.js';
 import {
   FiHome,
   FiUsers,

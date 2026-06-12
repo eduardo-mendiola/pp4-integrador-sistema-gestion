@@ -16,14 +16,17 @@
 	box-sizing: border-box;
 }
 
+/* IMPORTANTE: Altura fija para que el scroll sea solo en .main-area */
 html,
 body,
 #root {
-	min-height: 100%;
+	height: 100vh;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
 }
 
 body {
-	margin: 0;
 	font-family: Arial, Helvetica, sans-serif;
 	color: var(--ink);
 	background: linear-gradient(180deg, #f7f4ef 0%, #eef2f7 100%);
@@ -72,36 +75,8 @@ label {
 }
 
 /* ============================================
-   LAYOUT GENERAL
+   COMPONENTES GENERALES
    ============================================ */
-
-.app-shell {
-	display: grid;
-	grid-template-columns: 260px minmax(0, 1fr);
-	grid-template-rows: auto 1fr;
-	grid-template-areas:
-		"header header"
-		"sidebar main";
-	min-height: 100vh;
-}
-
-/* ============================================
-   MAIN CONTENT AREA
-   ============================================ */
-
-.main-area,
-.content-area {
-	grid-area: main;
-	min-width: 0;
-	min-height: 0;
-	padding: 1.5rem 2rem 2rem;
-	overflow: auto;
-    position: relative;
-}
-
-.main-area.no-padding {
-    padding: 0;
-}
 
 .module-grid {
 	display: grid;
@@ -253,26 +228,12 @@ td {
 	filter: brightness(0.96);
 }
 
+
 /* ============================================
-   RESPONSIVE
+   RESPONSIVE GENERAL
    ============================================ */
 
 @media (max-width: 900px) {
-	.app-shell {
-		grid-template-columns: 1fr;
-		grid-template-rows: auto auto 1fr;
-		grid-template-areas:
-			"header"
-			"sidebar"
-			"main";
-	}
-
-	.main-area,
-	.content-area {
-		padding-left: 1rem;
-		padding-right: 1rem;
-	}
-
 	.form-grid {
 		grid-template-columns: 1fr;
 	}
@@ -281,5 +242,3 @@ td {
 		grid-column: auto;
 	}
 }
-
-
