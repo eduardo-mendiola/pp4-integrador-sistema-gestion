@@ -77,6 +77,7 @@ export default function NewSalePage() {
           editingQuantities={sales.editingQuantities}
           onSelectItem={sales.selectItem}
           onRemoveItem={sales.removeFromCart}
+          onToggleActive={sales.toggleItemActive}
           onQuantityFocus={sales.handleQuantityFocus}
           onQuantityChange={sales.handleQuantityChange}
           onQuantityBlur={sales.handleQuantityBlur}
