@@ -79,6 +79,7 @@ export default function Sidebar() {
             ) : (
               <NavLink
                 to={menu.path}
+                end
                 className={({ isActive }) =>
                   `nav-item nav-link ${isActive ? 'active' : ''}`
                 }
@@ -96,6 +97,7 @@ export default function Sidebar() {
                   <NavLink
                     key={subitem.id}
                     to={subitem.path}
+                    end
                     className={({ isActive }) =>
                       `submenu-item ${isActive ? 'active' : ''}`
                     }
