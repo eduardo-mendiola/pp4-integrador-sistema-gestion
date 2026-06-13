@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext.jsx';
+import { useAuth } from '../../context/AuthContext.jsx'; // 👈 Este import faltaba
 import { menuConfig } from './menuConfig.js';
 import {
   FiHome,
@@ -31,13 +31,13 @@ const iconMap = {
   FiSettings,
 };
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const { user, logout, hasPermission } = useAuth();
   const [expandedMenu, setExpandedMenu] = useState(null);
 
   // Filtrar menús según permisos
   const visibleMenus = menuConfig.filter((menu) => {
-    if (menu.permission === null) return true; // Configuración visible para todos
+    if (menu.permission === null) return true;
     return hasPermission(menu.permission);
   });
 
@@ -54,8 +54,13 @@ export default function Sidebar() {
     return Icon ? <Icon className="sidebar-icon" /> : null;
   };
 
+  // Cerrar sidebar al navegar (solo en mobile)
+  const handleNavClick = () => {
+    if (onClose) onClose();
+  };
+
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <nav className="sidebar-nav">
         {visibleMenus.map((menu) => (
           <div key={menu.id} className="nav-item-wrapper">
@@ -80,6 +85,7 @@ export default function Sidebar() {
               <NavLink
                 to={menu.path}
                 end
+                onClick={handleNavClick}
                 className={({ isActive }) =>
                   `nav-item nav-link ${isActive ? 'active' : ''}`
                 }
@@ -98,6 +104,7 @@ export default function Sidebar() {
                     key={subitem.id}
                     to={subitem.path}
                     end
+                    onClick={handleNavClick}
                     className={({ isActive }) =>
                       `submenu-item ${isActive ? 'active' : ''}`
                     }
