@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { apiRequest } from '../../../services/api.js';
+import { printSaleReceipt } from '../../../utils/printSaleReceipt.js';
 import useSalesList from './useSalesList';
 import SalesStatsCards from '../../../components/Sales/SalesList/SalesStatsCards';
 import SalesFilters from '../../../components/Sales/SalesList/SalesFilters';
@@ -12,8 +13,8 @@ import './SalesListPage.css';
 export default function SalesListPage() {
   const { sales, allSales, loading, error, filters, setFilters, loadSales } = useSalesList();
   const [selectedSale, setSelectedSale] = useState(null);
-  const [saleToCancel, setSaleToCancel] = useState(null);      // Modal de confirmación
-  const [saleToConfirmCancel, setSaleToConfirmCancel] = useState(null); // Modal de motivo
+  const [saleToCancel, setSaleToCancel] = useState(null);
+  const [saleToConfirmCancel, setSaleToConfirmCancel] = useState(null);
   const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
@@ -28,30 +29,25 @@ export default function SalesListPage() {
     setSelectedSale(null);
   };
 
-  // Click en ❌ → abre modal de confirmación
   const handleCancelSale = (sale) => {
     setSaleToCancel(sale);
   };
 
-  // Click en "Sí, continuar" → cierra confirmación y abre modal de motivo
   const handleConfirmCancelClick = () => {
     setSaleToConfirmCancel(saleToCancel);
     setSaleToCancel(null);
   };
 
-  // Cerrar modal de confirmación
   const handleCloseConfirmModal = () => {
     setSaleToCancel(null);
   };
 
-  // Cerrar modal de motivo
   const handleCloseCancelModal = () => {
     if (!cancelling) {
       setSaleToConfirmCancel(null);
     }
   };
 
-  // Confirmar anulación con motivo → llamada al backend
   const handleConfirmCancel = async (sale, reason) => {
     setCancelling(true);
     try {
@@ -72,9 +68,9 @@ export default function SalesListPage() {
       }
 
       setSaleToConfirmCancel(null);
-      loadSales(); // Recargar lista de ventas
+      loadSales();
       
-      // ✅ NUEVO: Notificar al Header que debe recargar productos
+      // Notificar al Header que debe recargar productos
       window.dispatchEvent(new CustomEvent('productsUpdated'));
     } catch (err) {
       console.error('Error al anular venta:', err);
@@ -84,9 +80,9 @@ export default function SalesListPage() {
     }
   };
 
+  // ✅ NUEVO: Función de reimprimir usando el utilitario
   const handleReprintSale = (sale) => {
-    console.log('Reimprimir venta:', sale);
-    alert('Función de reimpresión en desarrollo');
+    printSaleReceipt(sale);
   };
 
   const filtersWithCount = { ...filters, _filteredCount: sales.length };
@@ -131,14 +127,12 @@ export default function SalesListPage() {
         onReprint={handleReprintSale}
       />
 
-      {/* Modal 1: Confirmación inicial */}
       <CancelSaleConfirmModal
         sale={saleToCancel}
         onClose={handleCloseConfirmModal}
         onConfirm={handleConfirmCancelClick}
       />
 
-      {/* Modal 2: Ingreso de motivo */}
       <CancelSaleModal
         sale={saleToConfirmCancel}
         onClose={handleCloseCancelModal}
