@@ -199,6 +199,15 @@ const SaleController = {
       delete updateData.created_at;
       delete updateData.updated_at;
 
+      // Obtener venta actual para validaciones
+      const currentSale = await Sale.model.findById(id).lean();
+      if (!currentSale) {
+        return res.status(404).json({
+          success: false,
+          message: "Venta no encontrada",
+        });
+      }
+
       // Validar y manejar 'status'
       if (updateData.status !== undefined) {
         const validStatuses = ["PENDING", "PAID", "CANCELLED"];
@@ -209,19 +218,35 @@ const SaleController = {
           });
         }
 
-        const currentSale = await Sale.model.findById(id).lean();
-        if (!currentSale) {
-          return res
-            .status(404)
-            .json({ success: false, message: "Venta no encontrada" });
-        }
-
-        // 🚫 No modificar ventas ya canceladas
+        // No modificar ventas ya canceladas
         if (currentSale.status === "CANCELLED") {
           return res.status(400).json({
             success: false,
             message: "No se puede modificar una venta cancelada",
           });
+        }
+
+        // Si se está anulando una venta PAID, reintegrar stock
+        if (
+          updateData.status === "CANCELLED" &&
+          currentSale.status === "PAID"
+        ) {
+          try {
+            const ProductNative = mongoose.model("Product");
+
+            const bulkOps = currentSale.items.map((item) => ({
+              updateOne: {
+                filter: { _id: item.product },
+                update: { $inc: { stock: item.quantity } }, // Sumamos la cantidad
+              },
+            }));
+
+            await ProductNative.bulkWrite(bulkOps);
+            console.log(`Stock reintegrado para venta anulada: ${id}`);
+          } catch (stockError) {
+            console.error("Error al reintegrar stock:", stockError);
+            // No fallar la anulación si el stock falla, solo loguear
+          }
         }
       }
 
@@ -246,7 +271,6 @@ const SaleController = {
         updateData.metadata !== undefined &&
         typeof updateData.metadata === "object"
       ) {
-        const currentSale = await Sale.model.findById(id).lean();
         updateData.metadata = {
           ...(currentSale?.metadata || {}),
           ...updateData.metadata,
@@ -257,12 +281,16 @@ const SaleController = {
       const updatedSale = await Sale.patch(id, updateData);
 
       if (!updatedSale) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Venta no encontrada" });
+        return res.status(404).json({
+          success: false,
+          message: "Venta no encontrada",
+        });
       }
 
-      return res.json({ success: true, data: updatedSale });
+      // Popular antes de devolver
+      const populatedSale = await Sale.findById(updatedSale._id);
+
+      return res.json({ success: true, data: populatedSale });
     } catch (error) {
       console.error("Error en partialUpdate sale:", error);
 
