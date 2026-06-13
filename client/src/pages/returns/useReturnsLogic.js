@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { apiRequest } from '../../services/api.js';
 
-export const RETURN_PERIOD_DAYS = 2;
+export const RETURN_PERIOD_DAYS = 30;
 
 export default function useReturnsLogic() {
   const [currentStep, setCurrentStep] = useState('search');
+  const [selectionMode, setSelectionMode] = useState('full'); // 'full' | 'individual'
   
   const [searchFilters, setSearchFilters] = useState({
     invoiceNumber: '',
@@ -91,14 +92,16 @@ export default function useReturnsLogic() {
 
     setOriginalSale(sale);
     setError('');
+    setSelectionMode('full'); // Siempre inicia en modo completo
     
+    // Por defecto, todo seleccionado con cantidad máxima
     const initialReturnItems = sale.items.map(item => ({
       productId: item.product?._id || item.product,
       name: item.product?.name || 'Producto',
-      quantity: 0,
+      quantity: item.quantity,
       maxQuantity: item.quantity,
       price: item.price,
-      subtotal: 0
+      subtotal: item.price * item.quantity
     }));
 
     setReturnItems(initialReturnItems);
@@ -118,7 +121,26 @@ export default function useReturnsLogic() {
     setCurrentStep('search');
   };
 
+  // Cambio de modo: Full <-> Individual
+  const toggleSelectionMode = () => {
+    setSelectionMode(prev => {
+      const nextMode = prev === 'full' ? 'individual' : 'full';
+      
+      setReturnItems(prevItems => prevItems.map(item => {
+        if (nextMode === 'individual') {
+          return { ...item, quantity: 0, subtotal: 0 };
+        }
+        return { ...item, quantity: item.maxQuantity, subtotal: item.maxQuantity * item.price };
+      }));
+      
+      return nextMode;
+    });
+  };
+
+  // Solo permite editar cantidades en modo individual
   const updateReturnQuantity = (productId, quantity) => {
+    if (selectionMode !== 'individual') return;
+
     setReturnItems(prev => prev.map(item => {
       if (item.productId === productId) {
         const validQty = Math.min(Math.max(0, quantity), item.maxQuantity);
@@ -128,8 +150,49 @@ export default function useReturnsLogic() {
     }));
   };
 
+  const addExchangeItem = (product) => {
+    setExchangeItems(prev => {
+      const existing = prev.find(item => item.productId === product._id);
+      if (existing) {
+        return prev.map(item => 
+          item.productId === product._id 
+            ? { ...item, quantity: item.quantity + 1, subtotal: (item.quantity + 1) * item.price }
+            : item
+        );
+      }
+      return [...prev, {
+        productId: product._id,
+        name: product.name,
+        quantity: 1,
+        price: product.price,
+        subtotal: product.price
+      }];
+    });
+  };
+
+  const updateExchangeQuantity = (productId, quantity) => {
+    if (quantity <= 0) {
+      setExchangeItems(prev => prev.filter(item => item.productId !== productId));
+    } else {
+      setExchangeItems(prev => prev.map(item => 
+        item.productId === productId 
+          ? { ...item, quantity, subtotal: quantity * item.price }
+          : item
+      ));
+    }
+  };
+
+  const calculateTotals = () => {
+    const returnTotal = returnItems.reduce((sum, item) => sum + item.subtotal, 0);
+    const exchangeTotal = exchangeItems.reduce((sum, item) => sum + item.subtotal, 0);
+    const difference = exchangeTotal - returnTotal;
+
+    return { returnTotal, exchangeTotal, difference };
+  };
+
   return {
     currentStep,
+    selectionMode,
     searchFilters,
     setSearchFilters,
     searchResults,
@@ -137,11 +200,20 @@ export default function useReturnsLogic() {
     hasSearched,       
     originalSale,
     returnItems,
+    exchangeItems,
+    operationType,
+    setOperationType,
+    returnReason,
+    setReturnReason,
     error,
     performSearch,
     clearFilters,      
     selectSale,
     cancelOperation,
-    updateReturnQuantity
+    toggleSelectionMode,
+    updateReturnQuantity,
+    addExchangeItem,
+    updateExchangeQuantity,
+    totals: calculateTotals()
   };
 }
