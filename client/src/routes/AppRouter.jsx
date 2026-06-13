@@ -20,6 +20,7 @@ import PromocionsPage from '../pages/promociones/PromocionsPage.jsx';
 import DescuentosPage from '../pages/promociones/DescuentosPage.jsx';
 import StockPage from '../pages/products/StockPage.jsx';
 import NewSalesPage from '../pages/sales/NewSalesPage/NewSalePage.jsx';
+import ReturnsPage from '../pages/returns/ReturnsPage.jsx'; 
 import ReportesPage from '../pages/ReportesPage.jsx';
 import ConfiguracionPage from '../pages/ConfiguracionPage.jsx';
 
@@ -51,7 +52,7 @@ export default function AppRouter() {
         {/* Ventas */}
         <Route path="ventas" element={<ProtectedRoute><SalesListPage /></ProtectedRoute>} />
         <Route path="ventas/nueva" element={<ProtectedRoute><NewSalesPage /></ProtectedRoute>} />
-        <Route path="ventas/pagos" element={<ProtectedRoute><SalesListPage /></ProtectedRoute>} />
+        <Route path="ventas/devoluciones" element={<ProtectedRoute><ReturnsPage /></ProtectedRoute>} /> {/* ✅ NUEVO */}
         
         {/* Productos */}
         <Route path="productos" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
