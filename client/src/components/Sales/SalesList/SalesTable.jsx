@@ -82,6 +82,10 @@ export default function SalesTable({ sales, loading, onViewSale, onCancelSale, o
            '-';
   };
 
+  const getInvoiceNumber = (sale) => {
+    return (sale._id || '').slice(-8).toUpperCase();
+  };
+
   const canCancel = (sale) => sale.status === 'PAID' || sale.status === 'PENDING';
 
   // Lógica de ordenamiento
@@ -92,6 +96,10 @@ export default function SalesTable({ sales, loading, onViewSale, onCancelSale, o
         let aValue, bValue;
         
         switch (sortConfig.key) {
+          case 'factura':
+            aValue = getInvoiceNumber(a);
+            bValue = getInvoiceNumber(b);
+            break;
           case 'fecha':
             aValue = new Date(a.createdAt || a.created_at).getTime();
             bValue = new Date(b.createdAt || b.created_at).getTime();
@@ -154,13 +162,16 @@ export default function SalesTable({ sales, loading, onViewSale, onCancelSale, o
         <thead>
           <tr>
             <th style={{ width: '50px' }}>#</th>
+            <th className="sortable" onClick={() => handleSort('factura')} style={{ width: '160px' }}>
+              N° Factura {getSortIcon('factura')}
+            </th>
             <th className="sortable" onClick={() => handleSort('fecha')}>
               Fecha {getSortIcon('fecha')}
             </th>
             <th className="sortable" onClick={() => handleSort('cliente')}>
               Cliente {getSortIcon('cliente')}
             </th>
-            <th className="sortable" onClick={() => handleSort('items')} style={{ textAlign: 'center' }}>
+            <th className="sortable" onClick={() => handleSort('items')} style={{ textAlign: 'center', width: '105px' }}>
               Items {getSortIcon('items')}
             </th>
             <th className="sortable" onClick={() => handleSort('total')} style={{ textAlign: 'right' }}>
@@ -169,7 +180,7 @@ export default function SalesTable({ sales, loading, onViewSale, onCancelSale, o
             <th className="sortable" onClick={() => handleSort('metodo')}>
               Método de Pago {getSortIcon('metodo')}
             </th>
-            <th className="sortable" onClick={() => handleSort('estado')} style={{ textAlign: 'center' }}>
+            <th className="sortable" onClick={() => handleSort('estado')} style={{ textAlign: 'center', width: '120px' }}>
               Estado {getSortIcon('estado')}
             </th>
             <th className="text-center" style={{ width: '120px' }}>Acciones</th>
@@ -179,6 +190,11 @@ export default function SalesTable({ sales, loading, onViewSale, onCancelSale, o
           {sortedSales.map((sale, index) => (
             <tr key={sale._id || index}>
               <td>{index + 1}</td>
+              <td>
+                <span className="sales-invoice-number">
+                  {getInvoiceNumber(sale)}
+                </span>
+              </td>
               <td>{formatDate(sale.createdAt || sale.created_at)}</td>
               <td>{getClientName(sale)}</td>
               <td style={{ textAlign: 'center' }}>{sale.items?.length || 0}</td>
