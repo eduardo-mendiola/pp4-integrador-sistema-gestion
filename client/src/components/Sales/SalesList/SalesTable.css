@@ -186,6 +186,22 @@
   transform: translateY(-1px);
 }
 
+/* Estilos para columnas ordenables */
+.sales-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sales-table th.sortable:hover {
+  background-color: #e9ecef;
+  color: #007bff;
+}
+
+.sales-table th.sortable:active {
+  background-color: #dee2e6;
+}
+
 @media (max-width: 768px) {
   .sales-table th,
   .sales-table td {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import './SalesTable.css';
 
 const statusLabels = {
@@ -13,7 +13,55 @@ const statusColors = {
   CANCELLED: '#dc3545'
 };
 
+// Función auxiliar fuera del componente para que sea estable
+const getPaymentMethodLabel = (sale) => {
+  // 1. Formato nuevo: array payments
+  if (sale.payments && sale.payments.length > 0) {
+    const method = sale.payments[0].method;
+    if (typeof method === 'string') {
+      const map = { 'cash': 'Efectivo', 'transfer': 'Transferencia', 'card': 'Tarjeta' };
+      return map[method.toLowerCase()] || method;
+    }
+    if (method?.name) {
+      const name = method.name.toLowerCase();
+      if (name.includes('cash') || name.includes('efectivo')) return 'Efectivo';
+      if (name.includes('crédito') || name.includes('credito')) return 'Tarjeta de Crédito';
+      if (name.includes('débito') || name.includes('debito')) return 'Tarjeta de Débito';
+      if (name.includes('transfer') || name.includes('transferencia')) return 'Transferencia';
+      return method.name;
+    }
+  }
+  
+  // 2. Formato viejo: campo payment_method directo
+  if (sale.payment_method) {
+    const pm = sale.payment_method.toLowerCase();
+    if (pm === 'cash' || pm === 'efectivo') return 'Efectivo';
+    if (pm === 'card' || pm.includes('credito') || pm.includes('crédito')) return 'Tarjeta';
+    if (pm === 'transfer' || pm === 'transferencia') return 'Transferencia';
+    return sale.payment_method;
+  }
+
+  return '-';
+};
+
 export default function SalesTable({ sales, loading, onViewSale, onCancelSale, onReprintSale }) {
+  const [sortConfig, setSortConfig] = useState({ key: 'fecha', direction: 'desc' });
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
+    }
+    return ' ⇅';
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return '-';
     const date = new Date(dateString);
@@ -34,16 +82,51 @@ export default function SalesTable({ sales, loading, onViewSale, onCancelSale, o
            '-';
   };
 
-  const getPaymentMethodLabel = (sale) => {
-    if (!sale.payments || sale.payments.length === 0) return '-';
-    
-    const method = sale.payments[0].method;
-    if (typeof method === 'string') return method;
-    if (method?.name) return method.name;
-    return '-';
-  };
-
   const canCancel = (sale) => sale.status === 'PAID' || sale.status === 'PENDING';
+
+  // Lógica de ordenamiento
+  const sortedSales = useMemo(() => {
+    let sortableItems = [...sales];
+    if (sortConfig.key) {
+      sortableItems.sort((a, b) => {
+        let aValue, bValue;
+        
+        switch (sortConfig.key) {
+          case 'fecha':
+            aValue = new Date(a.createdAt || a.created_at).getTime();
+            bValue = new Date(b.createdAt || b.created_at).getTime();
+            break;
+          case 'cliente':
+            aValue = getClientName(a).toLowerCase();
+            bValue = getClientName(b).toLowerCase();
+            break;
+          case 'items':
+            aValue = a.items?.length || 0;
+            bValue = b.items?.length || 0;
+            break;
+          case 'total':
+            aValue = a.total || 0;
+            bValue = b.total || 0;
+            break;
+          case 'metodo':
+            aValue = getPaymentMethodLabel(a).toLowerCase();
+            bValue = getPaymentMethodLabel(b).toLowerCase();
+            break;
+          case 'estado':
+            aValue = a.status || '';
+            bValue = b.status || '';
+            break;
+          default:
+            return 0;
+        }
+
+        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [sales, sortConfig]);
 
   if (loading) {
     return (
@@ -54,7 +137,7 @@ export default function SalesTable({ sales, loading, onViewSale, onCancelSale, o
     );
   }
 
-  if (sales.length === 0) {
+  if (sortedSales.length === 0) {
     return (
       <div className="sales-table-empty">
         <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,28 +153,40 @@ export default function SalesTable({ sales, loading, onViewSale, onCancelSale, o
       <table className="sales-table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Fecha</th>
-            <th>Cliente</th>
-            <th>Items</th>
-            <th>Total</th>
-            <th>Método de Pago</th>
-            <th>Estado</th>
-            <th className="text-center">Acciones</th>
+            <th style={{ width: '50px' }}>#</th>
+            <th className="sortable" onClick={() => handleSort('fecha')}>
+              Fecha {getSortIcon('fecha')}
+            </th>
+            <th className="sortable" onClick={() => handleSort('cliente')}>
+              Cliente {getSortIcon('cliente')}
+            </th>
+            <th className="sortable" onClick={() => handleSort('items')} style={{ textAlign: 'center' }}>
+              Items {getSortIcon('items')}
+            </th>
+            <th className="sortable" onClick={() => handleSort('total')} style={{ textAlign: 'right' }}>
+              Total {getSortIcon('total')}
+            </th>
+            <th className="sortable" onClick={() => handleSort('metodo')}>
+              Método de Pago {getSortIcon('metodo')}
+            </th>
+            <th className="sortable" onClick={() => handleSort('estado')} style={{ textAlign: 'center' }}>
+              Estado {getSortIcon('estado')}
+            </th>
+            <th className="text-center" style={{ width: '120px' }}>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {sales.map((sale, index) => (
+          {sortedSales.map((sale, index) => (
             <tr key={sale._id || index}>
               <td>{index + 1}</td>
               <td>{formatDate(sale.createdAt || sale.created_at)}</td>
               <td>{getClientName(sale)}</td>
-              <td>{sale.items?.length || 0}</td>
-              <td className="sales-table-total">
+              <td style={{ textAlign: 'center' }}>{sale.items?.length || 0}</td>
+              <td className="sales-table-total" style={{ textAlign: 'right' }}>
                 ${(sale.total || 0).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
               </td>
               <td>{getPaymentMethodLabel(sale)}</td>
-              <td>
+              <td style={{ textAlign: 'center' }}>
                 <span 
                   className="sales-table-status"
                   style={{ 
