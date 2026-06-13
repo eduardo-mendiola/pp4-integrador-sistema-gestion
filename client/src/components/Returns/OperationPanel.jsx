@@ -53,7 +53,9 @@ export default function OperationPanel({
   const searchRef = useRef(null);
   const debounceTimer = useRef(null);
 
-  const isExchange = operationType === 'exchange_same' || operationType === 'exchange_other';
+  // ✅ Separamos las condiciones para mayor claridad
+  const isExchangeOther = operationType === 'exchange_other';
+  const isExchangeSame = operationType === 'exchange_same';
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -101,7 +103,7 @@ export default function OperationPanel({
 
   const getBalanceLabel = () => {
     if (totals.difference === 0) {
-      return { text: 'Sin diferencia', color: '#6c757d' };
+      return { text: 'Sin diferencia de valor', color: '#6c757d' };
     }
     if (totals.difference > 0) {
       return { text: 'A COBRAR AL CLIENTE', color: '#28a745' };
@@ -148,7 +150,6 @@ export default function OperationPanel({
           ))}
         </div>
         
-        {/* ✅ CAMBIO: Ahora es un textarea real que baja de línea */}
         {returnReason === 'otro' && (
           <textarea
             className="custom-reason-input"
@@ -160,7 +161,8 @@ export default function OperationPanel({
         )}
       </div>
 
-      {isExchange && (
+      {/* Solo muestra el buscador si es "Cambio por OTRO producto" */}
+      {isExchangeOther && (
         <div className="exchange-section" ref={searchRef}>
           <h3>Productos del Cambio</h3>
           <div className="exchange-search-wrapper">
@@ -212,12 +214,20 @@ export default function OperationPanel({
         </div>
       )}
 
+      {/* Mensaje informativo cuando es "Cambio por el MISMO producto" */}
+      {isExchangeSame && exchangeItems.length > 0 && (
+        <div className="exchange-same-info">
+          <p>Se procesará el cambio por los <strong>mismos productos y cantidades</strong> seleccionados en el panel izquierdo.</p>
+          <p className="exchange-same-hint">No hay diferencia de valor a cobrar ni a devolver.</p>
+        </div>
+      )}
+
       <div className="balance-section">
         <div className="balance-row">
           <span>Total de la compra original:</span>
           <span>${formatCurrency(totals.returnTotal)}</span>
         </div>
-        {isExchange && (
+        {isExchangeOther && (
           <div className="balance-row">
             <span>Total productos nuevos:</span>
             <span>${formatCurrency(totals.exchangeTotal)}</span>

@@ -290,3 +290,28 @@
 .process-btn:hover {
   background: #218838;
 }
+
+/* Estilos para el mensaje de Cambio (Mismo) */
+.exchange-same-info {
+  background: #e7f8e7;
+  border: 2px solid #28a745;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.exchange-same-info p {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #155724;
+  font-weight: 600;
+}
+
+.exchange-same-info p:last-child {
+  margin: 0;
+  font-size: 14px;
+  color: #155724;
+  font-weight: 400;
+  opacity: 0.9;
+}

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { apiRequest } from '../../services/api.js';
 
 export const RETURN_PERIOD_DAYS = 30;
 
 export default function useReturnsLogic() {
   const [currentStep, setCurrentStep] = useState('search');
-  const [selectionMode, setSelectionMode] = useState('full'); // 'full' | 'individual'
+  const [selectionMode, setSelectionMode] = useState('full'); 
   
   const [searchFilters, setSearchFilters] = useState({
     invoiceNumber: '',
@@ -23,6 +23,28 @@ export default function useReturnsLogic() {
   const [exchangeItems, setExchangeItems] = useState([]);
   const [operationType, setOperationType] = useState('return');
   const [returnReason, setReturnReason] = useState('');
+
+  // 1. Sincronizar automáticamente cuando es "Cambio (Mismo)"
+  useEffect(() => {
+    if (operationType === 'exchange_same') {
+      const selectedReturns = returnItems.filter(item => item.quantity > 0);
+      const syncedExchangeItems = selectedReturns.map(item => ({
+        productId: item.productId,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        subtotal: item.subtotal
+      }));
+      setExchangeItems(syncedExchangeItems);
+    }
+  }, [operationType, returnItems]);
+
+  // 2. Limpiar exchangeItems cuando se cambia a otro modo (Devolución, Nota de Crédito, etc.)
+  useEffect(() => {
+    if (operationType !== 'exchange_same') {
+      setExchangeItems([]);
+    }
+  }, [operationType]);
 
   const performSearch = async () => {
     setIsSearching(true);
@@ -92,9 +114,8 @@ export default function useReturnsLogic() {
 
     setOriginalSale(sale);
     setError('');
-    setSelectionMode('full'); // Siempre inicia en modo completo
+    setSelectionMode('full'); 
     
-    // Por defecto, todo seleccionado con cantidad máxima
     const initialReturnItems = sale.items.map(item => ({
       productId: item.product?._id || item.product,
       name: item.product?.name || 'Producto',
@@ -121,7 +142,6 @@ export default function useReturnsLogic() {
     setCurrentStep('search');
   };
 
-  // Cambio de modo: Full <-> Individual
   const toggleSelectionMode = () => {
     setSelectionMode(prev => {
       const nextMode = prev === 'full' ? 'individual' : 'full';
@@ -137,7 +157,6 @@ export default function useReturnsLogic() {
     });
   };
 
-  // Solo permite editar cantidades en modo individual
   const updateReturnQuantity = (productId, quantity) => {
     if (selectionMode !== 'individual') return;
 
