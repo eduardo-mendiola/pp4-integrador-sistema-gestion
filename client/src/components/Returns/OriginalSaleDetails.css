@@ -1,0 +1,41 @@
+/* 1. Centrar los signos + y - en los botones */
+.qty-btn {
+  display: flex;             
+  align-items: center;       
+  justify-content: center;   
+  width: 36px;               
+  height: 36px;
+  border: 1px solid #e1e8ed;
+  background: white;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #333;
+  padding: 0; /* Asegura que no haya padding interno desalineando */
+}
+
+/* 2. Etiquetas y valores seguidos, no separados a los extremos */
+.original-sale-info-row {
+  display: flex;
+  gap: 8px; /* Solo un espacio entre etiqueta y valor */
+  padding: 8px 0;
+  font-size: 15px;
+}
+
+.original-sale-info-row .label {
+  color: #8898aa;
+  font-weight: 600;
+}
+
+.original-sale-info-row .value {
+  color: #333;
+  font-weight: 600;
+}
+
+.original-sale-info-row .value.total {
+  font-size: 18px;
+  color: #007bff;
+  margin-left: 4px; /* Pequeña separación extra para el total */
+}

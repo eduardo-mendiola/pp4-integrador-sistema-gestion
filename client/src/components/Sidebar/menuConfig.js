@@ -63,10 +63,10 @@ export const menuConfig = [
         permission: 'view_sales',
       },
       {
-        id: 'pagos-ventas',
-        label: 'Pagos',
-        path: '/ventas/pagos',
-        permission: 'view_payment_methods',
+        id: 'devoluciones-cambios',
+        label: 'Devol./Cambios',
+        path: '/ventas/devoluciones',
+        permission: 'view_sales',
       },
     ],
   },
@@ -151,7 +151,7 @@ export const menuConfig = [
     label: 'Configuración',
     icon: 'FiSettings',
     path: '/configuracion',
-    permission: null, // Visible para todos (sin permiso específico)
+    permission: null,
     submenu: null,
   },
 ];
