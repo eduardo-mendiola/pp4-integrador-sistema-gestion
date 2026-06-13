@@ -7,15 +7,15 @@ export default function SalesFooter({ totals, itemsCount, loading, onCancel, onP
       <div className="sales-totals-info">
         <div className="sales-total-item">
           <div className="sales-total-label">
-            Descuento: {totals.discount.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+            Descuento: {totals.discount.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
           </div>
           <div className="sales-total-label">
-            Impuesto (IVA): {totals.tax.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+            Impuesto (IVA): {totals.tax.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
           </div>
         </div>
         <div className="sales-total-item">
           <div className="sales-total-label">
-            Subtotal: {totals.subtotal.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+            Subtotal: {totals.subtotal.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
           </div>
         </div>
         <div className="sales-total-item">
@@ -23,7 +23,7 @@ export default function SalesFooter({ totals, itemsCount, loading, onCancel, onP
             TOTAL <span className="sales-total-badge">{itemsCount} ITEMS</span>
           </div>
           <div className="sales-total-value main">
-            ${totals.total.toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+            ${totals.total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
           </div>
         </div>
       </div>
