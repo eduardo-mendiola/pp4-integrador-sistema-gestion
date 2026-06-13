@@ -7,7 +7,7 @@ import {
   FiChevronDown,
   FiBell,
 } from 'react-icons/fi';
-import SearchResults from '../SearchResults.jsx';
+import SearchResults from './SearchResults.jsx';
 import './Header.css';
 
 export default function Header({ onProductSelect }) {
@@ -31,11 +31,9 @@ export default function Header({ onProductSelect }) {
     return () => clearInterval(timer);
   }, []);
 
-  // Cargar todos los productos UNA SOLA VEZ
+  // Cargar productos y escuchar evento de actualización
   useEffect(() => {
     const loadProducts = async () => {
-      if (productsLoaded.current) return;
-      
       try {
         const response = await fetch('/api/products');
         const data = await response.json();
@@ -49,7 +47,20 @@ export default function Header({ onProductSelect }) {
       }
     };
 
+    // Cargar al inicio
     loadProducts();
+
+    // Escuchar evento de actualización de productos
+    const handleProductsUpdate = () => {
+      console.log('🔄 Actualizando productos en Header...');
+      loadProducts();
+    };
+
+    window.addEventListener('productsUpdated', handleProductsUpdate);
+
+    return () => {
+      window.removeEventListener('productsUpdated', handleProductsUpdate);
+    };
   }, []);
 
   // Cerrar menús al hacer click fuera

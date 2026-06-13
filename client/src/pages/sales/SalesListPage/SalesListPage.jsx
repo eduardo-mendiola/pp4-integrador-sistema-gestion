@@ -72,7 +72,10 @@ export default function SalesListPage() {
       }
 
       setSaleToConfirmCancel(null);
-      loadSales();
+      loadSales(); // Recargar lista de ventas
+      
+      // ✅ NUEVO: Notificar al Header que debe recargar productos
+      window.dispatchEvent(new CustomEvent('productsUpdated'));
     } catch (err) {
       console.error('Error al anular venta:', err);
       alert('Error al anular la venta: ' + err.message);
