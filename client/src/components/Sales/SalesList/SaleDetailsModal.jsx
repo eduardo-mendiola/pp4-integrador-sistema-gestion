@@ -201,9 +201,10 @@ export default function SaleDetailsModal({ sale, onClose, onReprint }) {
           <button className="sale-details-btn secondary" onClick={onClose}>
             Cerrar
           </button>
-          {sale.status === 'PAID' && onReprint && (
+          {/* ✅ El botón de imprimir ahora es siempre visible si se pasa la prop onReprint */}
+          {onReprint && (
             <button className="sale-details-btn primary" onClick={() => onReprint(sale)}>
-              🖨️ Reimprimir Comprobante
+              🖨️ Imprimir Comprobante
             </button>
           )}
         </div>

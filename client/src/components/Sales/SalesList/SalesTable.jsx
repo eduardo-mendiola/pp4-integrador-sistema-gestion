@@ -13,7 +13,7 @@ const statusColors = {
   CANCELLED: '#dc3545'
 };
 
-export default function SalesTable({ sales, loading, onViewSale }) {
+export default function SalesTable({ sales, loading, onViewSale, onCancelSale, onReprintSale }) {
   const formatDate = (dateString) => {
     if (!dateString) return '-';
     const date = new Date(dateString);
@@ -42,6 +42,8 @@ export default function SalesTable({ sales, loading, onViewSale }) {
     if (method?.name) return method.name;
     return '-';
   };
+
+  const canCancel = (sale) => sale.status === 'PAID' || sale.status === 'PENDING';
 
   if (loading) {
     return (
@@ -101,13 +103,33 @@ export default function SalesTable({ sales, loading, onViewSale }) {
                 </span>
               </td>
               <td className="text-center">
-                <button 
-                  className="sales-table-view-btn"
-                  onClick={() => onViewSale(sale)}
-                  title="Ver detalles"
-                >
-                  Ver
-                </button>
+                <div className="sales-table-actions">
+                  <button 
+                    className="sales-action-btn view"
+                    onClick={() => onViewSale(sale)}
+                    title="Ver detalles"
+                  >
+                    📄
+                  </button>
+                  {onReprintSale && (
+                    <button 
+                      className="sales-action-btn reprint"
+                      onClick={() => onReprintSale(sale)}
+                      title="Reimprimir comprobante"
+                    >
+                      🖨️
+                    </button>
+                  )}
+                  {canCancel(sale) && onCancelSale && (
+                    <button 
+                      className="sales-action-btn cancel"
+                      onClick={() => onCancelSale(sale)}
+                      title="Anular venta"
+                    >
+                      ❌
+                    </button>
+                  )}
+                </div>
               </td>
             </tr>
           ))}
