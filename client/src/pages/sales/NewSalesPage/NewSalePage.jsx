@@ -75,6 +75,7 @@ export default function NewSalePage() {
           items={sales.cartItems}
           selectedItemId={sales.selectedItem?._id}
           editingQuantities={sales.editingQuantities}
+          itemDiscounts={sales.itemDiscounts}
           onSelectItem={sales.selectItem}
           onRemoveItem={sales.removeFromCart}
           onToggleActive={sales.toggleItemActive}
@@ -82,6 +83,7 @@ export default function NewSalePage() {
           onQuantityChange={sales.handleQuantityChange}
           onQuantityBlur={sales.handleQuantityBlur}
           onQuantityKeyDown={sales.handleQuantityKeyDown}
+          onItemDiscountChange={sales.setItemDiscount}
         />
 
         <ProductDetailsPanel
@@ -95,6 +97,8 @@ export default function NewSalePage() {
         loading={sales.loading}
         onCancel={sales.clearSale}
         onPay={handlePayClick}
+        discountRate={sales.discountRate}
+        onDiscountChange={sales.setDiscountRate}
       />
 
       <ClientModal

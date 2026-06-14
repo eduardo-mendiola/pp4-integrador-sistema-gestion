@@ -138,6 +138,44 @@
   border-color: #007bff;
 }
 
+/* Discount Input */
+.sales-discount-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.sales-discount-input {
+  width: 70px;
+  padding: 6px 20px 6px 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sales-discount-input:focus {
+  outline: none;
+  border-color: #ffc107;
+  background-color: #fffbf0;
+}
+
+.sales-discount-input:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+.sales-discount-suffix {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-weight: 700;
+  color: #8898aa;
+  pointer-events: none;
+}
+
 /* Price Display */
 .sales-price {
   font-weight: 600;
@@ -154,6 +192,14 @@
 .sales-price-final {
   color: #333;
   font-weight: 600;
+}
+
+.sales-price-discount {
+  display: block;
+  color: #ffc107;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 2px;
 }
 
 /* Delete Button */
@@ -223,7 +269,8 @@
   color: #adb5bd;
 }
 
-.sales-table tbody tr.inactive .sales-quantity-input {
+.sales-table tbody tr.inactive .sales-quantity-input,
+.sales-table tbody tr.inactive .sales-discount-input {
   background-color: #e9ecef;
   cursor: not-allowed;
 }

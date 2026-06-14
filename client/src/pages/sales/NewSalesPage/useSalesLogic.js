@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../../services/api.js";
 
-// Mapeo de métodos de pago del frontend a ObjectIds del backend
 const PAYMENT_METHOD_IDS = {
   cash: "6a2a413493ebd9bb34545eeb",
   credit_card: "6a13292f36b47dc045a9fc7a",
@@ -10,63 +9,81 @@ const PAYMENT_METHOD_IDS = {
 };
 
 export default function useSalesLogic() {
-  // Estado para productos disponibles
   const [availableProducts, setAvailableProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
-  // Estado para items en el carrito
   const [cartItems, setCartItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
-
-  // Estado para valores de cantidad en edición
   const [editingQuantities, setEditingQuantities] = useState({});
 
-  // Estado para UI
+  // ✅ NUEVO: Descuentos individuales por producto { productId: percentage }
+  const [itemDiscounts, setItemDiscounts] = useState({});
+  
+  // Descuento global (%)
+  const [discountRate, setDiscountRate] = useState(0);
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
 
-  // Estado para flujo de pago
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showPaymentProcessModal, setShowPaymentProcessModal] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
-  // Estado para modal de recibo
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [lastSale, setLastSale] = useState(null);
 
-  // Cargar productos al iniciar
   useEffect(() => {
     loadProducts();
   }, []);
 
-  // Calcular totales - SOLO considera items activos
+  // Cálculo con descuentos individuales + global
   const calculateTotals = () => {
     const activeItems = cartItems.filter((item) => item.active !== false);
 
+    // 1. Subtotal bruto: suma de (precio × cantidad)
     const subtotal = activeItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
-      0,
+      0
     );
-    const discount = activeItems.reduce(
-      (sum, item) => sum + (item.discount || 0),
-      0,
-    );
-    const total = subtotal - discount;
-    const tax = total * 0.21;
+
+    // 2. Descuentos individuales por producto
+    const itemDiscountsTotal = activeItems.reduce((sum, item) => {
+      const itemDiscountRate = itemDiscounts[item._id] || 0;
+      const itemSubtotal = item.price * item.quantity;
+      return sum + (itemSubtotal * (itemDiscountRate / 100));
+    }, 0);
+
+    // 3. Descuento global sobre el subtotal menos descuentos individuales
+    const subtotalAfterItemDiscounts = subtotal - itemDiscountsTotal;
+    const globalDiscount = subtotalAfterItemDiscounts * (discountRate / 100);
+
+    // 4. Descuento total
+    const discount = itemDiscountsTotal + globalDiscount;
+
+    // 5. Base imponible
+    const taxableBase = subtotal - discount;
+
+    // 6. IVA 21%
+    const tax_rate = 21;
+    const tax = taxableBase * (tax_rate / 100);
+
+    // 7. Total final
+    const total = taxableBase + tax;
 
     return {
       subtotal,
+      discount_rate: discountRate,
       discount,
+      tax_rate,
       tax,
-      total: total + tax,
+      total,
     };
   };
 
   const totals = calculateTotals();
 
-  // Cargar productos disponibles
   const loadProducts = async () => {
     try {
       const response = await apiRequest("/api/products?limit=100");
@@ -77,7 +94,6 @@ export default function useSalesLogic() {
     }
   };
 
-  // Buscar productos
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -90,11 +106,10 @@ export default function useSalesLogic() {
     }
   };
 
-  // Agregar producto al carrito - ahora incluye campo active
   const addToCart = (product) => {
     setCartItems((prevCart) => {
       const existingItemIndex = prevCart.findIndex(
-        (item) => item._id === product._id,
+        (item) => item._id === product._id
       );
 
       if (existingItemIndex >= 0) {
@@ -102,7 +117,7 @@ export default function useSalesLogic() {
         newCart[existingItemIndex] = {
           ...newCart[existingItemIndex],
           quantity: newCart[existingItemIndex].quantity + 1,
-          active: true, // Reactivar si estaba desmarcado
+          active: true,
         };
         return newCart;
       } else {
@@ -116,7 +131,7 @@ export default function useSalesLogic() {
           quantity: 1,
           image: product.image,
           stock: product.stock,
-          active: true, // ← NUEVO: activo por defecto
+          active: true,
         };
         return [...prevCart, newItem];
       }
@@ -128,9 +143,13 @@ export default function useSalesLogic() {
     setTimeout(() => setMessage(""), 3000);
   };
 
-  // Eliminar producto del carrito
   const removeFromCart = (itemId) => {
     setCartItems((prev) => prev.filter((item) => item._id !== itemId));
+    setItemDiscounts((prev) => {
+      const newDiscounts = { ...prev };
+      delete newDiscounts[itemId];
+      return newDiscounts;
+    });
 
     setEditingQuantities((prev) => {
       const newQuantities = { ...prev };
@@ -143,27 +162,24 @@ export default function useSalesLogic() {
     }
   };
 
-  // Toggle activo/inactivo de un item - NUEVA FUNCIÓN
   const toggleItemActive = (itemId) => {
     setCartItems((prev) =>
       prev.map((item) =>
-        item._id === itemId ? { ...item, active: !item.active } : item,
-      ),
+        item._id === itemId ? { ...item, active: !item.active } : item
+      )
     );
   };
 
-  // Actualizar cantidad
   const updateQuantity = (itemId, newQuantity) => {
     if (newQuantity < 1) return;
 
     setCartItems((prev) =>
       prev.map((item) =>
-        item._id === itemId ? { ...item, quantity: newQuantity } : item,
-      ),
+        item._id === itemId ? { ...item, quantity: newQuantity } : item
+      )
     );
   };
 
-  // Manejo de input de cantidad
   const handleQuantityFocus = (e, item) => {
     e.target.select();
     setEditingQuantities((prev) => ({
@@ -172,11 +188,18 @@ export default function useSalesLogic() {
     }));
   };
 
+  // Actualización automática al cambiar
   const handleQuantityChange = (itemId, value) => {
     setEditingQuantities((prev) => ({
       ...prev,
       [itemId]: value,
     }));
+
+    // Aplicar inmediatamente si es válido
+    const parsed = parseInt(value);
+    if (!isNaN(parsed) && parsed >= 1) {
+      updateQuantity(itemId, parsed);
+    }
   };
 
   const handleQuantityBlur = (itemId) => {
@@ -205,14 +228,20 @@ export default function useSalesLogic() {
     }
   };
 
-  // Seleccionar item para ver detalles
+  // Manejo de descuento individual por producto
+  const setItemDiscount = (productId, percentage) => {
+    const validPercentage = Math.min(Math.max(0, percentage), 100);
+    setItemDiscounts((prev) => ({
+      ...prev,
+      [productId]: validPercentage,
+    }));
+  };
+
   const selectItem = (item) => {
     setSelectedItem(item);
   };
 
-  // Procesar pago - ajustado al formato del backend
   const processPayment = async (client, paymentMethod, paymentData = {}) => {
-    // Filtrar solo items activos
     const activeItems = cartItems.filter((item) => item.active !== false);
 
     if (activeItems.length === 0) {
@@ -231,13 +260,13 @@ export default function useSalesLogic() {
     setLoading(true);
 
     try {
-      // Mapear SOLO items activos al formato esperado por el backend
+      // Incluir descuentos individuales en los items
       const items = activeItems.map((item) => ({
         productId: item._id,
         quantity: item.quantity,
+        discount_rate: itemDiscounts[item._id] || 0,
       }));
 
-      // Obtener el ObjectId del método de pago
       const paymentMethodId = PAYMENT_METHOD_IDS[paymentMethod];
 
       if (!paymentMethodId) {
@@ -246,10 +275,8 @@ export default function useSalesLogic() {
         return { success: false };
       }
 
-      // Calcular monto total (ya calculado con solo items activos)
       const totalAmount = totals.total;
 
-      // Crear referencia de pago según el método
       let paymentReference = "";
       if (paymentMethod === "cash" && paymentData.amount_received) {
         paymentReference = `Recibido: $${paymentData.amount_received}, Vuelto: $${paymentData.change || 0}`;
@@ -264,7 +291,6 @@ export default function useSalesLogic() {
           paymentData.transfer_reference || "Transferencia bancaria";
       }
 
-      // Payload ajustado al formato del backend
       const payload = {
         client_id: client._id,
         items: items,
@@ -276,6 +302,12 @@ export default function useSalesLogic() {
             status: "CONFIRMED",
           },
         ],
+        subtotal: totals.subtotal,
+        discount_rate: totals.discount_rate,
+        discount: totals.discount,
+        tax_rate: totals.tax_rate,
+        tax: totals.tax,
+        total: totals.total,
         metadata: {
           customer_name:
             client.business_name ||
@@ -293,18 +325,18 @@ export default function useSalesLogic() {
 
       const saleData = response.data || response;
 
-      // Guardar la venta para el recibo
       setLastSale(saleData);
       setShowPaymentProcessModal(false);
       setShowReceiptModal(true);
 
       setMessage({ type: "success", text: "✓ Venta creada exitosamente" });
 
-      // Limpiar carrito pero NO el cliente
       setCartItems([]);
       setEditingQuantities({});
       setSelectedItem(null);
       setSelectedPaymentMethod(null);
+      setDiscountRate(0);
+      setItemDiscounts({});
 
       setTimeout(() => setMessage(""), 5000);
 
@@ -318,46 +350,42 @@ export default function useSalesLogic() {
     }
   };
 
-  // Limpiar venta
   const clearSale = () => {
     if (window.confirm("¿Cancelar venta?")) {
       setCartItems([]);
       setEditingQuantities({});
       setSelectedItem(null);
       setSelectedPaymentMethod(null);
+      setDiscountRate(0);
+      setItemDiscounts({});
       setShowPaymentModal(false);
       setShowPaymentProcessModal(false);
     }
   };
 
-  // Filtrar productos para búsqueda
   const filteredProducts = availableProducts
     .filter(
       (product) =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.sku.toLowerCase().includes(searchQuery.toLowerCase()),
+        product.sku.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .slice(0, 10);
 
-  // Abrir modal de selección de método de pago
   const openPaymentModal = () => {
     setShowPaymentModal(true);
   };
 
-  // Seleccionar método de pago y abrir modal de procesamiento
   const handleSelectPaymentMethod = (method) => {
     setSelectedPaymentMethod(method);
     setShowPaymentModal(false);
     setShowPaymentProcessModal(true);
   };
 
-  // Cerrar modal de procesamiento
   const closePaymentProcessModal = () => {
     setShowPaymentProcessModal(false);
     setSelectedPaymentMethod(null);
   };
 
-  // Nueva venta desde el recibo
   const handleNewSale = () => {
     setLastSale(null);
     setShowReceiptModal(false);
@@ -373,6 +401,10 @@ export default function useSalesLogic() {
     showSearchResults,
     filteredProducts,
     totals,
+    discountRate,
+    setDiscountRate,
+    itemDiscounts,
+    setItemDiscount,
     setMessage,
     handleSearch,
     addToCart,
@@ -385,7 +417,6 @@ export default function useSalesLogic() {
     selectItem,
     processPayment,
     clearSale,
-    // Flujo de pago
     showPaymentModal,
     showPaymentProcessModal,
     selectedPaymentMethod,
@@ -393,7 +424,6 @@ export default function useSalesLogic() {
     handleSelectPaymentMethod,
     closePaymentProcessModal,
     setShowPaymentModal,
-    // Modal de recibo
     showReceiptModal,
     lastSale,
     handleNewSale,

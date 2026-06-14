@@ -23,14 +23,12 @@ const normalizePayments = (payments) => {
 const enrichItemsWithPricing = async (items) => {
   const productIds = items.map((i) => i.productId);
 
-  // Agregamos .lean() para garantizar que devuelva arrays planos de JS
   const [products, promotions, rules] = await Promise.all([
     Product.find({ _id: { $in: productIds } }).lean(),
     Promotion.model.find({ active: true }).lean(),
     DiscountRule.model.find({ active: true }).lean(),
   ]);
 
-  // Fallbacks por si Mongoose devuelve undefined o un objeto Query
   const safeProducts = Array.isArray(products) ? products : [];
   const safePromotions = Array.isArray(promotions) ? promotions : [];
   const safeRules = Array.isArray(rules) ? rules : [];
@@ -63,11 +61,19 @@ const enrichItemsWithPricing = async (items) => {
       product?.lastSaleDate,
     );
 
+    // Calcular descuento individual del item
+    const itemDiscountRate = item.discount_rate || 0;
+    const itemSubtotal = price * item.quantity;
+    const itemDiscount = itemSubtotal * (itemDiscountRate / 100);
+    const itemTotalAfterDiscount = itemSubtotal - itemDiscount;
+
     result.push({
       product: item.productId,
       quantity: item.quantity,
       price,
-      subtotal: price * item.quantity,
+      discount_rate: itemDiscountRate,
+      discount: itemDiscount,
+      subtotal: itemTotalAfterDiscount,
     });
   }
 
@@ -105,10 +111,8 @@ const SaleController = {
       const items = normalizeItems(req.body.items);
       const payments = normalizePayments(req.body.payments);
 
-      // Obtener el modelo nativo de Mongoose directamente
       const ProductNative = mongoose.model("Product");
 
-      // Validar stock disponible ANTES de procesar la venta
       const productIds = items.map((i) => i.productId);
       const products = await ProductNative.find({
         _id: { $in: productIds },
@@ -125,7 +129,6 @@ const SaleController = {
         products.map((p) => [p._id.toString(), p]),
       );
 
-      // Validar stock suficiente para cada item
       for (const item of items) {
         const product = productMap[item.productId.toString()];
         if (!product) {
@@ -142,24 +145,40 @@ const SaleController = {
         }
       }
 
-      // Enriquecer items con precios (calcula subtotal)
       const normalizedItems = await enrichItemsWithPricing(items);
 
-      // Calcular total
-      const total = normalizedItems.reduce((acc, i) => acc + i.subtotal, 0);
+      // Subtotal después de descuentos individuales
+      const subtotal = normalizedItems.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+      const itemDiscountsTotal = normalizedItems.reduce((acc, i) => acc + i.discount, 0);
+      
+      // Descuento global
+      const discount_rate = typeof req.body.discount_rate === 'number' ? req.body.discount_rate : 0;
+      const subtotalAfterItemDiscounts = subtotal - itemDiscountsTotal;
+      const globalDiscount = subtotalAfterItemDiscounts * (discount_rate / 100);
+      
+      const discount = itemDiscountsTotal + globalDiscount;
+      
+      const taxableBase = subtotal - discount;
+      const tax_rate = 21;
+      const tax = taxableBase * (tax_rate / 100);
+      const total = taxableBase + tax;
+      
       const paidAmount = payments.reduce((acc, p) => acc + p.amount, 0);
 
-      // Crear la venta
       const sale = await Sale.create({
         ...req.body,
         items: normalizedItems,
         payments,
+        subtotal,
+        discount_rate,
+        discount,
+        tax_rate,
+        tax,
         total,
         status: paidAmount >= total ? "PAID" : "PENDING",
         employee_id: req.user?._id || req.body.employee_id,
       });
 
-      // Si la venta está PAID, descontar stock de cada producto
       if (sale.status === "PAID") {
         try {
           const bulkOps = normalizedItems.map((item) => ({
@@ -175,7 +194,6 @@ const SaleController = {
         }
       }
 
-      // El findById del SaleModel ya popula automáticamente
       const populatedSale = await Sale.findById(sale._id);
 
       return res.status(201).json({ success: true, data: populatedSale });

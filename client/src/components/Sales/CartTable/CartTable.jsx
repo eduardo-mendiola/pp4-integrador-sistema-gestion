@@ -6,15 +6,16 @@ export default function CartTable({
   items,
   selectedItemId,
   editingQuantities,
+  itemDiscounts,
   onSelectItem,
   onRemoveItem,
   onToggleActive,
   onQuantityFocus,
   onQuantityChange,
   onQuantityBlur,
-  onQuantityKeyDown
+  onQuantityKeyDown,
+  onItemDiscountChange
 }) {
-  // Contar items activos
   const activeItemsCount = items.filter(item => item.active !== false).length;
   
   return (
@@ -43,7 +44,8 @@ export default function CartTable({
                 <th>Nombre del Producto</th>
                 <th className="text-center" style={{ width: '100px' }}>Cant.</th>
                 <th className="text-right" style={{ width: '120px' }}>Precio</th>
-                <th className="text-right" style={{ width: '120px' }}>Total</th>
+                <th className="text-center" style={{ width: '90px' }}>Desc. %</th>
+                <th className="text-right" style={{ width: '130px' }}>Total</th>
                 <th className="text-center" style={{ width: '60px' }}>Acción</th>
               </tr>
             </thead>
@@ -54,6 +56,7 @@ export default function CartTable({
                   item={item}
                   isSelected={selectedItemId === item._id}
                   editingQuantity={editingQuantities[item._id]}
+                  itemDiscount={itemDiscounts[item._id] || 0}
                   onSelect={onSelectItem}
                   onRemove={onRemoveItem}
                   onToggleActive={onToggleActive}
@@ -61,6 +64,7 @@ export default function CartTable({
                   onQuantityChange={onQuantityChange}
                   onQuantityBlur={onQuantityBlur}
                   onQuantityKeyDown={onQuantityKeyDown}
+                  onItemDiscountChange={onItemDiscountChange}
                 />
               ))}
             </tbody>
