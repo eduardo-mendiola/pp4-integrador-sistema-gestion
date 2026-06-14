@@ -223,3 +223,28 @@
   font-weight: 700;
   color: #007bff;
 }
+
+
+
+/* Badge de descuento en el nombre del producto */
+.item-discount-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  background: #d97706;
+  color: white;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Fila con descuento */
+.original-sale-item.with-discount {
+  border-left: 3px solid #d97706;
+}
+
+/* Desglose con colores para descuentos */
+.breakdown-row.discount {
+  color: #d97706;
+  font-weight: 600;
+}

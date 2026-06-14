@@ -33,13 +33,9 @@ export default function ReturnsPage() {
     totals
   } = useReturnsLogic();
 
-  // Efecto para hacer scroll al inicio cuando se cambia a la pantalla de operación
   useEffect(() => {
     if (currentStep === 'operation') {
-      // 1. Intentar hacer scroll en la ventana (por si acaso)
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      
-      // 2. Hacer scroll en el contenedor principal de la app (el que tiene overflow-y: auto)
       const mainArea = document.querySelector('.main-area');
       if (mainArea) {
         mainArea.scrollTo({ top: 0, behavior: 'smooth' });
@@ -78,6 +74,7 @@ export default function ReturnsPage() {
             onUpdateQuantity={updateReturnQuantity}
             onToggleSelectionMode={toggleSelectionMode}
             selectionMode={selectionMode}
+            totals={totals}
           />
           
           <OperationPanel
