@@ -53,7 +53,7 @@
 }
 
 .sale-details-id {
-  font-size: 12px;
+  font-size: 15px;
   color: #8898aa;
   font-family: monospace;
   background: white;
@@ -71,7 +71,7 @@
 .sale-details-status-badge {
   padding: 6px 12px;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -109,7 +109,7 @@
 
 .sale-details-section-title {
   margin: 0;
-  font-size: 13px;
+  font-size: 16px;
   color: #525f7f;
   font-weight: 700;
   text-transform: uppercase;
@@ -131,7 +131,7 @@
 }
 
 .sale-details-field-label {
-  font-size: 11px;
+  font-size: 15px;
   color: #8898aa;
   font-weight: 600;
   text-transform: uppercase;
@@ -139,7 +139,7 @@
 }
 
 .sale-details-field-value {
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
   font-weight: 600;
 }
@@ -157,7 +157,7 @@
   gap: 8px;
   padding: 10px 14px;
   background: #f8f9fa;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 700;
   text-transform: uppercase;
   color: #525f7f;
@@ -169,7 +169,7 @@
   grid-template-columns: 2fr 0.5fr 1fr 1fr;
   gap: 8px;
   padding: 10px 14px;
-  font-size: 13px;
+  font-size: 16px;
   border-bottom: 1px solid #f0f4f8;
 }
 
@@ -210,7 +210,7 @@
 .sale-details-total-row {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 16px;
   color: #525f7f;
 }
 
@@ -249,11 +249,11 @@
 .sale-details-payment-method {
   font-weight: 700;
   color: #333;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .sale-details-payment-ref {
-  font-size: 12px;
+  font-size: 15px;
   color: #8898aa;
 }
 
@@ -274,7 +274,7 @@
 .sale-details-cancel-reason p {
   margin: 0;
   color: #721c24;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 /* Footer */
@@ -291,7 +291,7 @@
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -317,6 +317,206 @@
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
 }
 
+/* ... mantener todos los estilos existentes ... */
+
+/* Items Table - Actualizado con más columnas */
+.sale-details-items-header {
+  display: grid;
+  grid-template-columns: 2fr 0.5fr 1fr 0.6fr 1fr 1fr;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f8f9fa;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #525f7f;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.sale-details-item-row {
+  display: grid;
+  grid-template-columns: 2fr 0.5fr 1fr 0.6fr 1fr 1fr;
+  gap: 8px;
+  padding: 10px 14px;
+  font-size: 16px;
+  border-bottom: 1px solid #f0f4f8;
+}
+
+.sale-details-item-row:last-child {
+  border-bottom: none;
+}
+
+.sale-details-item-row.with-discount {
+  background-color: #fffbf0;
+}
+
+.sale-details-item-name {
+  font-weight: 600;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sale-details-item-qty,
+.sale-details-item-price,
+.sale-details-item-discount-rate,
+.sale-details-item-discount,
+.sale-details-item-subtotal {
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+}
+
+.sale-details-item-price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sale-details-item-price-original {
+  text-decoration: line-through;
+  color: #adb5bd;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.sale-details-item-discount-rate {
+  color: #ffc107;
+  font-weight: 700;
+}
+
+.sale-details-item-discount {
+  color: #ffc107;
+  font-weight: 600;
+}
+
+.sale-details-item-subtotal {
+  color: #007bff;
+  font-weight: 700;
+}
+
+/* Totals - con desglose de descuentos */
+/* Items Table - Actualizado con colores de alto contraste */
+.sale-details-items-header {
+  display: grid;
+  grid-template-columns: 2fr 0.5fr 1fr 0.6fr 1fr 1fr;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f8f9fa;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #525f7f;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.sale-details-item-row {
+  display: grid;
+  grid-template-columns: 2fr 0.5fr 1fr 0.6fr 1fr 1fr;
+  gap: 8px;
+  padding: 10px 14px;
+  font-size: 16px;
+  border-bottom: 1px solid #f0f4f8;
+}
+
+.sale-details-item-row:last-child {
+  border-bottom: none;
+}
+
+/* ✅ Fondo más visible para filas con descuento */
+.sale-details-item-row.with-discount {
+  background-color: #fffbeb; /* Ámbar muy suave pero visible */
+}
+
+.sale-details-item-name {
+  font-weight: 600;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sale-details-item-qty,
+.sale-details-item-price,
+.sale-details-item-discount-rate,
+.sale-details-item-discount,
+.sale-details-item-subtotal {
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+}
+
+.sale-details-item-price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sale-details-item-price-original {
+  text-decoration: line-through;
+  color: #adb5bd;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.sale-details-item-discount-rate {
+  color: #d97706;
+  font-weight: 700;
+}
+
+.sale-details-item-discount {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.sale-details-item-subtotal {
+  color: #007bff;
+  font-weight: 700;
+}
+
+/* Totals - Actualizado con desglose de descuentos */
+.sale-details-totals {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sale-details-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #525f7f;
+}
+
+
+.sale-details-total-row.discount {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.sale-details-total-row.discount-total {
+  color: #b45309; /* Un poco más oscuro para el total de descuentos */
+  font-weight: 700;
+  padding-top: 8px;
+  border-top: 1px dashed #d97706;
+  margin-top: 4px;
+}
+
+.sale-details-total-final {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  padding-top: 8px;
+  border-top: 2px solid #e1e8ed;
+  margin-top: 4px;
+}
+
+
+
 @media (max-width: 600px) {
   .sale-details-grid {
     grid-template-columns: 1fr;
@@ -336,3 +536,5 @@
     width: 100%;
   }
 }
+
+

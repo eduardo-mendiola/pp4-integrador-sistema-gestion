@@ -49,8 +49,27 @@ export default function SaleDetailsModal({ sale, onClose, onReprint }) {
 
   const getPaymentMethodName = (method) => {
     if (!method) return '-';
-    if (typeof method === 'string') return method;
-    if (method.name) return method.name;
+    
+    // Si es un string directo
+    if (typeof method === 'string') {
+      const map = { 
+        'cash': 'Efectivo', 
+        'transfer': 'Transferencia', 
+        'card': 'Tarjeta' 
+      };
+      return map[method.toLowerCase()] || method;
+    }
+    
+    // Si es un objeto populado con .name
+    if (method?.name) {
+      const name = method.name.toLowerCase();
+      if (name.includes('cash') || name.includes('efectivo')) return 'Efectivo';
+      if (name.includes('crédito') || name.includes('credito')) return 'Tarjeta de Crédito';
+      if (name.includes('débito') || name.includes('debito')) return 'Tarjeta de Débito';
+      if (name.includes('transfer') || name.includes('transferencia')) return 'Transferencia';
+      return method.name;
+    }
+    
     return '-';
   };
 
@@ -63,6 +82,22 @@ export default function SaleDetailsModal({ sale, onClose, onReprint }) {
     }
     return item.name || 'Producto';
   };
+
+  // Calcular totales desglosados
+  const calculateBreakdown = () => {
+    const subtotalBruto = sale.items?.reduce((sum, i) => sum + (i.price * i.quantity), 0) || 0;
+    const descuentosIndividuales = sale.items?.reduce((sum, i) => sum + (i.discount || 0), 0) || 0;
+    const descuentoGlobal = (sale.discount || 0) - descuentosIndividuales;
+    
+    return {
+      subtotalBruto,
+      descuentosIndividuales,
+      descuentoGlobal,
+      descuentoTotal: sale.discount || 0
+    };
+  };
+
+  const breakdown = calculateBreakdown();
 
   return (
     <div className="sale-details-overlay" onClick={onClose}>
@@ -125,16 +160,38 @@ export default function SaleDetailsModal({ sale, onClose, onReprint }) {
                 <span>Producto</span>
                 <span>Cant.</span>
                 <span>Precio Unit.</span>
+                <span>Desc. %</span>
+                <span>Descuento</span>
                 <span>Subtotal</span>
               </div>
-              {sale.items?.map((item, index) => (
-                <div key={index} className="sale-details-item-row">
-                  <span className="sale-details-item-name">{getProductInfo(item)}</span>
-                  <span className="sale-details-item-qty">{item.quantity}</span>
-                  <span className="sale-details-item-price">${formatCurrency(item.price)}</span>
-                  <span className="sale-details-item-subtotal">${formatCurrency(item.subtotal || item.price * item.quantity)}</span>
-                </div>
-              ))}
+              {sale.items?.map((item, index) => {
+                const itemSubtotalBruto = item.price * item.quantity;
+                const hasDiscount = item.discount_rate > 0 || item.discount > 0;
+                
+                return (
+                  <div key={index} className={`sale-details-item-row ${hasDiscount ? 'with-discount' : ''}`}>
+                    <span className="sale-details-item-name">{getProductInfo(item)}</span>
+                    <span className="sale-details-item-qty">{item.quantity}</span>
+                    <span className="sale-details-item-price">
+                      {hasDiscount && (
+                        <span className="sale-details-item-price-original">
+                          ${formatCurrency(item.price)}
+                        </span>
+                      )}
+                      ${formatCurrency(item.price)}
+                    </span>
+                    <span className="sale-details-item-discount-rate">
+                      {item.discount_rate > 0 ? `${item.discount_rate}%` : '-'}
+                    </span>
+                    <span className="sale-details-item-discount">
+                      {item.discount > 0 ? `-${formatCurrency(item.discount)}` : '-'}
+                    </span>
+                    <span className="sale-details-item-subtotal">
+                      ${formatCurrency(item.subtotal)}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -142,21 +199,38 @@ export default function SaleDetailsModal({ sale, onClose, onReprint }) {
           <div className="sale-details-section">
             <div className="sale-details-totals">
               <div className="sale-details-total-row">
-                <span>Subtotal:</span>
-                <span>${formatCurrency(sale.subtotal || sale.items?.reduce((sum, i) => sum + (i.subtotal || i.price * i.quantity), 0) || 0)}</span>
+                <span>Subtotal Bruto:</span>
+                <span>${formatCurrency(breakdown.subtotalBruto)}</span>
               </div>
-              {sale.discount > 0 && (
-                <div className="sale-details-total-row">
-                  <span>Descuento:</span>
-                  <span>-${formatCurrency(sale.discount)}</span>
+              
+              {breakdown.descuentosIndividuales > 0 && (
+                <div className="sale-details-total-row discount">
+                  <span>Descuentos por producto:</span>
+                  <span>-${formatCurrency(breakdown.descuentosIndividuales)}</span>
                 </div>
               )}
+              
+              {breakdown.descuentoGlobal > 0 && (
+                <div className="sale-details-total-row discount">
+                  <span>Descuento global ({sale.discount_rate || 0}%):</span>
+                  <span>-${formatCurrency(breakdown.descuentoGlobal)}</span>
+                </div>
+              )}
+              
+              {sale.discount > 0 && (
+                <div className="sale-details-total-row discount-total">
+                  <span>Total Descuentos:</span>
+                  <span>-${formatCurrency(breakdown.descuentoTotal)}</span>
+                </div>
+              )}
+              
               {sale.tax > 0 && (
                 <div className="sale-details-total-row">
-                  <span>IVA:</span>
+                  <span>IVA ({sale.tax_rate || 21}%):</span>
                   <span>${formatCurrency(sale.tax)}</span>
                 </div>
               )}
+              
               <div className="sale-details-total-row sale-details-total-final">
                 <span>TOTAL:</span>
                 <span>${formatCurrency(sale.total)}</span>
@@ -201,7 +275,6 @@ export default function SaleDetailsModal({ sale, onClose, onReprint }) {
           <button className="sale-details-btn secondary" onClick={onClose}>
             Cerrar
           </button>
-          {/* ✅ El botón de imprimir ahora es siempre visible si se pasa la prop onReprint */}
           {onReprint && (
             <button className="sale-details-btn primary" onClick={() => onReprint(sale)}>
               🖨️ Imprimir Comprobante

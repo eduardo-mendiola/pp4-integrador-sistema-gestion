@@ -1,29 +1,46 @@
 import React from 'react';
+import DiscountButton from '../DiscountButton/DiscountButton';
 import './SalesFooter.css';
 
-export default function SalesFooter({ totals, itemsCount, loading, onCancel, onPay }) {
+export default function SalesFooter({ totals, itemsCount, loading, onCancel, onPay, discountRate, onDiscountChange }) {
+  const formatCurrency = (value) => 
+    value.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
   return (
     <div className="sales-footer">
       <div className="sales-totals-info">
         <div className="sales-total-item">
-          <div className="sales-total-label">
-            Descuento: {totals.discount.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
-          </div>
-          <div className="sales-total-label">
-            Impuesto (IVA): {totals.tax.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
-          </div>
+          <div className="sales-total-label">Subtotal</div>
+          <div className="sales-total-value">${formatCurrency(totals.subtotal)}</div>
         </div>
+        
         <div className="sales-total-item">
-          <div className="sales-total-label">
-            Subtotal: {totals.subtotal.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
-          </div>
+          <div className="sales-total-label">IVA ({totals.tax_rate}%)</div>
+          <div className="sales-total-value">${formatCurrency(totals.tax)}</div>
         </div>
-        <div className="sales-total-item">
+        
+        {/* ✅ Botón de descuento antes del total */}
+        <DiscountButton 
+          discountRate={discountRate}
+          onDiscountChange={onDiscountChange}
+        />
+        
+        {/* ✅ Si hay descuento, mostrar el cálculo */}
+        {totals.discount > 0 && (
+          <div className="sales-total-item discount">
+            <div className="sales-total-label">
+              Descuento ({totals.discount_rate}%)
+            </div>
+            <div className="sales-total-value">-${formatCurrency(totals.discount)}</div>
+          </div>
+        )}
+        
+        <div className="sales-total-item main">
           <div className="sales-total-label">
             TOTAL <span className="sales-total-badge">{itemsCount} ITEMS</span>
           </div>
           <div className="sales-total-value main">
-            ${totals.total.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+            ${formatCurrency(totals.total)}
           </div>
         </div>
       </div>

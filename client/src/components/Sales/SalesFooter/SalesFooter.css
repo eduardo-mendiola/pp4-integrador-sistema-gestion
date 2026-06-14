@@ -88,6 +88,15 @@
   transform: none;
 }
 
+.sales-total-item.discount {
+  color: #ffc107;
+}
+
+.sales-total-item.discount .sales-total-value {
+  color: #ffc107;
+  font-weight: 700;
+}
+
 @media (max-width: 768px) {
   .sales-footer {
     flex-direction: column;

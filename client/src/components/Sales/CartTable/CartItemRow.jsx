@@ -5,15 +5,20 @@ export default function CartItemRow({
   item,
   isSelected,
   editingQuantity,
+  itemDiscount,
   onSelect,
   onRemove,
   onToggleActive,
   onQuantityFocus,
   onQuantityChange,
   onQuantityBlur,
-  onQuantityKeyDown
+  onQuantityKeyDown,
+  onItemDiscountChange
 }) {
   const isActive = item.active !== false;
+  const itemSubtotal = item.price * item.quantity;
+  const itemDiscountAmount = itemSubtotal * ((itemDiscount || 0) / 100);
+  const itemTotalAfterDiscount = itemSubtotal - itemDiscountAmount;
   
   return (
     <tr 
@@ -39,7 +44,7 @@ export default function CartItemRow({
         <div className="sales-product-name">{item.name}</div>
         {item.discount > 0 && (
           <div className="sales-product-discount">
-            Discount - Special Price (${item.discount.toLocaleString()})
+            Descuento especial (${item.discount.toLocaleString()})
           </div>
         )}
       </td>
@@ -67,9 +72,34 @@ export default function CartItemRow({
           ${item.price.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
         </span>
       </td>
+      <td className="text-center">
+        <div className="sales-discount-wrapper">
+          <input
+            type="number"
+            className="sales-discount-input"
+            value={itemDiscount || 0}
+            onChange={(e) => {
+              e.stopPropagation();
+              const value = parseFloat(e.target.value) || 0;
+              onItemDiscountChange(item._id, Math.min(Math.max(0, value), 100));
+            }}
+            onClick={(e) => e.stopPropagation()}
+            min="0"
+            max="100"
+            disabled={!isActive}
+            title="Descuento %"
+          />
+          <span className="sales-discount-suffix">%</span>
+        </div>
+      </td>
       <td className="text-right">
+        {itemDiscount > 0 && (
+          <span className="sales-price-discount">
+            -${itemDiscountAmount.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+          </span>
+        )}
         <span className="sales-price">
-          ${(item.price * item.quantity).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+          ${itemTotalAfterDiscount.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
         </span>
       </td>
       <td className="text-center">
