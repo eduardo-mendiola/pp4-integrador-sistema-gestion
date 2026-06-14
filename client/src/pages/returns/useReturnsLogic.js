@@ -3,7 +3,6 @@ import { apiRequest } from '../../services/api.js';
 
 export const RETURN_PERIOD_DAYS = 30;
 
-// Mapeo de métodos de pago del frontend a ObjectIds del backend
 const PAYMENT_METHOD_IDS = {
   cash: "6a2a413493ebd9bb34545eeb",
   credit_card: "6a13292f36b47dc045a9fc7a",
@@ -32,6 +31,12 @@ export default function useReturnsLogic() {
   const [originalSale, setOriginalSale] = useState(null);
   const [returnItems, setReturnItems] = useState([]);
   const [exchangeItems, setExchangeItems] = useState([]);
+  
+  // ESTADOS para descuentos en items de cambio
+  const [exchangeItemDiscounts, setExchangeItemDiscounts] = useState({});
+  const [exchangeDiscountRate, setExchangeDiscountRate] = useState(0);
+  const [editingExchangeQuantities, setEditingExchangeQuantities] = useState({});
+  
   const [operationType, setOperationType] = useState('return');
   const [returnReason, setReturnReason] = useState('');
   const [customReason, setCustomReason] = useState('');
@@ -42,17 +47,24 @@ export default function useReturnsLogic() {
       const syncedExchangeItems = selectedReturns.map(item => ({
         productId: item.productId,
         name: item.name,
+        sku: item.sku || '',
         quantity: item.quantity,
         price: item.price,
+        active: true,
         subtotal: item.subtotal
       }));
       setExchangeItems(syncedExchangeItems);
+      // Limpiar descuentos cuando es exchange_same
+      setExchangeItemDiscounts({});
+      setExchangeDiscountRate(0);
     }
   }, [operationType, returnItems]);
 
   useEffect(() => {
     if (operationType !== 'exchange_same') {
       setExchangeItems([]);
+      setExchangeItemDiscounts({});
+      setExchangeDiscountRate(0);
     }
   }, [operationType]);
 
@@ -139,6 +151,7 @@ export default function useReturnsLogic() {
     const initialReturnItems = sale.items.map(item => ({
       productId: item.product?._id || item.product,
       name: item.product?.name || 'Producto',
+      sku: item.product?.sku || '',
       quantity: item.quantity,
       maxQuantity: item.quantity,
       price: item.price,
@@ -149,6 +162,9 @@ export default function useReturnsLogic() {
 
     setReturnItems(initialReturnItems);
     setExchangeItems([]);
+    setExchangeItemDiscounts({});
+    setExchangeDiscountRate(0);
+    setEditingExchangeQuantities({});
     setOperationType('return');
     setReturnReason('');
     setCustomReason('');
@@ -159,6 +175,9 @@ export default function useReturnsLogic() {
     setOriginalSale(null);
     setReturnItems([]);
     setExchangeItems([]);
+    setExchangeItemDiscounts({});
+    setExchangeDiscountRate(0);
+    setEditingExchangeQuantities({});
     setOperationType('return');
     setReturnReason('');
     setCustomReason('');
@@ -196,36 +215,112 @@ export default function useReturnsLogic() {
     }));
   };
 
+  // FUNCIONES para manejo de items de cambio
   const addExchangeItem = (product) => {
     setExchangeItems(prev => {
       const existing = prev.find(item => item.productId === product._id);
       if (existing) {
         return prev.map(item => 
           item.productId === product._id 
-            ? { ...item, quantity: item.quantity + 1, subtotal: (item.quantity + 1) * item.price }
+            ? { ...item, quantity: item.quantity + 1, active: true }
             : item
         );
       }
       return [...prev, {
         productId: product._id,
         name: product.name,
+        sku: product.sku || '',
         quantity: 1,
         price: product.price,
-        subtotal: product.price
+        active: true
       }];
     });
   };
 
-  const updateExchangeQuantity = (productId, quantity) => {
-    if (quantity <= 0) {
-      setExchangeItems(prev => prev.filter(item => item.productId !== productId));
-    } else {
-      setExchangeItems(prev => prev.map(item => 
-        item.productId === productId 
-          ? { ...item, quantity, subtotal: quantity * item.price }
-          : item
-      ));
+  const removeExchangeItem = (productId) => {
+    setExchangeItems(prev => prev.filter(item => item.productId !== productId));
+    setExchangeItemDiscounts(prev => {
+      const newDiscounts = { ...prev };
+      delete newDiscounts[productId];
+      return newDiscounts;
+    });
+    setEditingExchangeQuantities(prev => {
+      const newQuantities = { ...prev };
+      delete newQuantities[productId];
+      return newQuantities;
+    });
+  };
+
+  const toggleExchangeItemActive = (productId) => {
+    setExchangeItems(prev =>
+      prev.map(item =>
+        item.productId === productId ? { ...item, active: !item.active } : item
+      )
+    );
+  };
+
+  const updateExchangeQuantity = (productId, newQuantity) => {
+    if (newQuantity < 1) return;
+
+    setExchangeItems(prev =>
+      prev.map(item =>
+        item.productId === productId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
+  const handleExchangeQuantityFocus = (e, item) => {
+    e.target.select();
+    setEditingExchangeQuantities(prev => ({
+      ...prev,
+      [item.productId]: String(item.quantity),
+    }));
+  };
+
+  const handleExchangeQuantityChange = (productId, value) => {
+    setEditingExchangeQuantities(prev => ({
+      ...prev,
+      [productId]: value,
+    }));
+
+    const parsed = parseInt(value);
+    if (!isNaN(parsed) && parsed >= 1) {
+      updateExchangeQuantity(productId, parsed);
     }
+  };
+
+  const handleExchangeQuantityBlur = (productId) => {
+    const value = editingExchangeQuantities[productId];
+    const parsed = parseInt(value);
+
+    if (!isNaN(parsed) && parsed >= 1) {
+      updateExchangeQuantity(productId, parsed);
+    } else {
+      setExchangeItems(prev => {
+        const item = prev.find(i => i.productId === productId);
+        if (item) {
+          setEditingExchangeQuantities(prevEdit => ({
+            ...prevEdit,
+            [productId]: String(item.quantity),
+          }));
+        }
+        return prev;
+      });
+    }
+  };
+
+  const handleExchangeQuantityKeyDown = (e, productId) => {
+    if (e.key === "Enter") {
+      e.target.blur();
+    }
+  };
+
+  const setExchangeItemDiscount = (productId, percentage) => {
+    const validPercentage = Math.min(Math.max(0, percentage), 100);
+    setExchangeItemDiscounts(prev => ({
+      ...prev,
+      [productId]: validPercentage,
+    }));
   };
 
   const calculateTotals = () => {
@@ -247,26 +342,53 @@ export default function useReturnsLogic() {
     const returnBaseImponible = returnSubtotalBruto - returnDiscountTotal;
     const returnTaxRate = originalSale.tax_rate || 21;
     const returnIVA = returnBaseImponible * (returnTaxRate / 100);
-    const returnTotal = returnBaseImponible + returnIVA; // Este es el crédito CON IVA
+    const returnTotal = returnBaseImponible + returnIVA;
     
+    // Calcular totales de items de cambio considerando descuentos y active
     let exchangeSubtotal = 0;
     let exchangeTotalWithTax = 0;
     
     if (operationType === 'exchange_same') {
       exchangeSubtotal = returnBaseImponible;
-      exchangeTotalWithTax = returnTotal; // Mismo valor con IVA
+      exchangeTotalWithTax = returnTotal;
     } else {
-      exchangeSubtotal = exchangeItems.reduce((sum, item) => sum + item.subtotal, 0);
-      const exchangeIVA = exchangeSubtotal * (returnTaxRate / 100);
-      exchangeTotalWithTax = exchangeSubtotal + exchangeIVA; // Total del nuevo producto CON IVA
+      // Solo considerar items activos
+      const activeExchangeItems = exchangeItems.filter(item => item.active !== false);
+      
+      // Subtotal bruto de items activos
+      const exchangeSubtotalBruto = activeExchangeItems.reduce((sum, item) => {
+        return sum + (item.price * item.quantity);
+      }, 0);
+      
+      // Descuentos individuales
+      const exchangeDiscountsIndividual = activeExchangeItems.reduce((sum, item) => {
+        const itemDiscountRate = exchangeItemDiscounts[item.productId] || 0;
+        const itemSubtotal = item.price * item.quantity;
+        return sum + (itemSubtotal * (itemDiscountRate / 100));
+      }, 0);
+      
+      // Descuento global
+      const subtotalAfterItemDiscounts = exchangeSubtotalBruto - exchangeDiscountsIndividual;
+      const exchangeDiscountGlobal = subtotalAfterItemDiscounts * (exchangeDiscountRate / 100);
+      
+      // Total descuentos
+      const exchangeDiscountTotal = exchangeDiscountsIndividual + exchangeDiscountGlobal;
+      
+      // Base imponible
+      const exchangeBaseImponible = exchangeSubtotalBruto - exchangeDiscountTotal;
+      
+      // IVA
+      const exchangeIVA = exchangeBaseImponible * (returnTaxRate / 100);
+      
+      exchangeSubtotal = exchangeBaseImponible;
+      exchangeTotalWithTax = exchangeBaseImponible + exchangeIVA;
     }
     
-    // Ahora la resta es correcta: (Nuevo con IVA) - (Crédito con IVA)
     const difference = exchangeTotalWithTax - returnTotal;
 
     return {
       returnTotal,
-      exchangeTotal: exchangeTotalWithTax, // Ahora es con IVA
+      exchangeTotal: exchangeTotalWithTax,
       exchangeSubtotal,
       difference,
       breakdown: {
@@ -305,9 +427,20 @@ export default function useReturnsLogic() {
 
     try {
       const totals = calculateTotals();
-      
-      // Convertir el método de pago de string a ObjectId
       const paymentMethodId = paymentMethod ? PAYMENT_METHOD_IDS[paymentMethod] : null;
+      
+      // Preparar items de cambio con descuentos
+      const exchangeItemsWithDiscounts = operationType === 'exchange_other' 
+        ? exchangeItems
+            .filter(item => item.active !== false)
+            .map(item => ({
+              productId: item.productId,
+              name: item.name,
+              quantity: item.quantity,
+              price: item.price,
+              discount_rate: exchangeItemDiscounts[item.productId] || 0
+            }))
+        : [];
       
       const payload = {
         original_sale_id: originalSale._id,
@@ -323,10 +456,11 @@ export default function useReturnsLogic() {
           subtotal: item.subtotal,
           maxQuantity: item.maxQuantity
         })),
-        exchange_items: operationType === 'exchange_other' ? exchangeItems : [],
+        exchange_items: exchangeItemsWithDiscounts,
         exchange_total: totals.exchangeTotal,
+        exchange_discount_rate: exchangeDiscountRate,
         difference: totals.difference,
-        payment_method: paymentMethodId, // Ahora es un ObjectId válido
+        payment_method: paymentMethodId,
         payment_reference: paymentReference
       };
 
@@ -369,6 +503,10 @@ export default function useReturnsLogic() {
     originalSale,
     returnItems,
     exchangeItems,
+    exchangeItemDiscounts,
+    exchangeDiscountRate,
+    setExchangeDiscountRate,
+    editingExchangeQuantities,
     operationType,
     setOperationType,
     returnReason,
@@ -384,7 +522,13 @@ export default function useReturnsLogic() {
     toggleSelectionMode,
     updateReturnQuantity,
     addExchangeItem,
-    updateExchangeQuantity,
+    removeExchangeItem,
+    toggleExchangeItemActive,
+    handleExchangeQuantityFocus,
+    handleExchangeQuantityChange,
+    handleExchangeQuantityBlur,
+    handleExchangeQuantityKeyDown,
+    setExchangeItemDiscount,
     processReturn,
     totals: calculateTotals()
   };

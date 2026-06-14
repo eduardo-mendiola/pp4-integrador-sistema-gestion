@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { apiRequest } from '../../services/api.js';
+import ExchangeItemsTable from './ExchangeItemsTable';
+import DiscountButton from '../Sales/DiscountButton/DiscountButton';
 import './OperationPanel.css';
 
 const operationTypes = [
@@ -25,8 +27,18 @@ export default function OperationPanel({
   customReason,
   setCustomReason,
   exchangeItems,
+  exchangeItemDiscounts,
+  exchangeDiscountRate,
+  setExchangeDiscountRate,
+  editingExchangeQuantities,
   onAddExchangeItem,
-  onUpdateExchangeQuantity,
+  onRemoveExchangeItem,
+  onToggleExchangeItemActive,
+  onExchangeQuantityFocus,
+  onExchangeQuantityChange,
+  onExchangeQuantityBlur,
+  onExchangeQuantityKeyDown,
+  onSetExchangeItemDiscount,
   totals,
   onProcessReturn,
   loading,
@@ -117,14 +129,12 @@ export default function OperationPanel({
 
   return (
     <div className="operation-panel">
-      {/* Error en rojo */}
       {error && (
         <div className="operation-error">
           {error}
         </div>
       )}
 
-      {/* Warning en amarillo */}
       {warning && (
         <div className="operation-warning">
           ⚠️ {warning}
@@ -179,12 +189,11 @@ export default function OperationPanel({
 
       {isExchangeOther && (
         <div className="exchange-section" ref={searchRef}>
-          <h3>Productos del Cambio</h3>
           <div className="exchange-search-wrapper">
             <input
               type="text"
               className="exchange-search-input"
-              placeholder="Buscar producto nuevo..."
+              placeholder="Buscar producto para agregar al cambio..."
               value={productSearch}
               onChange={handleSearchChange}
             />
@@ -204,28 +213,18 @@ export default function OperationPanel({
             )}
           </div>
 
-          {exchangeItems.length > 0 && (
-            <div className="exchange-items-list">
-              {exchangeItems.map(item => (
-                <div key={item.productId} className="exchange-item">
-                  <div className="exchange-item-info">
-                    <span className="exchange-item-name">{item.name}</span>
-                    <span className="exchange-item-price">${formatCurrency(item.price)} c/u</span>
-                  </div>
-                  <div className="exchange-item-controls">
-                    <input
-                      type="number"
-                      className="exchange-qty-input"
-                      value={item.quantity}
-                      onChange={(e) => onUpdateExchangeQuantity(item.productId, parseInt(e.target.value) || 0)}
-                      min="1"
-                    />
-                    <span className="exchange-item-subtotal">${formatCurrency(item.subtotal)}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <ExchangeItemsTable
+            items={exchangeItems}
+            editingQuantities={editingExchangeQuantities}
+            itemDiscounts={exchangeItemDiscounts}
+            onRemoveItem={onRemoveExchangeItem}
+            onToggleActive={onToggleExchangeItemActive}
+            onQuantityFocus={onExchangeQuantityFocus}
+            onQuantityChange={onExchangeQuantityChange}
+            onQuantityBlur={onExchangeQuantityBlur}
+            onQuantityKeyDown={onExchangeQuantityKeyDown}
+            onItemDiscountChange={onSetExchangeItemDiscount}
+          />
         </div>
       )}
 
@@ -242,10 +241,23 @@ export default function OperationPanel({
           <span>${formatCurrency(totals.returnTotal)}</span>
         </div>
         {isExchangeOther && (
-          <div className="balance-row">
-            <span>Total productos nuevos (con IVA):</span>
-            <span>${formatCurrency(totals.exchangeTotal)}</span>
-          </div>
+          <>
+            <div className="balance-row">
+              <span>Total productos nuevos (con IVA):</span>
+              <span>${formatCurrency(totals.exchangeTotal)}</span>
+            </div>
+            <div className="balance-discount-row">
+              <DiscountButton 
+                discountRate={exchangeDiscountRate}
+                onDiscountChange={setExchangeDiscountRate}
+              />
+              {exchangeDiscountRate > 0 && (
+                <span className="balance-discount-label">
+                  Descuento aplicado: {exchangeDiscountRate}%
+                </span>
+              )}
+            </div>
+          </>
         )}
         <div className="balance-difference" style={{ borderColor: balanceLabel.color }}>
           <span className="balance-label" style={{ color: balanceLabel.color }}>

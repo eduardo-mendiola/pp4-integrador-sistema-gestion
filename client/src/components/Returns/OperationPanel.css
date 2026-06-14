@@ -438,3 +438,19 @@
   border-color: #ffb300;
   animation: pulse 1s ease-in-out 2;
 }
+
+/* sección para descuento global */
+.balance-discount-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px dashed #e1e8ed;
+  margin-top: 8px;
+}
+
+.balance-discount-label {
+  font-size: 13px;
+  color: #ffc107;
+  font-weight: 600;
+}
