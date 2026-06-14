@@ -32,6 +32,12 @@ export const allPermissions = [
   'edit_suppliers',
   'delete_suppliers',
 
+  // Pagos a Proveedores
+  'view_supplier_payments',
+  'create_supplier_payments',
+  'edit_supplier_payments',
+  'delete_supplier_payments',
+
   // Promociones
   'view_promotions',
   'create_promotions',
@@ -112,6 +118,12 @@ export const permissionLabels = {
   create_suppliers: 'Proveedores: Crear',
   edit_suppliers: 'Proveedores: Editar',
   delete_suppliers: 'Proveedores: Eliminar',
+
+   // Pagos a Proveedores 
+  view_supplier_payments: 'Pagos a Proveedores: Ver',
+  create_supplier_payments: 'Pagos a Proveedores: Crear',
+  edit_supplier_payments: 'Pagos a Proveedores: Editar',
+  delete_supplier_payments: 'Pagos a Proveedores: Eliminar',
 
   // Promociones
   view_promotions: 'Promociones: Ver',
