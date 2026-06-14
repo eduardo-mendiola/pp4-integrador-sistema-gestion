@@ -17,6 +17,7 @@ import employeeRoutes from './routes/employee-routes.js'
 import discountRulesRoutes from './routes/discountRule-routes.js'
 import paymentMethodRoutes from './routes/paymentMethod-routes.js'
 import promotionRoutes from './routes/promotion-routes.js'
+import returnRoutes from './routes/return-routes.js'
 
 
 const app = express();
@@ -68,7 +69,7 @@ app.use('/api/employees', employeeRoutes);
 app.use('/api/discount-rules', discountRulesRoutes);
 app.use('/api/payment-methods', paymentMethodRoutes);
 app.use('/api/promotions', promotionRoutes);
-
+app.use('/api/returns', returnRoutes);
 
 // ======================
 // HEALTH CHECK

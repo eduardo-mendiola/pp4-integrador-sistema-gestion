@@ -3,6 +3,14 @@ import { apiRequest } from '../../services/api.js';
 
 export const RETURN_PERIOD_DAYS = 30;
 
+// Mapeo de métodos de pago del frontend a ObjectIds del backend
+const PAYMENT_METHOD_IDS = {
+  cash: "6a2a413493ebd9bb34545eeb",
+  credit_card: "6a13292f36b47dc045a9fc7a",
+  debit_card: "6a13296f36b47dc045a9fc88",
+  transfer: "6a2a414593ebd9bb34545ef0"
+};
+
 export default function useReturnsLogic() {
   const [currentStep, setCurrentStep] = useState('search');
   const [selectionMode, setSelectionMode] = useState('full');
@@ -17,12 +25,16 @@ export default function useReturnsLogic() {
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false); 
   const [error, setError] = useState('');
+  const [warning, setWarning] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [operationCompleted, setOperationCompleted] = useState(false);
 
   const [originalSale, setOriginalSale] = useState(null);
   const [returnItems, setReturnItems] = useState([]);
   const [exchangeItems, setExchangeItems] = useState([]);
   const [operationType, setOperationType] = useState('return');
   const [returnReason, setReturnReason] = useState('');
+  const [customReason, setCustomReason] = useState('');
 
   useEffect(() => {
     if (operationType === 'exchange_same') {
@@ -44,10 +56,17 @@ export default function useReturnsLogic() {
     }
   }, [operationType]);
 
+  useEffect(() => {
+    if (returnReason) {
+      setWarning('');
+    }
+  }, [returnReason, customReason]);
+
   const performSearch = async () => {
     setIsSearching(true);
     setHasSearched(true); 
     setError('');
+    setWarning('');
     setSearchResults([]);
 
     try {
@@ -98,6 +117,7 @@ export default function useReturnsLogic() {
     setSearchResults([]);
     setHasSearched(false);
     setError('');
+    setWarning('');
   };
 
   const selectSale = (sale) => {
@@ -112,9 +132,10 @@ export default function useReturnsLogic() {
 
     setOriginalSale(sale);
     setError('');
+    setWarning('');
     setSelectionMode('full');
+    setOperationCompleted(false);
     
-    // Inicializar items con toda la información financiera
     const initialReturnItems = sale.items.map(item => ({
       productId: item.product?._id || item.product,
       name: item.product?.name || 'Producto',
@@ -130,6 +151,7 @@ export default function useReturnsLogic() {
     setExchangeItems([]);
     setOperationType('return');
     setReturnReason('');
+    setCustomReason('');
     setCurrentStep('operation');
   };
 
@@ -139,6 +161,10 @@ export default function useReturnsLogic() {
     setExchangeItems([]);
     setOperationType('return');
     setReturnReason('');
+    setCustomReason('');
+    setOperationCompleted(false);
+    setWarning('');
+    setError('');
     clearFilters();
     setCurrentStep('search');
   };
@@ -202,51 +228,46 @@ export default function useReturnsLogic() {
     }
   };
 
-  // CÁLCULO CORRECTO DE DEVOLUCIÓN
   const calculateTotals = () => {
     if (!originalSale) return { returnTotal: 0, exchangeTotal: 0, difference: 0, breakdown: {} };
 
     const selectedItems = returnItems.filter(item => item.quantity > 0);
     
-    // 1. Subtotal bruto de items a devolver (precio × cantidad sin descuentos)
     const returnSubtotalBruto = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    // 2. Descuentos individuales de items a devolver
     const returnDiscountsIndividual = selectedItems.reduce((sum, item) => {
-      // Calcular proporción del descuento individual según cantidad devuelta
       const proporcion = item.quantity / item.maxQuantity;
       return sum + (item.discount * proporcion);
     }, 0);
     
-    // 3. Base después de descuentos individuales
     const baseAfterIndividualDiscounts = returnSubtotalBruto - returnDiscountsIndividual;
-    
-    // 4. Aplicar descuento global proporcionalmente
     const saleDiscountGlobalRate = originalSale.discount_rate || 0;
     const returnDiscountGlobal = baseAfterIndividualDiscounts * (saleDiscountGlobalRate / 100);
-    
-    // 5. Total descuentos de la devolución
     const returnDiscountTotal = returnDiscountsIndividual + returnDiscountGlobal;
     
-    // 6. Base imponible final (sobre lo que se calcula el IVA)
     const returnBaseImponible = returnSubtotalBruto - returnDiscountTotal;
-    
-    // 7. IVA de la devolución
     const returnTaxRate = originalSale.tax_rate || 21;
     const returnIVA = returnBaseImponible * (returnTaxRate / 100);
+    const returnTotal = returnBaseImponible + returnIVA; // Este es el crédito CON IVA
     
-    // 8. Total a devolver
-    const returnTotal = returnBaseImponible + returnIVA;
+    let exchangeSubtotal = 0;
+    let exchangeTotalWithTax = 0;
     
-    // Total de productos nuevos (para cambio)
-    const exchangeTotal = exchangeItems.reduce((sum, item) => sum + item.subtotal, 0);
+    if (operationType === 'exchange_same') {
+      exchangeSubtotal = returnBaseImponible;
+      exchangeTotalWithTax = returnTotal; // Mismo valor con IVA
+    } else {
+      exchangeSubtotal = exchangeItems.reduce((sum, item) => sum + item.subtotal, 0);
+      const exchangeIVA = exchangeSubtotal * (returnTaxRate / 100);
+      exchangeTotalWithTax = exchangeSubtotal + exchangeIVA; // Total del nuevo producto CON IVA
+    }
     
-    // Diferencia
-    const difference = exchangeTotal - returnTotal;
+    // Ahora la resta es correcta: (Nuevo con IVA) - (Crédito con IVA)
+    const difference = exchangeTotalWithTax - returnTotal;
 
     return {
       returnTotal,
-      exchangeTotal,
+      exchangeTotal: exchangeTotalWithTax, // Ahora es con IVA
+      exchangeSubtotal,
       difference,
       breakdown: {
         subtotalBruto: returnSubtotalBruto,
@@ -260,6 +281,81 @@ export default function useReturnsLogic() {
     };
   };
 
+  const processReturn = async (paymentMethod = null, paymentReference = '') => {
+    setError('');
+    setWarning('');
+
+    if (!returnReason) {
+      setWarning('Debe seleccionar un motivo para la operación');
+      return { success: false, error: 'Motivo requerido' };
+    }
+
+    if (returnReason === 'otro' && !customReason.trim()) {
+      setWarning('Debe especificar el motivo en el campo de texto');
+      return { success: false, error: 'Motivo requerido' };
+    }
+
+    const selectedItems = returnItems.filter(item => item.quantity > 0);
+    if (selectedItems.length === 0) {
+      setWarning('Debe seleccionar al menos un producto para devolver');
+      return { success: false, error: 'No hay productos seleccionados' };
+    }
+
+    setLoading(true);
+
+    try {
+      const totals = calculateTotals();
+      
+      // Convertir el método de pago de string a ObjectId
+      const paymentMethodId = paymentMethod ? PAYMENT_METHOD_IDS[paymentMethod] : null;
+      
+      const payload = {
+        original_sale_id: originalSale._id,
+        type: operationType.toUpperCase(),
+        reason: returnReason,
+        reason_custom: returnReason === 'otro' ? customReason : '',
+        items: selectedItems.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          price: item.price,
+          discount_rate: item.discount_rate || 0,
+          discount: item.discount || 0,
+          subtotal: item.subtotal,
+          maxQuantity: item.maxQuantity
+        })),
+        exchange_items: operationType === 'exchange_other' ? exchangeItems : [],
+        exchange_total: totals.exchangeTotal,
+        difference: totals.difference,
+        payment_method: paymentMethodId, // Ahora es un ObjectId válido
+        payment_reference: paymentReference
+      };
+
+      const response = await apiRequest('/api/returns', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.success) {
+        throw new Error(response.message || 'Error al procesar la operación');
+      }
+
+      setOperationCompleted(true);
+      
+      setTimeout(() => {
+        cancelOperation();
+      }, 3000);
+
+      return { success: true, data: response.data };
+    } catch (err) {
+      console.error('Error procesando devolución:', err);
+      setError('✗ Error: ' + (err.message || 'Error al procesar la operación'));
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     currentStep,
     selectionMode,
@@ -267,7 +363,9 @@ export default function useReturnsLogic() {
     setSearchFilters,
     searchResults,
     isSearching,
-    hasSearched,       
+    hasSearched,
+    loading,
+    operationCompleted,
     originalSale,
     returnItems,
     exchangeItems,
@@ -275,7 +373,10 @@ export default function useReturnsLogic() {
     setOperationType,
     returnReason,
     setReturnReason,
+    customReason,
+    setCustomReason,
     error,
+    warning,
     performSearch,
     clearFilters,      
     selectSale,
@@ -284,6 +385,7 @@ export default function useReturnsLogic() {
     updateReturnQuantity,
     addExchangeItem,
     updateExchangeQuantity,
+    processReturn,
     totals: calculateTotals()
   };
 }
