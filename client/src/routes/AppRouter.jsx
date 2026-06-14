@@ -15,7 +15,7 @@ import UsersPage from '../pages/users/UsersPage.jsx';
 import RolesPage from '../pages/roles/RolesPage.jsx';
 import EmpleadosPage from '../pages/empleados/EmpleadosPage.jsx';
 import ProveedoresPage from '../pages/proveedores/ProveedoresPage.jsx';
-import PagosMetodosPage from '../pages/pagos/PagosMetodosPage.jsx';
+import UnderConstructionPage from '../pages/UnderConstructionPage/UnderConstructionPage.jsx';
 import PromocionsPage from '../pages/promociones/PromocionsPage.jsx';
 import DescuentosPage from '../pages/promociones/DescuentosPage.jsx';
 import StockPage from '../pages/products/StockPage.jsx';
@@ -63,17 +63,17 @@ export default function AppRouter() {
         <Route path="proveedores" element={<ProtectedRoute><ProveedoresPage /></ProtectedRoute>} />
         
         {/* Pagos */}
-        <Route path="pagos/metodos" element={<ProtectedRoute><PagosMetodosPage /></ProtectedRoute>} />
+        <Route path="pagos/proveedores" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />
         
         {/* Promociones */}
         <Route path="promociones" element={<ProtectedRoute><PromocionsPage /></ProtectedRoute>} />
         <Route path="promociones/descuentos" element={<ProtectedRoute><DescuentosPage /></ProtectedRoute>} />
         
         {/* Reportes */}
-        <Route path="reportes" element={<ProtectedRoute><ReportesPage /></ProtectedRoute>} />
+        <Route path="reportes" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />
         
         {/* Configuración */}
-        <Route path="configuracion" element={<ProtectedRoute><ConfiguracionPage /></ProtectedRoute>} />
+        <Route path="configuracion" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />
         
         {/* Módulos dinámicos del moduleCards */}
         {moduleCards
