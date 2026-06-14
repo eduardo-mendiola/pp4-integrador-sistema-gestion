@@ -38,6 +38,17 @@ export default function ReturnsPage() {
     toggleSelectionMode,
     updateReturnQuantity,
     addExchangeItem,
+    exchangeItemDiscounts,
+    exchangeDiscountRate,
+    setExchangeDiscountRate,
+    editingExchangeQuantities,
+    removeExchangeItem,
+    toggleExchangeItemActive,
+    handleExchangeQuantityFocus,
+    handleExchangeQuantityChange,
+    handleExchangeQuantityBlur,
+    handleExchangeQuantityKeyDown,
+    setExchangeItemDiscount,
     updateExchangeQuantity,
     processReturn,
     totals
@@ -170,8 +181,18 @@ export default function ReturnsPage() {
             customReason={customReason}
             setCustomReason={setCustomReason}
             exchangeItems={exchangeItems}
+            exchangeItemDiscounts={exchangeItemDiscounts}
+            exchangeDiscountRate={exchangeDiscountRate}
+            setExchangeDiscountRate={setExchangeDiscountRate}
+            editingExchangeQuantities={editingExchangeQuantities}
             onAddExchangeItem={addExchangeItem}
-            onUpdateExchangeQuantity={updateExchangeQuantity}
+            onRemoveExchangeItem={removeExchangeItem}
+            onToggleExchangeItemActive={toggleExchangeItemActive}
+            onExchangeQuantityFocus={handleExchangeQuantityFocus}
+            onExchangeQuantityChange={handleExchangeQuantityChange}
+            onExchangeQuantityBlur={handleExchangeQuantityBlur}
+            onExchangeQuantityKeyDown={handleExchangeQuantityKeyDown}
+            onSetExchangeItemDiscount={setExchangeItemDiscount}
             totals={totals}
             onProcessReturn={handleProcessClick}
             loading={loading}

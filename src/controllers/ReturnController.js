@@ -119,35 +119,51 @@ const ReturnController = {
         exchange_items &&
         exchange_items.length > 0
       ) {
-        const replacementItems = exchange_items.map((item) => ({
-          product: item.productId,
-          quantity: item.quantity,
-          price: item.price,
-          discount_rate: 0,
-          discount: 0,
-          subtotal: item.price * item.quantity,
-        }));
+        // Aplicar descuentos a los items de cambio
+        const replacementItems = exchange_items.map((item) => {
+          const itemDiscountRate = item.discount_rate || 0;
+          const itemSubtotal = item.price * item.quantity;
+          const itemDiscount = itemSubtotal * (itemDiscountRate / 100);
+          const itemTotalAfterDiscount = itemSubtotal - itemDiscount;
 
-        // A. Valores del NUEVO producto
+          return {
+            product: item.productId,
+            quantity: item.quantity,
+            price: item.price,
+            discount_rate: itemDiscountRate,
+            discount: itemDiscount,
+            subtotal: itemTotalAfterDiscount,
+          };
+        });
+
+        // A. Valores del NUEVO producto (ya con descuentos individuales aplicados)
         const newSubtotal = replacementItems.reduce(
           (sum, item) => sum + item.subtotal,
           0,
         );
-        const newTax = newSubtotal * (taxRate / 100);
-        const newTotal = newSubtotal + newTax;
+
+        // Aplicar descuento global si existe
+        const globalDiscountRate = req.body.exchange_discount_rate || 0;
+        const globalDiscount = newSubtotal * (globalDiscountRate / 100);
+        const subtotalAfterGlobalDiscount = newSubtotal - globalDiscount;
+
+        const newTax = subtotalAfterGlobalDiscount * (taxRate / 100);
+        const newTotal = subtotalAfterGlobalDiscount + newTax;
 
         // B. Valores del CRÉDITO (la devolución que ya calculamos)
-        // returnData.subtotal ya es el neto, returnData.tax es el iva de la devolución
         const creditNet = returnData.subtotal;
         const creditTax = returnData.tax;
         const creditTotal = returnData.total;
 
         // C. Cálculo final (Nuevo - Crédito)
-        const finalSubtotal = Math.max(0, newSubtotal - creditNet);
+        const finalSubtotal = Math.max(
+          0,
+          subtotalAfterGlobalDiscount - creditNet,
+        );
         const finalTax = Math.max(0, newTax - creditTax);
-        const finalTotal = finalSubtotal + finalTax; // Este es el monto real que queda pendiente
+        const finalTotal = finalSubtotal + finalTax;
 
-        // D. Registro del pago (solo si el cliente aún debe dinero después de aplicar el crédito)
+        // D. Registro del pago
         const replacementPayments = [];
         if (payment_method && finalTotal > 0) {
           replacementPayments.push({
@@ -167,12 +183,12 @@ const ReturnController = {
           client_id: originalSale.client_id,
           employee_id: req.user?._id || req.body.employee_id,
           items: replacementItems,
-          subtotal: newSubtotal, // Se registra el valor real del producto
-          discount_rate: 0,
-          discount: creditNet, // El descuento es la parte NETA del crédito
+          subtotal: subtotalAfterGlobalDiscount,
+          discount_rate: globalDiscountRate,
+          discount: globalDiscount,
           tax_rate: taxRate,
-          tax: finalTax, // El IVA es la diferencia de IVAs
-          total: finalTotal, // El total es lo que realmente debe pagar (o 0)
+          tax: finalTax,
+          total: finalTotal,
           payments: replacementPayments,
           status: replacementStatus,
           metadata: {
