@@ -5,7 +5,7 @@ export const RETURN_PERIOD_DAYS = 30;
 
 export default function useReturnsLogic() {
   const [currentStep, setCurrentStep] = useState('search');
-  const [selectionMode, setSelectionMode] = useState('full'); 
+  const [selectionMode, setSelectionMode] = useState('full');
   
   const [searchFilters, setSearchFilters] = useState({
     invoiceNumber: '',
@@ -24,7 +24,6 @@ export default function useReturnsLogic() {
   const [operationType, setOperationType] = useState('return');
   const [returnReason, setReturnReason] = useState('');
 
-  // 1. Sincronizar automáticamente cuando es "Cambio (Mismo)"
   useEffect(() => {
     if (operationType === 'exchange_same') {
       const selectedReturns = returnItems.filter(item => item.quantity > 0);
@@ -39,7 +38,6 @@ export default function useReturnsLogic() {
     }
   }, [operationType, returnItems]);
 
-  // 2. Limpiar exchangeItems cuando se cambia a otro modo (Devolución, Nota de Crédito, etc.)
   useEffect(() => {
     if (operationType !== 'exchange_same') {
       setExchangeItems([]);
@@ -114,15 +112,18 @@ export default function useReturnsLogic() {
 
     setOriginalSale(sale);
     setError('');
-    setSelectionMode('full'); 
+    setSelectionMode('full');
     
+    // Inicializar items con toda la información financiera
     const initialReturnItems = sale.items.map(item => ({
       productId: item.product?._id || item.product,
       name: item.product?.name || 'Producto',
       quantity: item.quantity,
       maxQuantity: item.quantity,
       price: item.price,
-      subtotal: item.price * item.quantity
+      discount_rate: item.discount_rate || 0,
+      discount: item.discount || 0,
+      subtotal: item.subtotal
     }));
 
     setReturnItems(initialReturnItems);
@@ -150,7 +151,7 @@ export default function useReturnsLogic() {
         if (nextMode === 'individual') {
           return { ...item, quantity: 0, subtotal: 0 };
         }
-        return { ...item, quantity: item.maxQuantity, subtotal: item.maxQuantity * item.price };
+        return { ...item, quantity: item.maxQuantity, subtotal: item.price * item.maxQuantity };
       }));
       
       return nextMode;
@@ -163,7 +164,7 @@ export default function useReturnsLogic() {
     setReturnItems(prev => prev.map(item => {
       if (item.productId === productId) {
         const validQty = Math.min(Math.max(0, quantity), item.maxQuantity);
-        return { ...item, quantity: validQty, subtotal: validQty * item.price };
+        return { ...item, quantity: validQty };
       }
       return item;
     }));
@@ -201,12 +202,62 @@ export default function useReturnsLogic() {
     }
   };
 
+  // CÁLCULO CORRECTO DE DEVOLUCIÓN
   const calculateTotals = () => {
-    const returnTotal = returnItems.reduce((sum, item) => sum + item.subtotal, 0);
+    if (!originalSale) return { returnTotal: 0, exchangeTotal: 0, difference: 0, breakdown: {} };
+
+    const selectedItems = returnItems.filter(item => item.quantity > 0);
+    
+    // 1. Subtotal bruto de items a devolver (precio × cantidad sin descuentos)
+    const returnSubtotalBruto = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // 2. Descuentos individuales de items a devolver
+    const returnDiscountsIndividual = selectedItems.reduce((sum, item) => {
+      // Calcular proporción del descuento individual según cantidad devuelta
+      const proporcion = item.quantity / item.maxQuantity;
+      return sum + (item.discount * proporcion);
+    }, 0);
+    
+    // 3. Base después de descuentos individuales
+    const baseAfterIndividualDiscounts = returnSubtotalBruto - returnDiscountsIndividual;
+    
+    // 4. Aplicar descuento global proporcionalmente
+    const saleDiscountGlobalRate = originalSale.discount_rate || 0;
+    const returnDiscountGlobal = baseAfterIndividualDiscounts * (saleDiscountGlobalRate / 100);
+    
+    // 5. Total descuentos de la devolución
+    const returnDiscountTotal = returnDiscountsIndividual + returnDiscountGlobal;
+    
+    // 6. Base imponible final (sobre lo que se calcula el IVA)
+    const returnBaseImponible = returnSubtotalBruto - returnDiscountTotal;
+    
+    // 7. IVA de la devolución
+    const returnTaxRate = originalSale.tax_rate || 21;
+    const returnIVA = returnBaseImponible * (returnTaxRate / 100);
+    
+    // 8. Total a devolver
+    const returnTotal = returnBaseImponible + returnIVA;
+    
+    // Total de productos nuevos (para cambio)
     const exchangeTotal = exchangeItems.reduce((sum, item) => sum + item.subtotal, 0);
+    
+    // Diferencia
     const difference = exchangeTotal - returnTotal;
 
-    return { returnTotal, exchangeTotal, difference };
+    return {
+      returnTotal,
+      exchangeTotal,
+      difference,
+      breakdown: {
+        subtotalBruto: returnSubtotalBruto,
+        descuentosIndividuales: returnDiscountsIndividual,
+        descuentoGlobal: returnDiscountGlobal,
+        descuentoTotal: returnDiscountTotal,
+        baseImponible: returnBaseImponible,
+        iva: returnIVA,
+        taxRate: returnTaxRate
+      }
+    };
   };
 
   return {

@@ -6,7 +6,8 @@ export default function OriginalSaleDetails({
   returnItems, 
   onUpdateQuantity,
   onToggleSelectionMode,
-  selectionMode
+  selectionMode,
+  totals
 }) {
   if (!sale) return null;
 
@@ -35,9 +36,7 @@ export default function OriginalSaleDetails({
     (value || 0).toLocaleString('es-AR', { minimumFractionDigits: 2 });
 
   const selectedItems = returnItems.filter(item => item.quantity > 0);
-  const returnTotal = selectedItems.reduce((sum, item) => sum + item.subtotal, 0);
-  const returnNeto = selectedItems.reduce((sum, item) => sum + (item.price / 1.21) * item.quantity, 0);
-  const returnIVA = returnTotal - returnNeto;
+  const { breakdown } = totals;
 
   return (
     <div className="original-sale-container">
@@ -79,55 +78,80 @@ export default function OriginalSaleDetails({
       </div>
 
       <div className="original-sale-items">
-        {returnItems.map(item => (
-          <div key={item.productId} className={`original-sale-item ${selectionMode === 'full' ? 'mode-full' : 'mode-individual'}`}>
-            <div className="item-info">
-              <div className="item-name">{item.name}</div>
-              <div className="item-price">
-                ${formatCurrency(item.price)} c/u
-                <span className="item-qty-original">(Compró: {item.maxQuantity})</span>
+        {returnItems.map(item => {
+          const hasDiscount = item.discount_rate > 0 || item.discount > 0;
+          
+          return (
+            <div key={item.productId} className={`original-sale-item ${selectionMode === 'full' ? 'mode-full' : 'mode-individual'} ${hasDiscount ? 'with-discount' : ''}`}>
+              <div className="item-info">
+                <div className="item-name">
+                  {item.name}
+                  {hasDiscount && <span className="item-discount-badge">-{item.discount_rate}%</span>}
+                </div>
+                <div className="item-price">
+                  ${formatCurrency(item.price)} c/u
+                  <span className="item-qty-original">(Compró: {item.maxQuantity})</span>
+                </div>
+              </div>
+
+              <div className="item-controls">
+                {selectionMode === 'full' ? (
+                  <span className="full-qty-badge">{item.maxQuantity} uds.</span>
+                ) : (
+                  <>
+                    <label className="quantity-label">Devuelve:</label>
+                    <input
+                      type="number"
+                      className="quantity-input"
+                      value={item.quantity}
+                      onChange={(e) => onUpdateQuantity(item.productId, parseInt(e.target.value) || 0)}
+                      min="0"
+                      max={item.maxQuantity}
+                      placeholder="0"
+                    />
+                  </>
+                )}
               </div>
             </div>
-
-            <div className="item-controls">
-              {selectionMode === 'full' ? (
-                <span className="full-qty-badge">{item.maxQuantity} uds.</span>
-              ) : (
-                <>
-                  <label className="quantity-label">Devuelve:</label>
-                  <input
-                    type="number"
-                    className="quantity-input"
-                    value={item.quantity}
-                    onChange={(e) => onUpdateQuantity(item.productId, parseInt(e.target.value) || 0)}
-                    min="0"
-                    max={item.maxQuantity}
-                    placeholder="0"
-                  />
-                  {item.quantity > 0 && (
-                    <div className="item-subtotal">${formatCurrency(item.subtotal)}</div>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {selectedItems.length > 0 && (
+      {selectedItems.length > 0 && breakdown && (
         <div className="return-breakdown">
           <h4>Desglose de la Devolución</h4>
           <div className="breakdown-row">
-            <span>Subtotal Neto:</span>
-            <span>${formatCurrency(returnNeto)}</span>
+            <span>Subtotal Bruto:</span>
+            <span>${formatCurrency(breakdown.subtotalBruto)}</span>
           </div>
+          
+          {breakdown.descuentosIndividuales > 0 && (
+            <div className="breakdown-row discount">
+              <span>Descuentos por producto:</span>
+              <span>-${formatCurrency(breakdown.descuentosIndividuales)}</span>
+            </div>
+          )}
+          
+          {breakdown.descuentoGlobal > 0 && (
+            <div className="breakdown-row discount">
+              <span>Descuento global ({sale.discount_rate}%):</span>
+              <span>-${formatCurrency(breakdown.descuentoGlobal)}</span>
+            </div>
+          )}
+          
           <div className="breakdown-row">
-            <span>IVA (21%):</span>
-            <span>${formatCurrency(returnIVA)}</span>
+            <span>Base Imponible:</span>
+            <span>${formatCurrency(breakdown.baseImponible)}</span>
           </div>
+          
+          <div className="breakdown-row">
+            <span>IVA ({breakdown.taxRate}%):</span>
+            <span>${formatCurrency(breakdown.iva)}</span>
+          </div>
+          
           <div className="breakdown-row total">
             <span>Total a Devolver:</span>
-            <span>${formatCurrency(returnTotal)}</span>
+            <span>${formatCurrency(totals.returnTotal)}</span>
           </div>
         </div>
       )}
