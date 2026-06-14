@@ -3,30 +3,10 @@ import { apiRequest } from '../../services/api.js';
 import './OperationPanel.css';
 
 const operationTypes = [
-  { 
-    id: 'return', 
-    label: 'DEVOLUCIÓN', 
-    description: 'El cliente recibe dinero',
-    color: '#84A3D3'
-  },
-  { 
-    id: 'credit_note', 
-    label: 'NOTA DE CRÉDITO', 
-    description: 'Saldo a favor del cliente',
-    color: '#95B8D1'
-  },
-  { 
-    id: 'exchange_same', 
-    label: 'CAMBIO (MISMO)', 
-    description: 'Por talle/color diferente',
-    color: '#B8E0D2'
-  },
-  { 
-    id: 'exchange_other', 
-    label: 'CAMBIO (OTRO)', 
-    description: 'Por otro producto',
-    color: '#9CADCE'
-  }
+  { id: 'return', label: 'DEVOLUCIÓN', description: 'El cliente recibe dinero', color: '#84A3D3' },
+  { id: 'credit_note', label: 'NOTA DE CRÉDITO', description: 'Saldo a favor del cliente', color: '#95B8D1' },
+  { id: 'exchange_same', label: 'CAMBIO (MISMO)', description: 'Por talle/color diferente', color: '#B8E0D2' },
+  { id: 'exchange_other', label: 'CAMBIO (OTRO)', description: 'Por otro producto', color: '#9CADCE' }
 ];
 
 const reasonOptions = [
@@ -42,18 +22,23 @@ export default function OperationPanel({
   setOperationType,
   returnReason,
   setReturnReason,
+  customReason,
+  setCustomReason,
   exchangeItems,
   onAddExchangeItem,
   onUpdateExchangeQuantity,
-  totals
+  totals,
+  onProcessReturn,
+  loading,
+  error,
+  warning,
+  operationCompleted
 }) {
   const [productSearch, setProductSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [customReason, setCustomReason] = useState('');
   const searchRef = useRef(null);
   const debounceTimer = useRef(null);
 
-  // ✅ Separamos las condiciones para mayor claridad
   const isExchangeOther = operationType === 'exchange_other';
   const isExchangeSame = operationType === 'exchange_same';
 
@@ -103,18 +88,49 @@ export default function OperationPanel({
 
   const getBalanceLabel = () => {
     if (totals.difference === 0) {
-      return { text: 'Sin diferencia de valor', color: '#6c757d' };
+      return { text: 'Sin diferencia a pagar', color: '#6c757d' };
     }
     if (totals.difference > 0) {
-      return { text: 'A COBRAR AL CLIENTE', color: '#28a745' };
+      return { text: 'DIFERENCIA A PAGAR (con IVA)', color: '#28a745' };
     }
-    return { text: 'A DEVOLVER AL CLIENTE', color: '#dc3545' };
+    return { text: 'SALDO A FAVOR DEL CLIENTE', color: '#dc3545' };
   };
 
   const balanceLabel = getBalanceLabel();
 
+  const handleProcess = () => {
+    onProcessReturn();
+  };
+
+  if (operationCompleted) {
+    return (
+      <div className="operation-panel">
+        <div className="operation-completed">
+          <div className="completed-icon">✓</div>
+          <h3>¡Operación Completada!</h3>
+          <p>La devolución/cambio se ha procesado exitosamente.</p>
+          <p className="completed-hint">Volviendo a la búsqueda...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="operation-panel">
+      {/* Error en rojo */}
+      {error && (
+        <div className="operation-error">
+          {error}
+        </div>
+      )}
+
+      {/* Warning en amarillo */}
+      {warning && (
+        <div className="operation-warning">
+          ⚠️ {warning}
+        </div>
+      )}
+
       <div className="operation-type-section">
         <h3>Tipo de Operación</h3>
         <div className="operation-type-grid">
@@ -137,12 +153,12 @@ export default function OperationPanel({
       </div>
 
       <div className="reason-section">
-        <h3>Motivo de la Operación</h3>
+        <h3>Motivo de la Operación <span className="required">*</span></h3>
         <div className="reason-chips">
           {reasonOptions.map(reason => (
             <button
               key={reason.id}
-              className={`reason-chip ${returnReason === reason.id ? 'active' : ''}`}
+              className={`reason-chip ${returnReason === reason.id ? 'active' : ''} ${!returnReason && warning ? 'needs-selection' : ''}`}
               onClick={() => setReturnReason(reason.id)}
             >
               {reason.label}
@@ -152,7 +168,7 @@ export default function OperationPanel({
         
         {returnReason === 'otro' && (
           <textarea
-            className="custom-reason-input"
+            className={`custom-reason-input ${!customReason.trim() && warning ? 'needs-input' : ''}`}
             placeholder="Especifique el motivo detallado..."
             value={customReason}
             onChange={(e) => setCustomReason(e.target.value)}
@@ -161,7 +177,6 @@ export default function OperationPanel({
         )}
       </div>
 
-      {/* Solo muestra el buscador si es "Cambio por OTRO producto" */}
       {isExchangeOther && (
         <div className="exchange-section" ref={searchRef}>
           <h3>Productos del Cambio</h3>
@@ -214,7 +229,6 @@ export default function OperationPanel({
         </div>
       )}
 
-      {/* Mensaje informativo cuando es "Cambio por el MISMO producto" */}
       {isExchangeSame && exchangeItems.length > 0 && (
         <div className="exchange-same-info">
           <p>Se procesará el cambio por los <strong>mismos productos y cantidades</strong> seleccionados en el panel izquierdo.</p>
@@ -224,12 +238,12 @@ export default function OperationPanel({
 
       <div className="balance-section">
         <div className="balance-row">
-          <span>Total de la compra original:</span>
+          <span>Crédito a favor (con IVA):</span>
           <span>${formatCurrency(totals.returnTotal)}</span>
         </div>
         {isExchangeOther && (
           <div className="balance-row">
-            <span>Total productos nuevos:</span>
+            <span>Total productos nuevos (con IVA):</span>
             <span>${formatCurrency(totals.exchangeTotal)}</span>
           </div>
         )}
@@ -243,8 +257,12 @@ export default function OperationPanel({
         </div>
       </div>
 
-      <button className="process-btn">
-        Procesar Operación
+      <button 
+        className="process-btn"
+        onClick={handleProcess}
+        disabled={loading || operationCompleted}
+      >
+        {loading ? 'Procesando...' : 'Procesar Operación'}
       </button>
     </div>
   );

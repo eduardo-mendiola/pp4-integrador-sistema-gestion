@@ -248,3 +248,81 @@
   color: #d97706;
   font-weight: 600;
 }
+
+
+
+/* Sección de operaciones anteriores */
+.previous-returns-section {
+  background: #f0f7ff;
+  border: 1px solid #b8d4f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.previous-returns-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #333;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.previous-returns-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.previous-return-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #e1e8ed;
+}
+
+.return-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.return-type-badge {
+  background: #007bff;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.return-date {
+  font-size: 13px;
+  color: #525f7f;
+}
+
+.return-amount {
+  font-size: 15px;
+  font-weight: 700;
+  color: #007bff;
+}
+
+.view-return-detail-btn {
+  background: #e7f3ff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.view-return-detail-btn:hover {
+  background: #007bff;
+  transform: translateY(-1px);
+}

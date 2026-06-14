@@ -7,7 +7,8 @@ export default function OriginalSaleDetails({
   onUpdateQuantity,
   onToggleSelectionMode,
   selectionMode,
-  totals
+  totals,
+  onViewReturnDetail 
 }) {
   if (!sale) return null;
 
@@ -38,6 +39,9 @@ export default function OriginalSaleDetails({
   const selectedItems = returnItems.filter(item => item.quantity > 0);
   const { breakdown } = totals;
 
+  // Obtener devoluciones asociadas
+  const returns = sale.return_ids || [];
+
   return (
     <div className="original-sale-container">
       <div className="original-sale-header">
@@ -67,6 +71,35 @@ export default function OriginalSaleDetails({
           <span className="value total">${formatCurrency(sale.total)}</span>
         </div>
       </div>
+
+      {/* Operaciones anteriores */}
+      {returns.length > 0 && (
+        <div className="previous-returns-section">
+          <h4>Operaciones Realizadas ({returns.length})</h4>
+          <div className="previous-returns-list">
+            {returns.map((returnItem, index) => (
+              <div key={returnItem._id || index} className="previous-return-item">
+                <div className="return-info">
+                  <span className="return-type-badge">{returnItem.type}</span>
+                  <span className="return-date">
+                    {formatDate(returnItem.createdAt)}
+                  </span>
+                  <span className="return-amount">
+                    ${formatCurrency(returnItem.total)}
+                  </span>
+                </div>
+                <button 
+                  className="view-return-detail-btn"
+                  onClick={() => onViewReturnDetail && onViewReturnDetail(returnItem)}
+                  title="Ver detalle"
+                >
+                  📄
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="original-sale-items-header">
         <h4>Productos Comprados</h4>
