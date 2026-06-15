@@ -1,45 +1,94 @@
 import React from 'react';
-import CrudModule from '../../components/CrudModule.jsx';
+import usePromotionsLogic from './usePromotionsLogic';
+import PromotionsTable from '../../components/Promotions/PromotionsTable';
+import PromotionModal from '../../components/Promotions/PromotionModal';
+import './PromotionsPage.css';
 
-const config = {
-  title: 'Promociones',
-  description: 'Gestión de promociones disponibles.',
-  endpoint: '/api/promotions',
-  initialValues: {
-    name: '',
-    description: '',
-    discount_percentage: '',
-    start_date: '',
-    end_date: '',
-  },
-  fields: [
-    { name: 'name', label: 'Nombre', type: 'text', required: true },
-    { name: 'description', label: 'Descripción', type: 'textarea' },
-    { name: 'discount_percentage', label: 'Descuento (%)', type: 'number', step: '0.01' },
-    { name: 'start_date', label: 'Fecha inicio', type: 'datetime-local' },
-    { name: 'end_date', label: 'Fecha fin', type: 'datetime-local' },
-  ],
-  transformPayload: (form) => ({
-    name: form.name,
-    description: form.description,
-    discount_percentage: Number(form.discount_percentage || 0),
-    start_date: form.start_date,
-    end_date: form.end_date,
-  }),
-  mapItemToForm: (item) => ({
-    name: item.name || '',
-    description: item.description || '',
-    discount_percentage: item.discount_percentage || '',
-    start_date: item.start_date || '',
-    end_date: item.end_date || '',
-  }),
-  columns: [
-    { label: 'Nombre', value: (item) => item.name || '-' },
-    { label: 'Descuento', value: (item) => `${item.discount_percentage || 0}%` },
-    { label: 'Inicio', value: (item) => item.start_date ? new Date(item.start_date).toLocaleDateString() : '-' },
-  ]
-};
+export default function PromotionsPage() {
+  const {
+    promotions,
+    products,
+    discountRules,
+    loading,
+    error,
+    success,
+    showModal,
+    editingPromotion,
+    saving,
+    showDeleteConfirm,
+    promotionToDelete,
+    openCreateModal,
+    openEditModal,
+    closeModal,
+    savePromotion,
+    requestDelete,
+    confirmDelete,
+    cancelDelete,
+    toggleActive
+  } = usePromotionsLogic();
 
-export default function PromocionsPage() {
-  return <CrudModule config={config} />;
+  return (
+    <div className="promotions-page">
+      <div className="promotions-header">
+        <h1>Promociones</h1>
+        <button className="btn-primary" onClick={openCreateModal}>
+          + Nueva Promoción
+        </button>
+      </div>
+
+      {error && (
+        <div className="alert alert-error">
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="alert alert-success">
+          {success}
+        </div>
+      )}
+
+      <PromotionsTable
+        promotions={promotions}
+        loading={loading}
+        onEdit={openEditModal}
+        onDelete={requestDelete}
+        onToggleActive={toggleActive}
+      />
+
+      <PromotionModal
+        isOpen={showModal}
+        promotion={editingPromotion}
+        products={products}
+        discountRules={discountRules}
+        saving={saving}
+        onClose={closeModal}
+        onSave={savePromotion}
+      />
+
+      {showDeleteConfirm && promotionToDelete && (
+        <div className="modal-overlay" onClick={cancelDelete}>
+          <div className="modal-content delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Confirmar Eliminación</h2>
+              <button className="modal-close" onClick={cancelDelete}>✕</button>
+            </div>
+            <div className="modal-body">
+              <p>
+                ¿Estás seguro de que deseas eliminar la promoción <strong>"{promotionToDelete.name}"</strong>?
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn-secondary" onClick={cancelDelete} disabled={saving}>
+                Cancelar
+              </button>
+              <button className="btn-danger" onClick={confirmDelete} disabled={saving}>
+                {saving ? 'Eliminando...' : 'Eliminar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
