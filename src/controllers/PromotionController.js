@@ -4,6 +4,26 @@ import Promotion from "../models/PromotionModel.js";
 const PromotionController = {
   create: async (req, res) => {
     try {
+      const { discountRuleIds } = req.body;
+      
+      // Validar que discountRuleIds sea un array
+      if (!Array.isArray(discountRuleIds) || discountRuleIds.length === 0) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "discountRuleIds debe ser un array con al menos una regla" 
+        });
+      }
+
+      // Validar que todos los IDs sean válidos
+      for (const id of discountRuleIds) {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+          return res.status(400).json({ 
+            success: false, 
+            message: `${id} no es un ID válido` 
+          });
+        }
+      }
+
       const promotion = await Promotion.create(req.body);
       return res.status(201).json({ success: true, data: promotion });
     } catch (error) {
@@ -37,18 +57,33 @@ const PromotionController = {
       const { id } = req.params;
       const updateData = { ...req.body };
 
-      // Sanitizar campos protegidos
       delete updateData._id;
       delete updateData.createdAt;
       delete updateData.updatedAt;
 
-      // Trim en nombre
       if (updateData.name !== undefined) {
         updateData.name = updateData.name.trim();
       }
 
-      // Validar referencias
-      ["productId", "discountRuleId"].forEach((field) => {
+      // Validar discountRuleIds si se envía
+      if (updateData.discountRuleIds !== undefined) {
+        if (!Array.isArray(updateData.discountRuleIds)) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "discountRuleIds debe ser un array" 
+          });
+        }
+        for (const ruleId of updateData.discountRuleIds) {
+          if (!mongoose.Types.ObjectId.isValid(ruleId)) {
+            return res.status(400).json({ 
+              success: false, 
+              message: `${ruleId} no es un ID válido` 
+            });
+          }
+        }
+      }
+
+      ["productId"].forEach((field) => {
         if (updateData[field] !== undefined && updateData[field] !== null) {
           if (!mongoose.Types.ObjectId.isValid(updateData[field])) {
             return res.status(400).json({ success: false, message: `${field} debe ser un ID válido` });
@@ -56,7 +91,6 @@ const PromotionController = {
         }
       });
 
-      // Validar durationDays
       if (updateData.durationDays !== undefined) {
         const days = Number(updateData.durationDays);
         if (isNaN(days) || days < 1) {
@@ -65,7 +99,6 @@ const PromotionController = {
         updateData.durationDays = days;
       }
 
-      // Validar fechas
       ["startDate", "endDate"].forEach((field) => {
         if (updateData[field] !== undefined && updateData[field] !== null) {
           const date = new Date(updateData[field]);
@@ -76,7 +109,7 @@ const PromotionController = {
         }
       });
 
-      // Auto-calcular endDate si cambian startDate o durationDays
+      // Auto-calcular endDate
       if (updateData.startDate !== undefined || updateData.durationDays !== undefined) {
         const currentPromo = await Promotion.model.findById(id);
         const start = updateData.startDate !== undefined ? updateData.startDate : currentPromo.startDate;
@@ -88,12 +121,10 @@ const PromotionController = {
         }
       }
 
-      // Normalizar booleano
       if (updateData.active !== undefined) {
         updateData.active = Boolean(updateData.active);
       }
 
-      // Usar patch del BaseModel
       const updatedPromotion = await Promotion.patch(id, updateData);
       if (!updatedPromotion) {
         return res.status(404).json({ success: false, message: "Promoción no encontrada" });
@@ -140,6 +171,19 @@ const PromotionController = {
         return res.status(404).json({ success: false, message: "Promoción no encontrada" });
       }
       return res.json({ success: true, message: "Promoción eliminada" });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  // Obtener promociones activas para un producto
+  getActiveByProduct: async (req, res) => {
+    try {
+      const { productId } = req.params;
+      const date = req.query.date ? new Date(req.query.date) : new Date();
+      
+      const promotions = await Promotion.findActiveByProductAndDate(productId, date);
+      return res.json({ success: true, data: promotions });
     } catch (error) {
       return res.status(500).json({ success: false, message: error.message });
     }

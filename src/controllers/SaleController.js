@@ -4,6 +4,7 @@ import ProductModel from "../models/ProductModel.js";
 import Promotion from "../models/PromotionModel.js";
 import DiscountRule from "../models/DiscountRuleModel.js";
 import PricingService from "../services/PricingService.js";
+import PromotionService from "../services/PromotionService.js";
 
 const Product = ProductModel.getNativeModel();
 
@@ -37,43 +38,38 @@ const enrichItemsWithPricing = async (items) => {
     safeProducts.map((p) => [p._id.toString(), p]),
   );
 
-  const promotionMap = Object.fromEntries(
-    safePromotions.map((p) => [p.productId.toString(), p]),
-  );
-
-  const ruleMap = Object.fromEntries(
-    safeRules.map((r) => [r._id.toString(), r]),
-  );
-
   const result = [];
 
   for (const item of items) {
     const product = productMap[item.productId];
-    const promotion = promotionMap[item.productId];
-    const rule = promotion
-      ? ruleMap[promotion.discountRuleId?.toString()]
-      : null;
 
-    const price = PricingService.calculateFinalPrice(
-      product?.price || 0,
-      promotion,
-      rule,
-      product?.lastSaleDate,
+    // Usar el servicio para calcular descuento automático
+    const automaticDiscount = await PromotionService.calculateAutomaticDiscount(
+      item.productId,
     );
 
-    // Calcular descuento individual del item
-    const itemDiscountRate = item.discount_rate || 0;
+    let price = product?.price || 0;
+    let discountRate = 0;
+    let discount = 0;
+
+    // Si hay descuento automático, aplicarlo
+    if (automaticDiscount && automaticDiscount.discountRate > 0) {
+      discountRate = automaticDiscount.discountRate;
+      discount = price * (discountRate / 100);
+      price = price - discount;
+    }
+
     const itemSubtotal = price * item.quantity;
-    const itemDiscount = itemSubtotal * (itemDiscountRate / 100);
-    const itemTotalAfterDiscount = itemSubtotal - itemDiscount;
 
     result.push({
       product: item.productId,
       quantity: item.quantity,
-      price,
-      discount_rate: itemDiscountRate,
-      discount: itemDiscount,
-      subtotal: itemTotalAfterDiscount,
+      price: price,
+      originalPrice: product?.price || 0,
+      discount_rate: discountRate,
+      discount: discount * item.quantity,
+      subtotal: itemSubtotal,
+      automaticDiscount: automaticDiscount, 
     });
   }
 
@@ -148,21 +144,28 @@ const SaleController = {
       const normalizedItems = await enrichItemsWithPricing(items);
 
       // Subtotal después de descuentos individuales
-      const subtotal = normalizedItems.reduce((acc, i) => acc + (i.price * i.quantity), 0);
-      const itemDiscountsTotal = normalizedItems.reduce((acc, i) => acc + i.discount, 0);
-      
+      const subtotal = normalizedItems.reduce(
+        (acc, i) => acc + i.price * i.quantity,
+        0,
+      );
+      const itemDiscountsTotal = normalizedItems.reduce(
+        (acc, i) => acc + i.discount,
+        0,
+      );
+
       // Descuento global
-      const discount_rate = typeof req.body.discount_rate === 'number' ? req.body.discount_rate : 0;
+      const discount_rate =
+        typeof req.body.discount_rate === "number" ? req.body.discount_rate : 0;
       const subtotalAfterItemDiscounts = subtotal - itemDiscountsTotal;
       const globalDiscount = subtotalAfterItemDiscounts * (discount_rate / 100);
-      
+
       const discount = itemDiscountsTotal + globalDiscount;
-      
+
       const taxableBase = subtotal - discount;
       const tax_rate = 21;
       const tax = taxableBase * (tax_rate / 100);
       const total = taxableBase + tax;
-      
+
       const paidAmount = payments.reduce((acc, p) => acc + p.amount, 0);
 
       const sale = await Sale.create({
