@@ -1,7 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import './DiscountRulesTable.css';
 
-export default function DiscountRulesTable({ rules, loading, onEdit, onDelete, onToggleActive }) {
+const AGE_RANGE_LABELS = {
+  '0-2': '0-2 años',
+  '3-5': '3-5 años',
+  '6-8': '6-8 años',
+  '9-12': '9-12 años',
+  '13+': '13+ años'
+};
+
+export default function DiscountRulesTable({ rules, loading, onView, onEdit, onDelete, onToggleActive }) {
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
 
   const handleSort = (key) => {
@@ -24,15 +32,10 @@ export default function DiscountRulesTable({ rules, loading, onEdit, onDelete, o
     if (sortConfig.key) {
       sortableItems.sort((a, b) => {
         let aValue, bValue;
-        
         switch (sortConfig.key) {
           case 'name':
             aValue = a.name?.toLowerCase() || '';
             bValue = b.name?.toLowerCase() || '';
-            break;
-          case 'timeWithoutSaleMonths':
-            aValue = a.timeWithoutSaleMonths || 0;
-            bValue = b.timeWithoutSaleMonths || 0;
             break;
           case 'percentage':
             aValue = a.percentage || 0;
@@ -45,7 +48,6 @@ export default function DiscountRulesTable({ rules, loading, onEdit, onDelete, o
           default:
             return 0;
         }
-
         if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
         if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
         return 0;
@@ -83,60 +85,107 @@ export default function DiscountRulesTable({ rules, loading, onEdit, onDelete, o
             <th className="sortable" onClick={() => handleSort('name')}>
               Nombre {getSortIcon('name')}
             </th>
-            <th className="sortable text-center" onClick={() => handleSort('timeWithoutSaleMonths')} style={{ width: '200px' }}>
-              Meses sin Venta {getSortIcon('timeWithoutSaleMonths')}
-            </th>
-            <th className="sortable text-center" onClick={() => handleSort('percentage')} style={{ width: '160px' }}>
+            <th style={{ width: '350px' }}>Condiciones</th>
+            <th className="sortable text-center" onClick={() => handleSort('percentage')} style={{ width: '140px' }}>
               Descuento % {getSortIcon('percentage')}
             </th>
             <th className="sortable text-center" onClick={() => handleSort('active')} style={{ width: '120px' }}>
               Estado {getSortIcon('active')}
             </th>
-            <th className="text-center" style={{ width: '150px' }}>Acciones</th>
+            <th className="text-center" style={{ width: '180px' }}>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {sortedRules.map((rule, index) => (
-            <tr key={rule._id}>
-              <td>{index + 1}</td>
-              <td>
-                <span className="rule-name">{rule.name}</span>
-              </td>
-              <td className="text-center">
-                <span className="rule-months">{rule.timeWithoutSaleMonths} meses</span>
-              </td>
-              <td className="text-center">
-                <span className="rule-percentage">{rule.percentage}%</span>
-              </td>
-              <td className="text-center">
-                <button
-                  className={`status-toggle ${rule.active ? 'active' : 'inactive'}`}
-                  onClick={() => onToggleActive(rule)}
-                  title={rule.active ? 'Click para desactivar' : 'Click para activar'}
-                >
-                  {rule.active ? 'Activa' : 'Inactiva'}
-                </button>
-              </td>
-              <td className="text-center">
-                <div className="rules-table-actions">
+          {sortedRules.map((rule, index) => {
+            const c = rule.conditions || {};
+            return (
+              <tr key={rule._id}>
+                <td>{index + 1}</td>
+                <td>
+                  <span className="rule-name">{rule.name}</span>
+                </td>
+                <td>
+                  <div className="rule-conditions-badges">
+                    {/* Filtros de identidad */}
+                    {c.productIds?.length > 0 && (
+                      <span className="condition-badge identity">
+                        📦 {c.productIds.length} productos
+                      </span>
+                    )}
+                    {c.brands?.length > 0 && (
+                      <span className="condition-badge brand">
+                        🏷️ {c.brands.join(', ')}
+                      </span>
+                    )}
+                    {c.supplierIds?.length > 0 && (
+                      <span className="condition-badge supplier">
+                        🚚 {c.supplierIds.length} proveedores
+                      </span>
+                    )}
+                    {c.ageRanges?.length > 0 && (
+                      <span className="condition-badge age">
+                        👶 {c.ageRanges.map(r => AGE_RANGE_LABELS[r] || r).join(', ')}
+                      </span>
+                    )}
+                    
+                    {/* Filtros de estado */}
+                    {(c.minMonthsWithoutSale != null || c.maxMonthsWithoutSale != null) && (
+                      <span className="condition-badge state">
+                        ⏱️ {c.minMonthsWithoutSale ?? 0}-{c.maxMonthsWithoutSale ?? '∞'} meses sin venta
+                      </span>
+                    )}
+                    {(c.minStockQuantity != null || c.maxStockQuantity != null) && (
+                      <span className="condition-badge state">
+                        📊 {c.minStockQuantity ?? 0}-{c.maxStockQuantity ?? '∞'} uds
+                      </span>
+                    )}
+                    {(c.minMonthsInStock != null || c.maxMonthsInStock != null) && (
+                      <span className="condition-badge state">
+                        📅 {c.minMonthsInStock ?? 0}-{c.maxMonthsInStock ?? '∞'} meses en stock
+                      </span>
+                    )}
+                  </div>
+                </td>
+                <td className="text-center">
+                  <span className="rule-percentage">{rule.percentage}%</span>
+                </td>
+                <td className="text-center">
                   <button
-                    className="rules-action-btn edit"
-                    onClick={() => onEdit(rule)}
-                    title="Editar regla"
+                    className={`status-toggle ${rule.active ? 'active' : 'inactive'}`}
+                    onClick={() => onToggleActive(rule)}
+                    title={rule.active ? 'Click para desactivar' : 'Click para activar'}
                   >
-                    ✏️
+                    {rule.active ? 'Activa' : 'Inactiva'}
                   </button>
-                  <button
-                    className="rules-action-btn delete"
-                    onClick={() => onDelete(rule)}
-                    title="Eliminar regla"
-                  >
-                    🗑️
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td className="text-center">
+                  <div className="rules-table-actions">
+                    <button
+                      className="rules-action-btn view"
+                      onClick={() => onView(rule)}
+                      title="Ver detalle"
+                    >
+                      📄
+                    </button>
+                    <button
+                      className="rules-action-btn edit"
+                      onClick={() => onEdit(rule)}
+                      title="Editar regla"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      className="rules-action-btn delete"
+                      onClick={() => onDelete(rule)}
+                      title="Eliminar regla"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

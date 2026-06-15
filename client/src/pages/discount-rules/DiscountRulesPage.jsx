@@ -1,99 +1,80 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import useDiscountRulesLogic from './useDiscountRulesLogic';
 import DiscountRulesTable from '../../components/DiscountRules/DiscountRulesTable';
-import DiscountRuleModal from '../../components/DiscountRules/DiscountRuleModal';
+import DiscountRuleViewModal from '../../components/DiscountRules/DiscountRuleViewModal';
+import DiscountRuleDeleteModal from '../../components/DiscountRules/DiscountRuleDeleteModal';
 import './DiscountRulesPage.css';
 
 export default function DiscountRulesPage() {
+  const navigate = useNavigate();
   const {
     rules,
     loading,
     error,
     success,
-    showModal,
-    editingRule,
+    viewingRule,
     saving,
     showDeleteConfirm,
     ruleToDelete,
     promotionsUsingRule,
-    openCreateModal,
-    openEditModal,
-    closeModal,
-    saveRule,
+    viewRule,
+    closeViewModal,
     requestDelete,
     confirmDelete,
     cancelDelete,
     toggleActive
   } = useDiscountRulesLogic();
 
+  const handleCreate = () => {
+    navigate('/promociones/descuentos/nuevo');
+  };
+
+  const handleEdit = (rule) => {
+    navigate(`/promociones/descuentos/${rule._id}/editar`);
+  };
+
+  const handleViewEdit = (rule) => {
+    closeViewModal();
+    navigate(`/promociones/descuentos/${rule._id}/editar`);
+  };
+
   return (
     <div className="discount-rules-page">
       <div className="discount-rules-header">
         <h1>Reglas de Descuento</h1>
-        <button className="btn-primary" onClick={openCreateModal}>
+        <button className="btn-primary" onClick={handleCreate}>
           + Nueva Regla
         </button>
       </div>
 
-      {error && (
-        <div className="alert alert-error">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="alert alert-success">
-          {success}
-        </div>
-      )}
+      {error && <div className="alert alert-error">{error}</div>}
+      {success && <div className="alert alert-success">{success}</div>}
 
       <DiscountRulesTable
         rules={rules}
         loading={loading}
-        onEdit={openEditModal}
+        onView={viewRule}
+        onEdit={handleEdit}
         onDelete={requestDelete}
         onToggleActive={toggleActive}
       />
 
-      <DiscountRuleModal
-        isOpen={showModal}
-        rule={editingRule}
-        saving={saving}
-        onClose={closeModal}
-        onSave={saveRule}
+      <DiscountRuleViewModal
+        isOpen={Boolean(viewingRule)}
+        rule={viewingRule}
+        onClose={closeViewModal}
+        onEdit={handleViewEdit}
       />
 
-      {/* Modal de confirmación de eliminación */}
-      {showDeleteConfirm && ruleToDelete && (
-        <div className="modal-overlay" onClick={cancelDelete}>
-          <div className="modal-content delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Confirmar Eliminación</h2>
-              <button className="modal-close" onClick={cancelDelete}>✕</button>
-            </div>
-            <div className="modal-body">
-              <p>
-                ¿Estás seguro de que deseas eliminar la regla <strong>"{ruleToDelete.name}"</strong>?
-              </p>
-              {promotionsUsingRule > 0 && (
-                <div className="warning-box">
-                  <strong>⚠️ Atención:</strong> Esta regla está siendo utilizada por{' '}
-                  <strong>{promotionsUsingRule} promoción(es)</strong>. 
-                  Al eliminarla, se desasociará de dichas promociones.
-                </div>
-              )}
-            </div>
-            <div className="modal-footer">
-              <button className="btn-secondary" onClick={cancelDelete} disabled={saving}>
-                Cancelar
-              </button>
-              <button className="btn-danger" onClick={confirmDelete} disabled={saving}>
-                {saving ? 'Eliminando...' : 'Eliminar'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+       <DiscountRuleDeleteModal
+        isOpen={showDeleteConfirm}
+        rule={ruleToDelete}
+        promotionsCount={promotionsUsingRule}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        saving={saving}
+      />
     </div>
   );
 }

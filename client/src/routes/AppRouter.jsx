@@ -18,6 +18,7 @@ import ProveedoresPage from '../pages/proveedores/ProveedoresPage.jsx';
 import UnderConstructionPage from '../pages/UnderConstructionPage/UnderConstructionPage.jsx';
 import PromocionsPage from '../pages/promotions/PromocionsPage.jsx';
 import DescuentosPage from '../pages/discount-rules/DiscountRulesPage.jsx';
+import DiscountRuleFormPage from '../pages/discount-rules/DiscountRuleFormPage.jsx';
 import StockPage from '../pages/products/StockPage.jsx';
 import NewSalesPage from '../pages/sales/NewSalesPage/NewSalePage.jsx';
 import ReturnsPage from '../pages/returns/ReturnsPage.jsx'; 
@@ -68,6 +69,8 @@ export default function AppRouter() {
         {/* Promociones */}
         <Route path="promociones" element={<ProtectedRoute><PromocionsPage /></ProtectedRoute>} />
         <Route path="promociones/descuentos" element={<ProtectedRoute><DescuentosPage /></ProtectedRoute>} />
+        <Route path="promociones/descuentos/nuevo" element={<ProtectedRoute><DiscountRuleFormPage /></ProtectedRoute>} />
+        <Route path="promociones/descuentos/:id/editar" element={<ProtectedRoute><DiscountRuleFormPage /></ProtectedRoute>} />
         
         {/* Reportes */}
         <Route path="reportes" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />

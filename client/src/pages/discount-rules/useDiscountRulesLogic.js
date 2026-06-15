@@ -7,15 +7,14 @@ export default function useDiscountRulesLogic() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Estados para modal
-  const [showModal, setShowModal] = useState(false);
-  const [editingRule, setEditingRule] = useState(null);
-  const [saving, setSaving] = useState(false);
+  // Solo para el modal de VER detalle (lectura)
+  const [viewingRule, setViewingRule] = useState(null);
 
   // Estados para confirmación de eliminación
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [ruleToDelete, setRuleToDelete] = useState(null);
   const [promotionsUsingRule, setPromotionsUsingRule] = useState(0);
+  const [saving, setSaving] = useState(false);
 
   // Cargar reglas al montar
   useEffect(() => {
@@ -36,60 +35,19 @@ export default function useDiscountRulesLogic() {
     }
   };
 
-  const openCreateModal = () => {
-    setEditingRule(null);
-    setShowModal(true);
+  // Modal de solo lectura (ver detalle)
+  const viewRule = (rule) => {
+    setViewingRule(rule);
   };
 
-  const openEditModal = (rule) => {
-    setEditingRule(rule);
-    setShowModal(true);
+  const closeViewModal = () => {
+    setViewingRule(null);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-    setEditingRule(null);
-  };
-
-  const saveRule = async (ruleData) => {
-    setSaving(true);
-    setError('');
-    setSuccess('');
-
-    try {
-      if (editingRule) {
-        // Actualizar
-        await apiRequest(`/api/discount-rules/${editingRule._id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(ruleData)
-        });
-        setSuccess('Regla actualizada exitosamente');
-      } else {
-        // Crear
-        await apiRequest('/api/discount-rules', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(ruleData)
-        });
-        setSuccess('Regla creada exitosamente');
-      }
-
-      closeModal();
-      await loadRules();
-      
-      setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError(err.message || 'Error al guardar la regla');
-    } finally {
-      setSaving(false);
-    }
-  };
-
+  // Eliminación
   const requestDelete = async (rule) => {
     setRuleToDelete(rule);
     
-    // Verificar cuántas promociones usan esta regla
     try {
       const response = await apiRequest(`/api/discount-rules/${rule._id}/promotions-count`);
       setPromotionsUsingRule(response.data?.count || 0);
@@ -130,6 +88,7 @@ export default function useDiscountRulesLogic() {
     setPromotionsUsingRule(0);
   };
 
+  // Toggle activo/inactivo
   const toggleActive = async (rule) => {
     try {
       await apiRequest(`/api/discount-rules/${rule._id}`, {
@@ -152,16 +111,13 @@ export default function useDiscountRulesLogic() {
     loading,
     error,
     success,
-    showModal,
-    editingRule,
     saving,
+    viewingRule,
+    viewRule,
+    closeViewModal,
     showDeleteConfirm,
     ruleToDelete,
     promotionsUsingRule,
-    openCreateModal,
-    openEditModal,
-    closeModal,
-    saveRule,
     requestDelete,
     confirmDelete,
     cancelDelete,
