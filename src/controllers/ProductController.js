@@ -38,6 +38,16 @@ const ProductController = {
     }
   },
 
+  getUniqueBrands: async (req, res) => {
+    try {
+      const Product = (await import("../models/ProductModel.js")).default;
+      const brands = await Product.getUniqueBrands();
+      return res.json({ success: true, data: brands });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
   partialUpdate: async (req, res) => {
     try {
       const { id } = req.params;
@@ -146,6 +156,7 @@ const ProductController = {
       return res.status(500).json({ success: false, message: error.message });
     }
   },
+
 };
 
 export default ProductController;

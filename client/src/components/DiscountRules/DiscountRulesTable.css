@@ -194,3 +194,20 @@
   margin: 0;
   font-size: 18px;
 }
+
+.rule-conditions-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.condition-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  background: #e7f3ff;
+  color: #007bff;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}

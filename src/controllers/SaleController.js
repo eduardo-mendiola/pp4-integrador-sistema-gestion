@@ -69,7 +69,7 @@ const enrichItemsWithPricing = async (items) => {
       discount_rate: discountRate,
       discount: discount * item.quantity,
       subtotal: itemSubtotal,
-      automaticDiscount: automaticDiscount, 
+      automaticDiscount: automaticDiscount,
     });
   }
 
@@ -187,7 +187,10 @@ const SaleController = {
           const bulkOps = normalizedItems.map((item) => ({
             updateOne: {
               filter: { _id: item.product },
-              update: { $inc: { stock: -item.quantity } },
+              update: {
+                $inc: { stock: -item.quantity },
+                $set: { lastSaleDate: new Date() }, // Actualizar fecha de última venta
+              },
             },
           }));
 
