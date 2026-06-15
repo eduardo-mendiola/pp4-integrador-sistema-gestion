@@ -1,0 +1,263 @@
+/* Overlay */
+.rule-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  animation: ruleFadeIn 0.2s ease-out;
+  padding: 20px;
+}
+
+@keyframes ruleFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal Container */
+.rule-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: ruleSlideUp 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes ruleSlideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Header */
+.rule-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e1e8ed;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #f8f9fa;
+}
+
+.rule-modal-header h2 {
+  margin: 0 0 4px 0;
+  font-size: 20px;
+  color: #333;
+  font-weight: 700;
+}
+
+.rule-modal-id {
+  font-size: 15px;
+  color: #8898aa;
+  font-family: monospace;
+  background: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #e1e8ed;
+}
+
+.rule-modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.rule-modal-close:hover {
+  background: #e9ecef;
+}
+
+/* Body */
+.rule-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rule-modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rule-modal-section-title {
+  margin: 0;
+  font-size: 16px;
+  color: #525f7f;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+/* Form Groups */
+.rule-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rule-form-group label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.rule-form-group input[type="text"],
+.rule-form-group input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+  background: white;
+}
+
+.rule-form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.rule-form-group input.error {
+  border-color: #dc3545;
+}
+
+.rule-error-message {
+  display: block;
+  font-size: 13px;
+  color: #dc3545;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.rule-form-hint {
+  font-size: 13px;
+  color: #8898aa;
+  line-height: 1.4;
+}
+
+.rule-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.rule-input-with-suffix {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rule-input-with-suffix input {
+  padding-right: 45px;
+}
+
+.rule-input-suffix {
+  position: absolute;
+  right: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #8898aa;
+  pointer-events: none;
+}
+
+/* Checkbox */
+.rule-checkbox-group {
+  margin-top: 8px;
+}
+
+.rule-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.rule-checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #007bff;
+}
+
+/* Footer */
+.rule-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e1e8ed;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #f8f9fa;
+}
+
+.rule-modal-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rule-modal-btn.secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.rule-modal-btn.secondary:hover {
+  background: #5a6268;
+}
+
+.rule-modal-btn.primary {
+  background: #007bff;
+  color: white;
+}
+
+.rule-modal-btn.primary:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.rule-modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .rule-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .rule-modal-footer {
+    flex-direction: column;
+  }
+  
+  .rule-modal-btn {
+    width: 100%;
+  }
+}

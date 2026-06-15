@@ -8,6 +8,7 @@ router.use(isAuthenticated);
 
 router.get('/', DiscountRuleController.getAll);
 router.get('/:id', DiscountRuleController.getById);
+router.get('/:id/promotions-count', DiscountRuleController.getPromotionsCount);
 router.post('/', DiscountRuleController.create);
 router.patch('/:id', DiscountRuleController.partialUpdate);
 router.put('/:id', DiscountRuleController.update);
