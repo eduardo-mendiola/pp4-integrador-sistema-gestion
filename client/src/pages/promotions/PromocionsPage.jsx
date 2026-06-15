@@ -2,18 +2,19 @@ import React from 'react';
 import usePromotionsLogic from './usePromotionsLogic';
 import PromotionsTable from '../../components/Promotions/PromotionsTable';
 import PromotionModal from '../../components/Promotions/PromotionModal';
+import PromotionViewModal from '../../components/Promotions/PromotionViewModal';
 import './PromotionsPage.css';
 
 export default function PromotionsPage() {
   const {
     promotions,
-    products,
     discountRules,
     loading,
     error,
     success,
     showModal,
     editingPromotion,
+    viewingPromotion,
     saving,
     showDeleteConfirm,
     promotionToDelete,
@@ -21,11 +22,19 @@ export default function PromotionsPage() {
     openEditModal,
     closeModal,
     savePromotion,
+    viewPromotion,
+    closeViewModal,
     requestDelete,
     confirmDelete,
     cancelDelete,
     toggleActive
   } = usePromotionsLogic();
+
+  // ✅ Cuando se hace clic en "Editar" desde la tabla o el modal de vista
+  const handleEdit = (promotion) => {
+    closeViewModal(); // Cerrar modal de vista si está abierto
+    openEditModal(promotion); // Abrir modal de edición
+  };
 
   return (
     <div className="promotions-page">
@@ -36,36 +45,37 @@ export default function PromotionsPage() {
         </button>
       </div>
 
-      {error && (
-        <div className="alert alert-error">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="alert alert-success">
-          {success}
-        </div>
-      )}
+      {error && <div className="alert alert-error">{error}</div>}
+      {success && <div className="alert alert-success">{success}</div>}
 
       <PromotionsTable
         promotions={promotions}
         loading={loading}
-        onEdit={openEditModal}
+        onView={viewPromotion}
+        onEdit={handleEdit}
         onDelete={requestDelete}
         onToggleActive={toggleActive}
       />
 
+      {/* Modal de Crear/Editar */}
       <PromotionModal
         isOpen={showModal}
         promotion={editingPromotion}
-        products={products}
         discountRules={discountRules}
         saving={saving}
         onClose={closeModal}
         onSave={savePromotion}
       />
 
+      {/* Modal de Vista */}
+      <PromotionViewModal
+        isOpen={Boolean(viewingPromotion)}
+        promotion={viewingPromotion}
+        onClose={closeViewModal}
+        onEdit={handleEdit}
+      />
+
+      {/* Modal de Confirmación de Eliminación */}
       {showDeleteConfirm && promotionToDelete && (
         <div className="modal-overlay" onClick={cancelDelete}>
           <div className="modal-content delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
@@ -79,9 +89,7 @@ export default function PromotionsPage() {
               </p>
             </div>
             <div className="modal-footer">
-              <button className="btn-secondary" onClick={cancelDelete} disabled={saving}>
-                Cancelar
-              </button>
+              <button className="btn-secondary" onClick={cancelDelete} disabled={saving}>Cancelar</button>
               <button className="btn-danger" onClick={confirmDelete} disabled={saving}>
                 {saving ? 'Eliminando...' : 'Eliminar'}
               </button>

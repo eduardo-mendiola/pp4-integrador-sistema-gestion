@@ -8,7 +8,7 @@ router.use(isAuthenticated);
 
 router.get('/', PromotionController.getAll);
 router.get('/:id', PromotionController.getById);
-router.get('/active/:productId', PromotionController.getActiveByProduct);
+router.get('/active', PromotionController.getActiveByDate);
 router.post('/', PromotionController.create);
 router.patch('/:id', PromotionController.partialUpdate);
 router.put('/:id', PromotionController.update);
