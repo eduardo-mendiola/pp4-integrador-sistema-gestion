@@ -207,3 +207,55 @@
   margin: 0;
   font-size: 18px;
 }
+
+/* Días activos */
+.promo-active-days {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #e7f3ff;
+  color: #007bff;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Lista de reglas aplicadas */
+.promo-rules-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.promo-rule-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.promo-no-rules {
+  color: #8898aa;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* Botón de ver */
+.promotions-action-btn.view {
+  background: #e7f3ff;
+  color: #007bff;
+}
+
+.promotions-action-btn.view:hover {
+  background: #007bff;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.promotions-action-btn.view svg {
+  width: 18px;
+  height: 18px;
+}

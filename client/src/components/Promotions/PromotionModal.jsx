@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './PromotionModal.css';
 
-export default function PromotionModal({ isOpen, promotion, products, discountRules, saving, onClose, onSave }) {
+export default function PromotionModal({ isOpen, promotion, discountRules, saving, onClose, onSave }) {
   const [formData, setFormData] = useState({
     name: '',
-    productId: '',
     discountRuleIds: [],
     startDate: '',
     durationDays: 30,
@@ -19,7 +18,6 @@ export default function PromotionModal({ isOpen, promotion, products, discountRu
       const startStr = promotion.startDate ? new Date(promotion.startDate).toISOString().split('T')[0] : '';
       setFormData({
         name: promotion.name || '',
-        productId: promotion.productId?._id || promotion.productId || '',
         discountRuleIds: Array.isArray(promotion.discountRuleIds) 
           ? promotion.discountRuleIds.map(r => r._id || r) 
           : [],
@@ -30,7 +28,6 @@ export default function PromotionModal({ isOpen, promotion, products, discountRu
     } else {
       setFormData({
         name: '',
-        productId: '',
         discountRuleIds: [],
         startDate: new Date().toISOString().split('T')[0],
         durationDays: 30,
@@ -86,10 +83,6 @@ export default function PromotionModal({ isOpen, promotion, products, discountRu
       newErrors.name = 'El nombre es obligatorio';
     }
     
-    if (!formData.productId) {
-      newErrors.productId = 'Debes seleccionar un producto';
-    }
-    
     if (formData.discountRuleIds.length === 0) {
       newErrors.discountRuleIds = 'Debes seleccionar al menos una regla de descuento';
     }
@@ -113,7 +106,6 @@ export default function PromotionModal({ isOpen, promotion, products, discountRu
     
     onSave({
       name: formData.name.trim(),
-      productId: formData.productId,
       discountRuleIds: formData.discountRuleIds,
       startDate: formData.startDate,
       durationDays: Number(formData.durationDays),
@@ -155,25 +147,6 @@ export default function PromotionModal({ isOpen, promotion, products, discountRu
                 />
                 {errors.name && <span className="promotion-error-message">{errors.name}</span>}
               </div>
-
-              <div className="promotion-form-group">
-                <label htmlFor="productId">Producto Aplicado *</label>
-                <select
-                  id="productId"
-                  name="productId"
-                  value={formData.productId}
-                  onChange={handleChange}
-                  className={errors.productId ? 'error' : ''}
-                >
-                  <option value="">Selecciona un producto...</option>
-                  {products.map(product => (
-                    <option key={product._id} value={product._id}>
-                      {product.name} {product.sku ? `(${product.sku})` : ''}
-                    </option>
-                  ))}
-                </select>
-                {errors.productId && <span className="promotion-error-message">{errors.productId}</span>}
-              </div>
             </div>
 
             <div className="promotion-modal-section">
@@ -195,7 +168,7 @@ export default function PromotionModal({ isOpen, promotion, products, discountRu
                       <span className="rule-info">
                         <span className="rule-name">{rule.name}</span>
                         <span className="rule-detail">
-                          {rule.timeWithoutSaleMonths} meses sin venta → {rule.percentage}% descuento
+                          {rule.percentage}% descuento
                         </span>
                       </span>
                     </label>

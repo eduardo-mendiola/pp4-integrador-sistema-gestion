@@ -126,6 +126,22 @@
   padding: 0;
 }
 
+.rules-action-btn.view {
+  background: #e7f3ff;
+  color: #007bff;
+}
+
+.rules-action-btn.view:hover {
+  background: #007bff;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.rules-action-btn.view svg {
+  width: 18px;
+  height: 18px;
+}
+
 .rules-action-btn.edit {
   background: #e7f3ff;
   color: #007bff;

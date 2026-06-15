@@ -60,6 +60,7 @@ const PromotionController = {
       delete updateData._id;
       delete updateData.createdAt;
       delete updateData.updatedAt;
+      delete updateData.productId; // ✅ Eliminar productId si viene
 
       if (updateData.name !== undefined) {
         updateData.name = updateData.name.trim();
@@ -82,14 +83,6 @@ const PromotionController = {
           }
         }
       }
-
-      ["productId"].forEach((field) => {
-        if (updateData[field] !== undefined && updateData[field] !== null) {
-          if (!mongoose.Types.ObjectId.isValid(updateData[field])) {
-            return res.status(400).json({ success: false, message: `${field} debe ser un ID válido` });
-          }
-        }
-      });
 
       if (updateData.durationDays !== undefined) {
         const days = Number(updateData.durationDays);
@@ -151,6 +144,7 @@ const PromotionController = {
       delete updateData._id;
       delete updateData.createdAt;
       delete updateData.updatedAt;
+      delete updateData.productId; // Eliminar productId si viene
 
       const updatedPromotion = await Promotion.model.findByIdAndUpdate(
         id, { $set: updateData }, { new: true, runValidators: true }
@@ -176,13 +170,12 @@ const PromotionController = {
     }
   },
 
-  // Obtener promociones activas para un producto
-  getActiveByProduct: async (req, res) => {
+  // Obtener promociones activas en una fecha (sin filtro de producto)
+  getActiveByDate: async (req, res) => {
     try {
-      const { productId } = req.params;
       const date = req.query.date ? new Date(req.query.date) : new Date();
       
-      const promotions = await Promotion.findActiveByProductAndDate(productId, date);
+      const promotions = await Promotion.findActiveByDate(date);
       return res.json({ success: true, data: promotions });
     } catch (error) {
       return res.status(500).json({ success: false, message: error.message });

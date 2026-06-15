@@ -308,6 +308,34 @@
   transform: none;
 }
 
+/* ✅ Form wrapper - CRÍTICO para el scroll */
+.promotion-modal form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; /* Importante: permite que el flexbox funcione */
+  overflow: hidden;
+}
+
+/* Scrollbar personalizado */
+.promotion-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.promotion-modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.promotion-modal-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.promotion-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .promotion-form-grid {

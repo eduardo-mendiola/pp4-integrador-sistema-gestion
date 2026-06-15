@@ -12,7 +12,8 @@ const AGE_RANGES = {
 const PromotionService = {
   calculateAutomaticDiscount: async (productId, currentDate = new Date()) => {
     try {
-      const activePromotions = await Promotion.findActiveByProductAndDate(productId, currentDate);
+      // ✅ NUEVO: Obtener todas las promociones activas en la fecha (sin filtro de producto)
+      const activePromotions = await Promotion.findActiveByDate(currentDate);
       if (!activePromotions || activePromotions.length === 0) return null;
 
       const product = await Product.model.findById(productId).populate('supplier').lean();
@@ -160,7 +161,6 @@ const PromotionService = {
       }
     }
 
-    // Filtros de tiempo en stock
     if (conditions.minMonthsInStock != null) {
       if (metrics.monthsInStock >= conditions.minMonthsInStock) {
         matchedConditions.push(`En stock: ≥${conditions.minMonthsInStock} meses`);

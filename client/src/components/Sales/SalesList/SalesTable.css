@@ -164,6 +164,11 @@
   transform: translateY(-1px);
 }
 
+.sales-action-btn.view svg {
+  width: 18px;
+  height: 18px;
+}
+
 .sales-action-btn.reprint {
   background: #e7f8e7;
   color: #28a745;

@@ -3,22 +3,25 @@ import { apiRequest } from '../../services/api.js';
 
 export default function usePromotionsLogic() {
   const [promotions, setPromotions] = useState([]);
-  const [products, setProducts] = useState([]);
   const [discountRules, setDiscountRules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  // Modal de crear/editar
   const [showModal, setShowModal] = useState(false);
   const [editingPromotion, setEditingPromotion] = useState(null);
-  const [saving, setSaving] = useState(false);
 
+  // Modal de vista
+  const [viewingPromotion, setViewingPromotion] = useState(null);
+
+  // Modal de eliminación
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [promotionToDelete, setPromotionToDelete] = useState(null);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     loadPromotions();
-    loadProducts();
     loadDiscountRules();
   }, []);
 
@@ -36,24 +39,16 @@ export default function usePromotionsLogic() {
     }
   };
 
-  const loadProducts = async () => {
-    try {
-      const response = await apiRequest('/api/products?limit=1000');
-      setProducts(response.data || []);
-    } catch (err) {
-      console.error('Error al cargar productos:', err);
-    }
-  };
-
   const loadDiscountRules = async () => {
     try {
       const response = await apiRequest('/api/discount-rules');
       setDiscountRules(response.data || []);
     } catch (err) {
-      console.error('Error al cargar reglas:', err);
+      console.error('Error al cargar las reglas:', err);
     }
   };
 
+  // Modal de crear/editar
   const openCreateModal = () => {
     setEditingPromotion(null);
     setShowModal(true);
@@ -102,6 +97,16 @@ export default function usePromotionsLogic() {
     }
   };
 
+  // Modal de vista
+  const viewPromotion = (promotion) => {
+    setViewingPromotion(promotion);
+  };
+
+  const closeViewModal = () => {
+    setViewingPromotion(null);
+  };
+
+  // Modal de eliminación
   const requestDelete = (promotion) => {
     setPromotionToDelete(promotion);
     setShowDeleteConfirm(true);
@@ -155,13 +160,13 @@ export default function usePromotionsLogic() {
 
   return {
     promotions,
-    products,
     discountRules,
     loading,
     error,
     success,
     showModal,
     editingPromotion,
+    viewingPromotion,
     saving,
     showDeleteConfirm,
     promotionToDelete,
@@ -169,6 +174,8 @@ export default function usePromotionsLogic() {
     openEditModal,
     closeModal,
     savePromotion,
+    viewPromotion,
+    closeViewModal,
     requestDelete,
     confirmDelete,
     cancelDelete,
