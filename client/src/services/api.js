@@ -1,5 +1,9 @@
 export async function apiRequest(path, options = {}) {
-  const response = await fetch(path, {
+  // Si existe la variable de Vercel, úsala. Si no, usa ruta relativa (proxy de Vite)
+  const baseURL = import.meta.env.VITE_API_URL || '';
+  const fullUrl = baseURL ? `${baseURL}${path}` : path;
+
+  const response = await fetch(fullUrl, {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
