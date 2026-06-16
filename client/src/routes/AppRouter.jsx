@@ -53,7 +53,7 @@ export default function AppRouter() {
         {/* Ventas */}
         <Route path="ventas" element={<ProtectedRoute><SalesListPage /></ProtectedRoute>} />
         <Route path="ventas/nueva" element={<ProtectedRoute><NewSalesPage /></ProtectedRoute>} />
-        <Route path="ventas/devoluciones" element={<ProtectedRoute><ReturnsPage /></ProtectedRoute>} /> {/* ✅ NUEVO */}
+        <Route path="ventas/devoluciones" element={<ProtectedRoute><ReturnsPage /></ProtectedRoute>} /> 
         
         {/* Productos */}
         <Route path="productos" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />

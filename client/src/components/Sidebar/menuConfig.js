@@ -77,16 +77,16 @@ export const menuConfig = [
     permission: "view_promotions",
     submenu: [
       {
-        id: "promociones-list",
-        label: "Promociones",
-        path: "/promociones",
-        permission: "view_promotions",
-      },
-      {
         id: "descuentos",
         label: "Reglas de descuento",
         path: "/promociones/descuentos",
         permission: "view_discount_rules",
+      },
+      {
+        id: "promociones-list",
+        label: "Promociones",
+        path: "/promociones",
+        permission: "view_promotions",
       },
     ],
   },

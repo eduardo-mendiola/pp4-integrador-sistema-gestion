@@ -13,6 +13,27 @@ GET {{baseUrl}}/api/promotions/{{promotionId}}
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Accept: application/json
 
+
+
+
+### Calcular descuento automático para un producto
+GET {{baseUrl}}/api/promotions/calculate-discount/6a0b893e9acdea0d123badbf
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Calcular descuento automático para un producto
+GET {{baseUrl}}/api/promotions/calculate-discount/6a0b893e9acdea0d123badc0
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Calcular descuento automático para un producto
+GET {{baseUrl}}/api/promotions/calculate-discount/6a0b893e9acdea0d123badc1
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+
+
+
 ### Create promotion
 POST {{baseUrl}}/api/promotions
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}

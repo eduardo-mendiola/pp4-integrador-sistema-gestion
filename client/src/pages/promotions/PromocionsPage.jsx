@@ -3,6 +3,7 @@ import usePromotionsLogic from './usePromotionsLogic';
 import PromotionsTable from '../../components/Promotions/PromotionsTable';
 import PromotionModal from '../../components/Promotions/PromotionModal';
 import PromotionViewModal from '../../components/Promotions/PromotionViewModal';
+import PromotionDeleteModal from '../../components/Promotions/PromotionDeleteModal';
 import './PromotionsPage.css';
 
 export default function PromotionsPage() {
@@ -30,7 +31,7 @@ export default function PromotionsPage() {
     toggleActive
   } = usePromotionsLogic();
 
-  // ✅ Cuando se hace clic en "Editar" desde la tabla o el modal de vista
+  // Cuando se hace clic en "Editar" desde la tabla o el modal de vista
   const handleEdit = (promotion) => {
     closeViewModal(); // Cerrar modal de vista si está abierto
     openEditModal(promotion); // Abrir modal de edición
@@ -76,27 +77,13 @@ export default function PromotionsPage() {
       />
 
       {/* Modal de Confirmación de Eliminación */}
-      {showDeleteConfirm && promotionToDelete && (
-        <div className="modal-overlay" onClick={cancelDelete}>
-          <div className="modal-content delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Confirmar Eliminación</h2>
-              <button className="modal-close" onClick={cancelDelete}>✕</button>
-            </div>
-            <div className="modal-body">
-              <p>
-                ¿Estás seguro de que deseas eliminar la promoción <strong>"{promotionToDelete.name}"</strong>?
-              </p>
-            </div>
-            <div className="modal-footer">
-              <button className="btn-secondary" onClick={cancelDelete} disabled={saving}>Cancelar</button>
-              <button className="btn-danger" onClick={confirmDelete} disabled={saving}>
-                {saving ? 'Eliminando...' : 'Eliminar'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <PromotionDeleteModal
+        isOpen={showDeleteConfirm}
+        promotion={promotionToDelete}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        saving={saving}
+      />
     </div>
   );
 }
