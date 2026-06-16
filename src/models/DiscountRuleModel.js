@@ -52,6 +52,22 @@ class DiscountRuleModel extends BaseModel {
   constructor() {
     super(discountRuleSchema, "DiscountRule");
   }
+
+  // Sobreescribir findAll para hacer populate de campos anidados
+  findAll() {
+    return this.model.find()
+      .populate('conditions.productIds', 'name sku brand price')
+      .populate('conditions.supplierIds', 'business_name name')
+      .lean();
+  }
+
+  // Sobreescribir findById para hacer populate de campos anidados
+  findById(id) {
+    return this.model.findById(id)
+      .populate('conditions.productIds', 'name sku brand price')
+      .populate('conditions.supplierIds', 'business_name name')
+      .lean();
+  }
 }
 
 export default new DiscountRuleModel();

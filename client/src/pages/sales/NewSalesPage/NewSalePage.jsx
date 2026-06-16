@@ -44,7 +44,6 @@ export default function NewSalePage() {
     );
     
     if (result.success) {
-      // Aquí en FASE 3 abriremos el modal de comprobante
       console.log('Pago procesado exitosamente:', result.sale);
     }
   };
@@ -76,6 +75,8 @@ export default function NewSalePage() {
           selectedItemId={sales.selectedItem?._id}
           editingQuantities={sales.editingQuantities}
           itemDiscounts={sales.itemDiscounts}
+          automaticDiscounts={sales.automaticDiscounts}
+          manualDiscounts={sales.manualDiscounts}
           onSelectItem={sales.selectItem}
           onRemoveItem={sales.removeFromCart}
           onToggleActive={sales.toggleItemActive}

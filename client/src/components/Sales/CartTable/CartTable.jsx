@@ -7,6 +7,8 @@ export default function CartTable({
   selectedItemId,
   editingQuantities,
   itemDiscounts,
+  automaticDiscounts,
+  manualDiscounts,
   onSelectItem,
   onRemoveItem,
   onToggleActive,
@@ -57,6 +59,8 @@ export default function CartTable({
                   isSelected={selectedItemId === item._id}
                   editingQuantity={editingQuantities[item._id]}
                   itemDiscount={itemDiscounts[item._id] || 0}
+                  automaticDiscount={automaticDiscounts[item._id]}
+                  isManualDiscount={manualDiscounts[item._id]}
                   onSelect={onSelectItem}
                   onRemove={onRemoveItem}
                   onToggleActive={onToggleActive}

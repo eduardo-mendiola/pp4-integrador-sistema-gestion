@@ -6,6 +6,8 @@ export default function CartItemRow({
   isSelected,
   editingQuantity,
   itemDiscount,
+  automaticDiscount,
+  isManualDiscount,
   onSelect,
   onRemove,
   onToggleActive,
@@ -19,6 +21,11 @@ export default function CartItemRow({
   const itemSubtotal = item.price * item.quantity;
   const itemDiscountAmount = itemSubtotal * ((itemDiscount || 0) / 100);
   const itemTotalAfterDiscount = itemSubtotal - itemDiscountAmount;
+  
+  // Determinar el tipo de descuento para mostrar el badge
+  const hasAutomaticDiscount = automaticDiscount && automaticDiscount.discountRate > 0;
+  const showAutoBadge = hasAutomaticDiscount && !isManualDiscount;
+  const showManualBadge = isManualDiscount && itemDiscount > 0;
   
   return (
     <tr 
@@ -45,6 +52,18 @@ export default function CartItemRow({
         {item.discount > 0 && (
           <div className="sales-product-discount">
             Descuento especial (${item.discount.toLocaleString()})
+          </div>
+        )}
+        {/* Badge de descuento automático */}
+        {showAutoBadge && (
+          <div className="sales-auto-discount-badge" title={automaticDiscount.matchedConditions?.join(', ')}>
+            🎁 {automaticDiscount.promotion?.name} - {automaticDiscount.discountRate}%
+          </div>
+        )}
+        {/* Badge de descuento manual */}
+        {showManualBadge && (
+          <div className="sales-manual-discount-badge">
+            Descuento manual
           </div>
         )}
       </td>
@@ -76,7 +95,7 @@ export default function CartItemRow({
         <div className="sales-discount-wrapper">
           <input
             type="number"
-            className="sales-discount-input"
+            className={`sales-discount-input ${showAutoBadge ? 'auto-discount' : ''} ${showManualBadge ? 'manual-discount' : ''}`}
             value={itemDiscount || 0}
             onChange={(e) => {
               e.stopPropagation();
@@ -87,7 +106,7 @@ export default function CartItemRow({
             min="0"
             max="100"
             disabled={!isActive}
-            title="Descuento %"
+            title={showAutoBadge ? `Descuento automático: ${automaticDiscount.promotion?.name}` : "Descuento %"}
           />
           <span className="sales-discount-suffix">%</span>
         </div>

@@ -31,7 +31,7 @@
   color: white;
   padding: 4px 12px;
   border-radius: 12px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -57,7 +57,7 @@
   padding: 12px 16px;
   text-align: left;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 16px;
   text-transform: uppercase;
   color: #525f7f;
   border-bottom: 2px solid #e1e8ed;
@@ -110,17 +110,19 @@
   font-weight: 600;
   color: #333;
   margin-bottom: 4px;
+  font-size: 18px;
 }
 
 .sales-product-sku {
-  font-size: 13px;
-  color: #8898aa;
+  font-size: 16px;
+  color: #5a6c7d;
 }
 
 .sales-product-discount {
-  font-size: 12px;
-  color: #2dce89;
+  font-size: 16px;
+  color: #059669;
   margin-top: 2px;
+  font-weight: 600;
 }
 
 /* Quantity Input */
@@ -130,7 +132,7 @@
   border: 1px solid #dee2e6;
   border-radius: 4px;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .sales-quantity-input:focus {
@@ -145,19 +147,19 @@
 }
 
 .sales-discount-input {
-  width: 70px;
+  width: 75px;
   padding: 6px 20px 6px 8px;
   border: 1px solid #dee2e6;
   border-radius: 4px;
   text-align: center;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
 }
 
 .sales-discount-input:focus {
   outline: none;
-  border-color: #ffc107;
-  background-color: #fffbf0;
+  border-color: #d97706;
+  background-color: #fef3c7;
 }
 
 .sales-discount-input:disabled {
@@ -170,9 +172,9 @@
   right: 6px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
-  color: #8898aa;
+  color: #5a6c7d;
   pointer-events: none;
 }
 
@@ -180,24 +182,26 @@
 .sales-price {
   font-weight: 600;
   color: #333;
+  font-size: 16px;
 }
 
 .sales-price-original {
   text-decoration: line-through;
   color: #8898aa;
-  font-size: 13px;
+  font-size: 16px;
   display: block;
 }
 
 .sales-price-final {
   color: #333;
   font-weight: 600;
+  font-size: 18px;
 }
 
 .sales-price-discount {
   display: block;
-  color: #ffc107;
-  font-size: 12px;
+  color: #b45309;
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 2px;
 }
@@ -206,7 +210,7 @@
 .sales-delete-btn {
   background: none;
   border: none;
-  color: #f5365c;
+  color: #dc2626;
   cursor: pointer;
   padding: 8px;
   border-radius: 4px;
@@ -217,7 +221,7 @@
 }
 
 .sales-delete-btn:hover {
-  background-color: #fee;
+  background-color: #fee2e2;
   transform: scale(1.1);
 }
 
@@ -233,7 +237,7 @@
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  color: #8898aa;
+  color: #5a6c7d;
 }
 
 .sales-empty-state svg {
@@ -273,4 +277,53 @@
 .sales-table tbody tr.inactive .sales-discount-input {
   background-color: #e9ecef;
   cursor: not-allowed;
+}
+
+/* Badge de descuento automático */
+.sales-auto-discount-badge {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 3px 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: help;
+}
+
+/* Badge de descuento manual */
+.sales-manual-discount-badge {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 3px 10px;
+  background: #d97706;
+  color: white;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Input de descuento con descuento automático */
+.sales-discount-input.auto-discount {
+  border-color: #667eea;
+  background-color: #eef2ff;
+  border-width: 2px;
+}
+
+.sales-discount-input.auto-discount:focus {
+  border-color: #764ba2;
+  background-color: #fff;
+}
+
+/* Input de descuento manual */
+.sales-discount-input.manual-discount {
+  border-color: #d97706;
+  background-color: #fef3c7;
+  border-width: 2px;
+}
+
+.sales-discount-input.manual-discount:focus {
+  border-color: #b45309;
+  background-color: #fff;
 }
