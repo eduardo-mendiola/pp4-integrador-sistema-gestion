@@ -19,6 +19,9 @@ import discountRulesRoutes from './routes/discountRule-routes.js'
 import paymentMethodRoutes from './routes/paymentMethod-routes.js'
 import promotionRoutes from './routes/promotion-routes.js'
 import returnRoutes from './routes/return-routes.js'
+import cashRegisterRoutes from "./routes/cashRegister-routes.js";
+import cashFlowRoutes from "./routes/cashFlow-routes.js";
+import internalVoucherRoutes from "./routes/internalVoucher-routes.js";
 
 
 const app = express();
@@ -102,6 +105,9 @@ app.use('/api/discount-rules', discountRulesRoutes);
 app.use('/api/payment-methods', paymentMethodRoutes);
 app.use('/api/promotions', promotionRoutes);
 app.use('/api/returns', returnRoutes);
+app.use("/api/cash-register", cashRegisterRoutes);
+app.use("/api/cash-flow", cashFlowRoutes);
+app.use("/api/internal-vouchers", internalVoucherRoutes);
 
 // ======================
 // HEALTH CHECK
