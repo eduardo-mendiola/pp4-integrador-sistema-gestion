@@ -64,6 +64,8 @@ const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI_ATLAS || process.env.MONGO_URI
 });
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'dev-secret',
   resave: false,
