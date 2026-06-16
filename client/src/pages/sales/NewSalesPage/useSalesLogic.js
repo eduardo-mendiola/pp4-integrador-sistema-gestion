@@ -17,8 +17,14 @@ export default function useSalesLogic() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [editingQuantities, setEditingQuantities] = useState({});
 
-  // ✅ NUEVO: Descuentos individuales por producto { productId: percentage }
+  // Descuentos individuales por producto { productId: percentage }
   const [itemDiscounts, setItemDiscounts] = useState({});
+  
+  // Información de descuentos automáticos por producto
+  const [automaticDiscounts, setAutomaticDiscounts] = useState({});
+  
+  // Marcar qué descuentos fueron modificados manualmente
+  const [manualDiscounts, setManualDiscounts] = useState({});
   
   // Descuento global (%)
   const [discountRate, setDiscountRate] = useState(0);
@@ -106,7 +112,21 @@ export default function useSalesLogic() {
     }
   };
 
-  const addToCart = (product) => {
+  // Función para calcular descuento automático
+  const calculateAutomaticDiscount = async (productId) => {
+    try {
+      const response = await apiRequest(`/api/promotions/calculate-discount/${productId}`);
+      if (response.success && response.data) {
+        return response.data;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error calculando descuento automático:", error);
+      return null;
+    }
+  };
+
+  const addToCart = async (product) => {
     setCartItems((prevCart) => {
       const existingItemIndex = prevCart.findIndex(
         (item) => item._id === product._id
@@ -137,6 +157,23 @@ export default function useSalesLogic() {
       }
     });
 
+    // Calcular descuento automático para el producto
+    const autoDiscount = await calculateAutomaticDiscount(product._id);
+    if (autoDiscount) {
+      setAutomaticDiscounts((prev) => ({
+        ...prev,
+        [product._id]: autoDiscount
+      }));
+      
+      // Aplicar el descuento automático si no fue modificado manualmente
+      if (!manualDiscounts[product._id]) {
+        setItemDiscounts((prev) => ({
+          ...prev,
+          [product._id]: autoDiscount.discountRate
+        }));
+      }
+    }
+
     setSearchQuery("");
     setShowSearchResults(false);
     setMessage({ type: "success", text: `Producto agregado: ${product.name}` });
@@ -149,6 +186,19 @@ export default function useSalesLogic() {
       const newDiscounts = { ...prev };
       delete newDiscounts[itemId];
       return newDiscounts;
+    });
+    
+    // Limpiar descuentos automáticos y manuales
+    setAutomaticDiscounts((prev) => {
+      const newAutoDiscounts = { ...prev };
+      delete newAutoDiscounts[itemId];
+      return newAutoDiscounts;
+    });
+    
+    setManualDiscounts((prev) => {
+      const newManualDiscounts = { ...prev };
+      delete newManualDiscounts[itemId];
+      return newManualDiscounts;
     });
 
     setEditingQuantities((prev) => {
@@ -234,6 +284,12 @@ export default function useSalesLogic() {
     setItemDiscounts((prev) => ({
       ...prev,
       [productId]: validPercentage,
+    }));
+    
+    // Marcar como descuento manual si el cajero lo modifica
+    setManualDiscounts((prev) => ({
+      ...prev,
+      [productId]: true
     }));
   };
 
@@ -337,6 +393,8 @@ export default function useSalesLogic() {
       setSelectedPaymentMethod(null);
       setDiscountRate(0);
       setItemDiscounts({});
+      setAutomaticDiscounts({});
+      setManualDiscounts({});
 
       setTimeout(() => setMessage(""), 5000);
 
@@ -358,6 +416,8 @@ export default function useSalesLogic() {
       setSelectedPaymentMethod(null);
       setDiscountRate(0);
       setItemDiscounts({});
+      setAutomaticDiscounts({});
+      setManualDiscounts({});
       setShowPaymentModal(false);
       setShowPaymentProcessModal(false);
     }
@@ -405,6 +465,8 @@ export default function useSalesLogic() {
     setDiscountRate,
     itemDiscounts,
     setItemDiscount,
+    automaticDiscounts,
+    manualDiscounts,
     setMessage,
     handleSearch,
     addToCart,

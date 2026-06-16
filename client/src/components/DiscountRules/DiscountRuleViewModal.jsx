@@ -80,22 +80,41 @@ export default function DiscountRuleViewModal({ isOpen, rule, onClose, onEdit })
             <div className="rule-view-section">
               <h3 className="rule-view-section-title">Aplicado a</h3>
               
+              {/* Productos en formato LISTA */}
               {conditions.productIds?.length > 0 && (
                 <div className="rule-view-subsection">
-                  <span className="subsection-label">Productos específicos:</span>
-                  <div className="rule-view-badges">
+                  <span className="subsection-label">
+                    Productos específicos ({conditions.productIds.length}):
+                  </span>
+                  <div className="rule-view-list">
                     {conditions.productIds.map(p => {
                       const product = typeof p === 'object' ? p : { _id: p, name: 'Producto' };
                       return (
-                        <span key={product._id} className="rule-view-badge product">
-                          {product.name || 'Producto'}
-                        </span>
+                        <div key={product._id} className="rule-view-list-item product">
+                          <div className="rule-view-list-item-main">
+                            <span className="rule-view-list-item-name">{product.name}</span>
+                            {product.sku && (
+                              <span className="rule-view-list-item-sku">SKU: {product.sku}</span>
+                            )}
+                          </div>
+                          <div className="rule-view-list-item-details">
+                            {product.brand && (
+                              <span className="rule-view-list-item-brand">{product.brand}</span>
+                            )}
+                            {product.price != null && (
+                              <span className="rule-view-list-item-price">
+                                ${product.price.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       );
                     })}
                   </div>
                 </div>
               )}
 
+              {/* Marcas como badges (texto corto) */}
               {conditions.brands?.length > 0 && (
                 <div className="rule-view-subsection">
                   <span className="subsection-label">Marcas:</span>
@@ -107,22 +126,30 @@ export default function DiscountRuleViewModal({ isOpen, rule, onClose, onEdit })
                 </div>
               )}
 
+              {/* ✅ NUEVO: Proveedores en formato LISTA */}
               {conditions.supplierIds?.length > 0 && (
                 <div className="rule-view-subsection">
-                  <span className="subsection-label">Proveedores:</span>
-                  <div className="rule-view-badges">
+                  <span className="subsection-label">
+                    Proveedores ({conditions.supplierIds.length}):
+                  </span>
+                  <div className="rule-view-list">
                     {conditions.supplierIds.map(s => {
                       const supplier = typeof s === 'object' ? s : { _id: s, name: 'Proveedor' };
                       return (
-                        <span key={supplier._id} className="rule-view-badge supplier">
-                          {supplier.business_name || supplier.name || 'Proveedor'}
-                        </span>
+                        <div key={supplier._id} className="rule-view-list-item supplier">
+                          <div className="rule-view-list-item-main">
+                            <span className="rule-view-list-item-name">
+                              {supplier.business_name || supplier.name}
+                            </span>
+                          </div>
+                        </div>
                       );
                     })}
                   </div>
                 </div>
               )}
 
+              {/* Rangos etarios como badges */}
               {conditions.ageRanges?.length > 0 && (
                 <div className="rule-view-subsection">
                   <span className="subsection-label">Rangos etarios:</span>

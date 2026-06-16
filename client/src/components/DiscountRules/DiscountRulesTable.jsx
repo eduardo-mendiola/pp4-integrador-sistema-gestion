@@ -86,7 +86,7 @@ export default function DiscountRulesTable({ rules, loading, onView, onEdit, onD
               Nombre {getSortIcon('name')}
             </th>
             <th style={{ width: '350px' }}>Condiciones</th>
-            <th className="sortable text-center" onClick={() => handleSort('percentage')} style={{ width: '140px' }}>
+            <th className="sortable text-center" onClick={() => handleSort('percentage')} style={{ width: '160px' }}>
               Descuento % {getSortIcon('percentage')}
             </th>
             <th className="sortable text-center" onClick={() => handleSort('active')} style={{ width: '120px' }}>

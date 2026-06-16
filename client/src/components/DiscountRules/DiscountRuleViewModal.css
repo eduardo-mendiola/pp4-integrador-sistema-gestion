@@ -283,6 +283,77 @@
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
 }
 
+/* Lista de productos/proveedores */
+.rule-view-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.rule-view-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 3px solid #007bff;
+  transition: background 0.2s;
+}
+
+.rule-view-list-item:hover {
+  background: #e9ecef;
+}
+
+.rule-view-list-item.product {
+  border-left-color: #007bff;
+}
+
+.rule-view-list-item.supplier {
+  border-left-color: #17a2b8;
+}
+
+.rule-view-list-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.rule-view-list-item-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.rule-view-list-item-sku {
+  font-size: 14px;
+  color: #5a6c7d;
+  font-family: monospace;
+}
+
+.rule-view-list-item-details {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.rule-view-list-item-brand {
+  font-size: 14px;
+  color: #5a6c7d;
+  padding: 2px 8px;
+  background: #e7f3ff;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.rule-view-list-item-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #059669;
+}
+
 @media (max-width: 600px) {
   .rule-view-grid {
     grid-template-columns: 1fr;
