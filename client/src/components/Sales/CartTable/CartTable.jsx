@@ -12,7 +12,7 @@ export default function CartTable({
   onSelectItem,
   onRemoveItem,
   onToggleActive,
-  onQuantityFocus,
+  onRowFocus,
   onQuantityChange,
   onQuantityBlur,
   onQuantityKeyDown,
@@ -64,7 +64,7 @@ export default function CartTable({
                   onSelect={onSelectItem}
                   onRemove={onRemoveItem}
                   onToggleActive={onToggleActive}
-                  onQuantityFocus={onQuantityFocus}
+                  onRowFocus={onRowFocus}
                   onQuantityChange={onQuantityChange}
                   onQuantityBlur={onQuantityBlur}
                   onQuantityKeyDown={onQuantityKeyDown}

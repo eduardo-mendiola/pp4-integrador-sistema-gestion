@@ -37,21 +37,7 @@ const CashRegisterController = {
         openingNotes: notes.trim()
       });
 
-      // Registrar el movimiento de apertura (si hay monto inicial)
-      if (initialAmount > 0 && userId) {
-        await CashFlow.create({
-          type: "INCOME",
-          amount: Number(initialAmount),
-          paymentMethod: "cash",
-          concept: "Apertura de caja - Monto inicial",
-          sourceType: "OPENING",
-          sourceId: updatedRegister._id,
-          cashRegisterId: updatedRegister._id,
-          operatorId: userId,
-          notes: notes.trim()
-        });
-      }
-
+      
       const populated = await CashRegister.findById(updatedRegister._id);
       return res.status(201).json({ success: true, data: populated });
     } catch (error) {

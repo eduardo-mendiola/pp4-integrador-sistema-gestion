@@ -71,7 +71,7 @@
 }
 
 /* Layout de 3 columnas */
-.modal-content {
+.modal-content-product {
   display: grid;
   grid-template-columns: 1fr 1fr 250px;
   gap: 2rem;

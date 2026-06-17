@@ -7,7 +7,7 @@ export default function ExchangeItemRow({
   itemDiscount,
   onRemove,
   onToggleActive,
-  onQuantityFocus,
+  onRowFocus,
   onQuantityChange,
   onQuantityBlur,
   onQuantityKeyDown,
@@ -43,7 +43,7 @@ export default function ExchangeItemRow({
           type="number"
           className="exchange-quantity-input"
           value={editingQuantity ?? item.quantity}
-          onFocus={(e) => onQuantityFocus(e, item)}
+          onFocus={(e) => onRowFocus(e, item)}
           onChange={(e) => onQuantityChange(item.productId, e.target.value)}
           onBlur={() => onQuantityBlur(item.productId)}
           onKeyDown={(e) => onQuantityKeyDown(e, item.productId)}
@@ -63,6 +63,7 @@ export default function ExchangeItemRow({
             type="number"
             className="exchange-discount-input"
             value={itemDiscount || 0}
+            onFocus={(e) => onRowFocus(e, item)}
             onChange={(e) => {
               e.stopPropagation();
               const value = parseFloat(e.target.value) || 0;

@@ -8,7 +8,7 @@ export default function ExchangeItemsTable({
   itemDiscounts,
   onRemoveItem,
   onToggleActive,
-  onQuantityFocus,
+  onRowFocus,
   onQuantityChange,
   onQuantityBlur,
   onQuantityKeyDown,
@@ -59,7 +59,7 @@ export default function ExchangeItemsTable({
                 itemDiscount={itemDiscounts[item.productId] || 0}
                 onRemove={onRemoveItem}
                 onToggleActive={onToggleActive}
-                onQuantityFocus={onQuantityFocus}
+                onRowFocus={onRowFocus}
                 onQuantityChange={onQuantityChange}
                 onQuantityBlur={onQuantityBlur}
                 onQuantityKeyDown={onQuantityKeyDown}
