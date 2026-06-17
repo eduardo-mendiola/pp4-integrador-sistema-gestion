@@ -224,8 +224,8 @@ export default function useSalesLogic() {
     if (newQuantity < 1) return;
 
     setCartItems((prev) =>
-      prev.map((item) =>
-        item._id === itemId ? { ...item, quantity: newQuantity } : item
+      prev.map((i) =>
+        i._id === itemId ? { ...i, quantity: newQuantity } : i
       )
     );
   };
@@ -240,36 +240,61 @@ export default function useSalesLogic() {
 
   // Actualización automática al cambiar
   const handleQuantityChange = (itemId, value) => {
+    // Solo actualizar el valor visual del input, NO el state
     setEditingQuantities((prev) => ({
       ...prev,
       [itemId]: value,
     }));
-
-    // Aplicar inmediatamente si es válido
-    const parsed = parseInt(value);
-    if (!isNaN(parsed) && parsed >= 1) {
-      updateQuantity(itemId, parsed);
-    }
   };
 
   const handleQuantityBlur = (itemId) => {
     const value = editingQuantities[itemId];
     const parsed = parseInt(value);
 
-    if (!isNaN(parsed) && parsed >= 1) {
-      updateQuantity(itemId, parsed);
-    } else {
-      setCartItems((prev) => {
-        const item = prev.find((i) => i._id === itemId);
-        if (item) {
-          setEditingQuantities((prevEdit) => ({
-            ...prevEdit,
-            [itemId]: String(item.quantity),
-          }));
-        }
+    setCartItems((prev) => {
+      const item = prev.find((i) => i._id === itemId);
+      if (!item) return prev;
+
+      // Si no es un número válido, restaurar la cantidad actual
+      if (isNaN(parsed) || parsed < 1) {
+        setEditingQuantities((prevEdit) => {
+          const newEdit = { ...prevEdit };
+          delete newEdit[itemId];
+          return newEdit;
+        });
         return prev;
+      }
+
+      // Si supera el stock, corregir al máximo y mostrar warning
+      if (parsed > item.stock) {
+        setMessage({ 
+          type: "warning", 
+          text: `Stock máximo disponible: ${item.stock} unidades` 
+        });
+        setTimeout(() => setMessage(""), 4000);
+        
+        setEditingQuantities((prevEdit) => {
+          const newEdit = { ...prevEdit };
+          delete newEdit[itemId];
+          return newEdit;
+        });
+        
+        return prev.map((i) =>
+          i._id === itemId ? { ...i, quantity: item.stock } : i
+        );
+      }
+
+      // Valor válido: actualizar cantidad
+      setEditingQuantities((prevEdit) => {
+        const newEdit = { ...prevEdit };
+        delete newEdit[itemId];
+        return newEdit;
       });
-    }
+      
+      return prev.map((i) =>
+        i._id === itemId ? { ...i, quantity: parsed } : i
+      );
+    });
   };
 
   const handleQuantityKeyDown = (e, itemId) => {

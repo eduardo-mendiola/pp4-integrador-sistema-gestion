@@ -13,7 +13,7 @@
 
 .sales-products-header {
   padding: 16px 24px;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   border-bottom: 1px solid #e1e8ed;
   display: flex;
   justify-content: space-between;
@@ -47,7 +47,7 @@
 }
 
 .sales-table thead {
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -78,7 +78,7 @@
 }
 
 .sales-table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
 }
 
 .sales-table tbody tr.selected {
@@ -255,7 +255,7 @@
 /* Fila inactiva (desmarcada) */
 .sales-table tbody tr.inactive {
   opacity: 0.5;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
 }
 
 .sales-table tbody tr.inactive:hover {
@@ -326,4 +326,22 @@
 .sales-discount-input.manual-discount:focus {
   border-color: #b45309;
   background-color: #fff;
+}
+
+/* Stock Display */
+.sales-stock {
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 40px;
+}
+
+.sales-stock.low-stock {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: 700;
 }

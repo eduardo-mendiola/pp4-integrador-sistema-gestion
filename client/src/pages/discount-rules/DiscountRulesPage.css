@@ -135,7 +135,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f8f9fa;
+  background: #f2f2f2;
 }
 
 .modal-header h2 {
@@ -170,7 +170,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  background: #f8f9fa;
+  background: #f2f2f2;
 }
 
 .delete-confirm-modal .modal-body p {
@@ -319,7 +319,7 @@
 .selected-products-list {
   border: 2px solid #d1d9e0;
   border-radius: 6px;
-  background: #f8f9fa;
+  background: #f2f2f2;
   overflow: hidden;
 }
 
@@ -414,5 +414,5 @@
   font-style: italic;
   border: 2px dashed #d1d9e0;
   border-radius: 6px;
-  background: #f8f9fa;
+  background: #f2f2f2;
 }

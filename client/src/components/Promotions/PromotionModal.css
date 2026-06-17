@@ -45,7 +45,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  background: #f8f9fa;
+  background: #f2f2f2;
 }
 
 .promotion-modal-header h2 {
@@ -166,7 +166,7 @@
 
 .promotion-readonly-field {
   padding: 12px;
-  background: #f8f9fa;
+  background: #f2f2f2;
   border: 2px solid #e1e8ed;
   border-radius: 6px;
   font-size: 16px;
@@ -269,7 +269,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  background: #f8f9fa;
+  background: #f2f2f2;
 }
 
 .promotion-modal-btn {
