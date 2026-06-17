@@ -219,7 +219,7 @@ export default function OperationPanel({
             itemDiscounts={exchangeItemDiscounts}
             onRemoveItem={onRemoveExchangeItem}
             onToggleActive={onToggleExchangeItemActive}
-            onQuantityFocus={onExchangeQuantityFocus}
+            onRowFocus={onExchangeQuantityFocus}
             onQuantityChange={onExchangeQuantityChange}
             onQuantityBlur={onExchangeQuantityBlur}
             onQuantityKeyDown={onExchangeQuantityKeyDown}

@@ -36,7 +36,7 @@ export default function ProductModal({ product, onClose }) {
 
         {/* Body con 3 columnas */}
         <div className="modal-body">
-          <div className="modal-content">
+          <div className="modal-content-product">
             {/* Columna 1: SKU, Precio, Edad */}
             <div className="modal-column">
               <div className="modal-field">

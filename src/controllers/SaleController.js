@@ -5,6 +5,8 @@ import Promotion from "../models/PromotionModel.js";
 import DiscountRule from "../models/DiscountRuleModel.js";
 import PricingService from "../services/PricingService.js";
 import PromotionService from "../services/PromotionService.js";
+import CashRegister from "../models/CashRegisterModel.js";
+import CashFlow from "../models/CashFlowModel.js";
 
 const Product = ProductModel.getNativeModel();
 
@@ -31,9 +33,6 @@ const enrichItemsWithPricing = async (items) => {
   ]);
 
   const safeProducts = Array.isArray(products) ? products : [];
-  const safePromotions = Array.isArray(promotions) ? promotions : [];
-  const safeRules = Array.isArray(rules) ? rules : [];
-
   const productMap = Object.fromEntries(
     safeProducts.map((p) => [p._id.toString(), p]),
   );
@@ -42,38 +41,76 @@ const enrichItemsWithPricing = async (items) => {
 
   for (const item of items) {
     const product = productMap[item.productId];
+    if (!product) continue;
 
-    // Usar el servicio para calcular descuento automático
     const automaticDiscount = await PromotionService.calculateAutomaticDiscount(
       item.productId,
     );
 
-    let price = product?.price || 0;
+    let basePrice = product.price || 0;
     let discountRate = 0;
     let discount = 0;
 
-    // Si hay descuento automático, aplicarlo
-    if (automaticDiscount && automaticDiscount.discountRate > 0) {
+    // Priorizar el descuento manual del frontend
+    const manualDiscount = Number(item.discount_rate) || 0;
+
+    if (manualDiscount > 0) {
+      discountRate = manualDiscount;
+    } else if (automaticDiscount && automaticDiscount.discountRate > 0) {
+      // Si no hay manual, usar el automático
       discountRate = automaticDiscount.discountRate;
-      discount = price * (discountRate / 100);
-      price = price - discount;
     }
 
-    const itemSubtotal = price * item.quantity;
+    // Calcular monto del descuento por unidad y precio final
+    discount = basePrice * (discountRate / 100);
+    const finalPrice = basePrice - discount;
+    const itemSubtotal = finalPrice * item.quantity;
 
     result.push({
       product: item.productId,
       quantity: item.quantity,
-      price: price,
-      originalPrice: product?.price || 0,
+      price: finalPrice,
+      originalPrice: basePrice,
       discount_rate: discountRate,
       discount: discount * item.quantity,
       subtotal: itemSubtotal,
-      automaticDiscount: automaticDiscount,
+      // Solo guardamos el objeto automaticDiscount si NO fue un descuento manual
+      automaticDiscount:
+        manualDiscount === 0 && automaticDiscount ? automaticDiscount : null,
     });
   }
 
   return result;
+};
+
+// Mapear nombre del método de pago al formato de CashFlow
+const mapPaymentMethodToCashFlow = (paymentMethodName) => {
+  if (!paymentMethodName) return "cash";
+
+  const name = paymentMethodName.toLowerCase();
+
+  if (name.includes("efectivo") || name.includes("cash")) {
+    return "cash";
+  }
+  if (
+    name.includes("débito") ||
+    name.includes("debito") ||
+    name.includes("debit")
+  ) {
+    return "debit_card";
+  }
+  if (
+    name.includes("crédito") ||
+    name.includes("credito") ||
+    name.includes("credit")
+  ) {
+    return "credit_card";
+  }
+  if (name.includes("transfer")) {
+    return "transfer";
+  }
+
+  return "cash"; // Default
 };
 
 const SaleController = {
@@ -104,6 +141,16 @@ const SaleController = {
 
   create: async (req, res) => {
     try {
+      // Validar que haya una caja abierta
+      const openRegister = await CashRegister.findOpenRegister();
+      if (!openRegister) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "No se pueden registrar ventas. La caja está cerrada. Por favor, abra la caja primero.",
+        });
+      }
+
       const items = normalizeItems(req.body.items);
       const payments = normalizePayments(req.body.payments);
 
@@ -143,25 +190,30 @@ const SaleController = {
 
       const normalizedItems = await enrichItemsWithPricing(items);
 
-      // Subtotal después de descuentos individuales
-      const subtotal = normalizedItems.reduce(
-        (acc, i) => acc + i.price * i.quantity,
+      // Calcular subtotal BRUTO usando originalPrice
+      const subtotalBruto = normalizedItems.reduce(
+        (acc, i) => acc + i.originalPrice * i.quantity,
         0,
       );
+
+      // Descuentos individuales (ya calculados en enrichItemsWithPricing)
       const itemDiscountsTotal = normalizedItems.reduce(
         (acc, i) => acc + i.discount,
         0,
       );
 
+      // Subtotal NETO (después de descuentos individuales)
+      const subtotal = subtotalBruto - itemDiscountsTotal;
+
       // Descuento global
       const discount_rate =
         typeof req.body.discount_rate === "number" ? req.body.discount_rate : 0;
-      const subtotalAfterItemDiscounts = subtotal - itemDiscountsTotal;
-      const globalDiscount = subtotalAfterItemDiscounts * (discount_rate / 100);
+      const globalDiscount = subtotal * (discount_rate / 100);
 
       const discount = itemDiscountsTotal + globalDiscount;
 
-      const taxableBase = subtotal - discount;
+      // Base imponible = Subtotal bruto - todos los descuentos
+      const taxableBase = subtotalBruto - discount;
       const tax_rate = 21;
       const tax = taxableBase * (tax_rate / 100);
       const total = taxableBase + tax;
@@ -189,7 +241,7 @@ const SaleController = {
               filter: { _id: item.product },
               update: {
                 $inc: { stock: -item.quantity },
-                $set: { lastSaleDate: new Date() }, // Actualizar fecha de última venta
+                $set: { lastSaleDate: new Date() },
               },
             },
           }));
@@ -197,6 +249,41 @@ const SaleController = {
           await ProductNative.bulkWrite(bulkOps);
         } catch (stockError) {
           console.error("Error al actualizar stock:", stockError);
+        }
+
+        // NUEVO PASO 2: Registrar ingresos en caja automáticamente
+        try {
+          const populatedSale = await Sale.model
+            .findById(sale._id)
+            .populate("payments.method");
+
+          const operatorId = req.user?._id || req.body.employee_id;
+
+          if (populatedSale.payments && populatedSale.payments.length > 0) {
+            for (const payment of populatedSale.payments) {
+              // Solo registrar pagos CONFIRMED
+              if (payment.status !== "CONFIRMED") continue;
+
+              const methodName = payment.method?.name || "";
+              const cfPaymentMethod = mapPaymentMethodToCashFlow(methodName);
+
+              await CashFlow.create({
+                type: "INCOME",
+                amount: payment.amount,
+                paymentMethod: cfPaymentMethod,
+                concept: `Venta #${sale._id.toString().slice(-8).toUpperCase()}`,
+                sourceType: "SALE",
+                sourceId: sale._id,
+                cashRegisterId: openRegister._id,
+                operatorId: operatorId,
+                notes: payment.reference || "",
+              });
+            }
+          }
+        } catch (cashFlowError) {
+          // IMPORTANTE: Si falla el registro en caja, NO fallar la venta
+          // La venta ya está creada y el stock actualizado
+          console.error("Error registrando movimiento en caja:", cashFlowError);
         }
       }
 
@@ -250,26 +337,66 @@ const SaleController = {
           });
         }
 
-        // Si se está anulando una venta PAID, reintegrar stock
+        // Si se está anulando una venta PAID, reintegrar stock y registrar devolución en caja
         if (
           updateData.status === "CANCELLED" &&
           currentSale.status === "PAID"
         ) {
           try {
             const ProductNative = mongoose.model("Product");
+            const openRegister = await CashRegister.findOpenRegister();
 
+            // 1. Reintegrar stock
             const bulkOps = currentSale.items.map((item) => ({
               updateOne: {
                 filter: { _id: item.product },
-                update: { $inc: { stock: item.quantity } }, // Sumamos la cantidad
+                update: { $inc: { stock: item.quantity } },
               },
             }));
-
             await ProductNative.bulkWrite(bulkOps);
-            console.log(`Stock reintegrado para venta anulada: ${id}`);
+
+            // 2. Registrar egreso en caja si hubo pagos en EFECTIVO
+            if (
+              openRegister &&
+              currentSale.payments &&
+              currentSale.payments.length > 0
+            ) {
+              // Necesitamos el nombre del método de pago para saber si fue efectivo
+              const saleWithMethods = await Sale.model
+                .findById(currentSale._id)
+                .populate("payments.method");
+
+              for (const payment of saleWithMethods.payments) {
+                const methodName = payment.method?.name || "";
+                const isCash =
+                  methodName.toLowerCase().includes("efectivo") ||
+                  methodName.toLowerCase().includes("cash");
+
+                if (isCash && payment.status === "CONFIRMED") {
+                  await CashFlow.create({
+                    type: "EXPENSE",
+                    amount: payment.amount,
+                    paymentMethod: "cash",
+                    concept: `Devolución Venta #${currentSale._id.toString().slice(-8).toUpperCase()}`,
+                    sourceType: "RETURN",
+                    sourceId: currentSale._id,
+                    cashRegisterId: openRegister._id,
+                    operatorId: req.user?._id || currentSale.employee_id,
+                    notes:
+                      updateData.metadata?.cancel_reason ||
+                      "Anulación de venta",
+                  });
+                }
+              }
+            }
+            console.log(
+              `Stock reintegrado y caja actualizada para venta anulada: ${id}`,
+            );
           } catch (stockError) {
-            console.error("Error al reintegrar stock:", stockError);
-            // No fallar la anulación si el stock falla, solo loguear
+            console.error(
+              "Error al reintegrar stock o registrar devolución:",
+              stockError,
+            );
           }
         }
       }

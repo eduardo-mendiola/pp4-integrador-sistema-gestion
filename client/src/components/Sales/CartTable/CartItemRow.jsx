@@ -11,7 +11,7 @@ export default function CartItemRow({
   onSelect,
   onRemove,
   onToggleActive,
-  onQuantityFocus,
+  onRowFocus,
   onQuantityChange,
   onQuantityBlur,
   onQuantityKeyDown,
@@ -72,7 +72,7 @@ export default function CartItemRow({
           type="number"
           className="sales-quantity-input"
           value={editingQuantity ?? item.quantity}
-          onFocus={(e) => onQuantityFocus(e, item)}
+          onFocus={(e) => onRowFocus(e, item)}
           onChange={(e) => onQuantityChange(item._id, e.target.value)}
           onBlur={() => onQuantityBlur(item._id)}
           onKeyDown={(e) => onQuantityKeyDown(e, item._id)}
@@ -97,6 +97,7 @@ export default function CartItemRow({
             type="number"
             className={`sales-discount-input ${showAutoBadge ? 'auto-discount' : ''} ${showManualBadge ? 'manual-discount' : ''}`}
             value={itemDiscount || 0}
+            onFocus={(e) => onRowFocus(e, item)}
             onChange={(e) => {
               e.stopPropagation();
               const value = parseFloat(e.target.value) || 0;
