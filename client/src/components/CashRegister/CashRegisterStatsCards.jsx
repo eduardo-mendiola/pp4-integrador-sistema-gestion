@@ -26,17 +26,17 @@ export default function CashRegisterStatsCards({ cashRegister, dailySummary, las
       value: `$${formatCurrency(initialAmount)}`,
       color: '#6c757d',
     },
-    {
+        {
       label: 'Ingresos del Día',
       value: `$${formatCurrency(totalIncomes)}`,
       color: '#529d85',
-      suffix: `${dailySummary?.incomeCount || 0} mov.` 
+      suffix: `${dailySummary?.incomeCount || 0} mov.`
     },
     {
       label: 'Egresos del Día',
       value: `$${formatCurrency(totalExpenses)}`,
       color: '#df5757',
-      suffix: `${dailySummary?.expenseCount || 0} mov.` 
+      suffix: `${dailySummary?.expenseCount || 0} mov.`
     },
     {
       label: 'Saldo Esperado',
