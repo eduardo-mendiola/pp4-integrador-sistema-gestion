@@ -1,12 +1,42 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { RETURN_PERIOD_DAYS } from '../../pages/returns/useReturnsLogic'; 
 import './ReturnsSearchPanel.css';
 
 export default function ReturnsSearchPanel({ 
   filters, setFilters, onSearch, onClear, results, isSearching, hasSearched, onSelect, error 
 }) {
+  const [columnFilters, setColumnFilters] = useState({
+    invoiceNumber: '',
+    clientName: '',
+    total: ''
+  });
+  
+  const [sortConfig, setSortConfig] = useState({ 
+    key: 'date', 
+    direction: 'desc' 
+  });
+
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
+
+  const handleColumnFilterChange = (column, value) => {
+    setColumnFilters(prev => ({ ...prev, [column]: value }));
+  };
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
+    }
+    return ' ⇅';
   };
 
   const getInvoiceNumber = (sale) => (sale._id || '').slice(-8).toUpperCase();
@@ -23,6 +53,63 @@ export default function ReturnsSearchPanel({
 
   const hasActiveFilters = filters.invoiceNumber || filters.clientName || filters.dateFrom || filters.dateTo;
   const searchButtonText = hasActiveFilters ? 'Buscar Factura' : 'Mostrar todas las facturas';
+
+  // Filtrar y ordenar resultados
+  const filteredAndSortedResults = useMemo(() => {
+    let filtered = [...results];
+
+    // Aplicar filtros de columna
+    if (columnFilters.invoiceNumber) {
+      filtered = filtered.filter(sale => 
+        getInvoiceNumber(sale).includes(columnFilters.invoiceNumber.toUpperCase())
+      );
+    }
+    if (columnFilters.clientName) {
+      filtered = filtered.filter(sale => 
+        getClientInfo(sale).toLowerCase().includes(columnFilters.clientName.toLowerCase())
+      );
+    }
+    if (columnFilters.total) {
+      const totalValue = parseFloat(columnFilters.total);
+      if (!isNaN(totalValue)) {
+        filtered = filtered.filter(sale => sale.total >= totalValue);
+      }
+    }
+
+    // Aplicar ordenamiento
+    if (sortConfig.key) {
+      filtered.sort((a, b) => {
+        let aValue, bValue;
+        
+        switch (sortConfig.key) {
+          case 'invoice':
+            aValue = getInvoiceNumber(a);
+            bValue = getInvoiceNumber(b);
+            break;
+          case 'date':
+            aValue = new Date(a.createdAt || a.created_at).getTime();
+            bValue = new Date(b.createdAt || b.created_at).getTime();
+            break;
+          case 'client':
+            aValue = getClientInfo(a).toLowerCase();
+            bValue = getClientInfo(b).toLowerCase();
+            break;
+          case 'total':
+            aValue = a.total || 0;
+            bValue = b.total || 0;
+            break;
+          default:
+            return 0;
+        }
+
+        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
+  }, [results, columnFilters, sortConfig]);
 
   return (
     <div className="returns-search-panel">
@@ -77,26 +164,66 @@ export default function ReturnsSearchPanel({
 
       {error && <div className="search-error">{error}</div>}
 
-      {results.length > 0 && (
+      {filteredAndSortedResults.length > 0 && (
         <div className="search-results-table">
           <table>
             <thead>
               <tr>
-                <th>N° Factura</th>
-                <th>Fecha Compra</th>
+                <th className="sortable" onClick={() => handleSort('invoice')}>
+                  N° Factura {getSortIcon('invoice')}
+                </th>
+                <th className="sortable" onClick={() => handleSort('date')}>
+                  Fecha Compra {getSortIcon('date')}
+                </th>
                 <th>Válido hasta</th>
-                <th>Cliente</th>
-                <th>Total</th>
+                <th className="sortable" onClick={() => handleSort('client')}>
+                  Cliente {getSortIcon('client')}
+                </th>
+                <th className="sortable" onClick={() => handleSort('total')}>
+                  Total {getSortIcon('total')}
+                </th>
                 <th>Estado</th>
                 <th>Acción</th>
               </tr>
+              <tr className="column-filters">
+                <th>
+                  <input 
+                    type="text"
+                    placeholder="Filtrar..."
+                    value={columnFilters.invoiceNumber}
+                    onChange={(e) => handleColumnFilterChange('invoiceNumber', e.target.value)}
+                    className="column-filter-input"
+                  />
+                </th>
+                <th></th>
+                <th></th>
+                <th>
+                  <input 
+                    type="text"
+                    placeholder="Filtrar..."
+                    value={columnFilters.clientName}
+                    onChange={(e) => handleColumnFilterChange('clientName', e.target.value)}
+                    className="column-filter-input"
+                  />
+                </th>
+                <th>
+                  <input 
+                    type="number"
+                    placeholder="Mínimo..."
+                    value={columnFilters.total}
+                    onChange={(e) => handleColumnFilterChange('total', e.target.value)}
+                    className="column-filter-input"
+                  />
+                </th>
+                <th></th>
+                <th></th>
+              </tr>
             </thead>
             <tbody>
-              {results.map(sale => {
+              {filteredAndSortedResults.map(sale => {
                 const saleDate = new Date(sale.createdAt || sale.created_at);
                 const today = new Date();
                 const daysDiff = Math.floor((today - saleDate) / (1000 * 60 * 60 * 24));
-                
                 
                 const isEligible = daysDiff <= RETURN_PERIOD_DAYS; 
                 
@@ -135,7 +262,7 @@ export default function ReturnsSearchPanel({
         </div>
       )}
 
-      {hasSearched && !isSearching && results.length === 0 && (
+      {hasSearched && !isSearching && filteredAndSortedResults.length === 0 && (
         <div className="search-empty">
           No se encontraron facturas que coincidan con los criterios de búsqueda.
         </div>
