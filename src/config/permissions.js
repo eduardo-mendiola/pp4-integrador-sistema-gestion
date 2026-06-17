@@ -62,6 +62,21 @@ export const allPermissions = [
   'edit_payment_methods',
   'delete_payment_methods',
 
+  // CAJA (Cash Register)
+  'view_cash_register',
+  'open_cash_register',
+  'close_cash_register',
+
+  // MOVIMIENTOS DE CAJA (Cash Flow)
+  'view_cash_flow',
+  'create_cash_flow',
+  'delete_cash_flow',
+
+  // COMPROBANTES INTERNOS (Internal Vouchers)
+  'view_internal_vouchers',
+  'create_internal_vouchers',
+  'cancel_internal_vouchers',
+
   // Usuarios
   'view_users',
   'create_users',
@@ -148,6 +163,21 @@ export const permissionLabels = {
   create_payment_methods: 'Métodos de Pago: Crear',
   edit_payment_methods: 'Métodos de Pago: Editar',
   delete_payment_methods: 'Métodos de Pago: Eliminar',
+
+  // CAJA (Cash Register)
+  view_cash_register: 'Caja: Ver estado',
+  open_cash_register: 'Caja: Aperturar',
+  close_cash_register: 'Caja: Cerrar',
+
+  // MOVIMIENTOS DE CAJA (Cash Flow)
+  view_cash_flow: 'Movimientos de Caja: Ver',
+  create_cash_flow: 'Movimientos de Caja: Crear',
+  delete_cash_flow: 'Movimientos de Caja: Eliminar',
+
+  // COMPROBANTES INTERNOS (Internal Vouchers)
+  view_internal_vouchers: 'Comprobantes Internos: Ver',
+  create_internal_vouchers: 'Comprobantes Internos: Crear',
+  cancel_internal_vouchers: 'Comprobantes Internos: Cancelar',
 
   // Usuarios
   view_users: 'Usuarios: Ver',

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext.jsx'; // 👈 Este import faltaba
+import { useAuth } from '../../context/AuthContext.jsx'; 
 import { menuConfig } from './menuConfig.js';
 import {
   FiHome,
@@ -15,6 +15,7 @@ import {
   FiChevronDown,
   FiChevronRight,
   FiLogOut,
+  FiDollarSign,
 } from 'react-icons/fi';
 import './Sidebar.css';
 
@@ -29,6 +30,7 @@ const iconMap = {
   FiGift,
   FiBarChart2,
   FiSettings,
+  FiDollarSign,
 };
 
 export default function Sidebar({ isOpen, onClose }) {
