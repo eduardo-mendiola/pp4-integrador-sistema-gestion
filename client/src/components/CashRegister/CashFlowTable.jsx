@@ -22,7 +22,7 @@ const sourceTypeLabels = {
   CLOSING: 'Cierre'
 };
 
-export default function CashFlowTable({ cashFlows, filters, onFilterChange }) {
+export default function CashFlowTable({ cashFlows, cashRegister, filters, onFilterChange }) {
   const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
 
   const handleSort = (key) => {
@@ -67,6 +67,12 @@ export default function CashFlowTable({ cashFlows, filters, onFilterChange }) {
   const filteredFlows = useMemo(() => {
     let result = [...cashFlows];
     
+    // ✅ NUEVO: Filtrar por período (desde apertura o todo el día)
+    if (filters.period === 'since_opening' && cashRegister?.openingDate) {
+      const openingDate = new Date(cashRegister.openingDate).getTime();
+      result = result.filter(f => new Date(f.date).getTime() >= openingDate);
+    }
+    
     if (filters.type) {
       result = result.filter(f => f.type === filters.type);
     }
@@ -75,7 +81,7 @@ export default function CashFlowTable({ cashFlows, filters, onFilterChange }) {
     }
     
     return result;
-  }, [cashFlows, filters]);
+  }, [cashFlows, filters, cashRegister]);
 
   // Ordenar
   const sortedFlows = useMemo(() => {
@@ -122,15 +128,15 @@ export default function CashFlowTable({ cashFlows, filters, onFilterChange }) {
   }, [filteredFlows, sortConfig]);
 
   const clearFilters = () => {
-    onFilterChange({ type: '', paymentMethod: '' });
+    onFilterChange({ period: 'all', type: '', paymentMethod: '' });
   };
 
-  const hasActiveFilters = filters.type || filters.paymentMethod;
+  const hasActiveFilters = filters.period || filters.type || filters.paymentMethod;
 
   return (
     <div className="cash-flow-container">
       <div className="cash-flow-header">
-        <h2>Movimientos del Día</h2>
+        <h2>Movimientos Totales del Día</h2>
         <span className="cash-flow-count">
           {sortedFlows.length} {sortedFlows.length === 1 ? 'movimiento' : 'movimientos'}
         </span>
@@ -138,6 +144,17 @@ export default function CashFlowTable({ cashFlows, filters, onFilterChange }) {
 
       {/* Filtros */}
       <div className="cash-flow-filters">
+        <div className="cash-flow-filter-group">
+          <label>Período</label>
+          <select
+            value={filters.period || 'all'}
+            onChange={(e) => onFilterChange({ ...filters, period: e.target.value })}
+          >
+            <option value="all">Todo el día</option>
+            <option value="since_opening">Desde apertura de caja</option>
+          </select>
+        </div>
+
         <div className="cash-flow-filter-group">
           <label>Tipo</label>
           <select

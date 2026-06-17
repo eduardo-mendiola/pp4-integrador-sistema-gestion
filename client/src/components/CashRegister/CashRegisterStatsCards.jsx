@@ -14,13 +14,13 @@ export default function CashRegisterStatsCards({ cashRegister, dailySummary, las
   const totalExpenses = dailySummary?.totalExpenses || 0;
   const expectedBalance = initialAmount + totalIncomes - totalExpenses;
 
-  // ✅ NUEVO: Usar lastClosedSummary cuando la caja está cerrada
+  // Usar lastClosedSummary cuando la caja está cerrada
   const lastInitialAmount = lastClosedSummary?.initialAmount || 0;
   const lastTotalIncomes = lastClosedSummary?.totalIncomes || 0;
   const lastTotalExpenses = lastClosedSummary?.totalExpenses || 0;
   const lastCount = lastClosedSummary?.count || 0;
 
-  const stats = isOpen ? [
+    const stats = isOpen ? [
     {
       label: 'Saldo Inicial',
       value: `$${formatCurrency(initialAmount)}`,
@@ -30,13 +30,13 @@ export default function CashRegisterStatsCards({ cashRegister, dailySummary, las
       label: 'Ingresos del Día',
       value: `$${formatCurrency(totalIncomes)}`,
       color: '#529d85',
-      suffix: `${dailySummary?.count || 0} mov.`
+      suffix: `${dailySummary?.incomeCount || 0} mov.` 
     },
     {
       label: 'Egresos del Día',
       value: `$${formatCurrency(totalExpenses)}`,
       color: '#df5757',
-      suffix: `${dailySummary?.count || 0} mov.`
+      suffix: `${dailySummary?.expenseCount || 0} mov.` 
     },
     {
       label: 'Saldo Esperado',

@@ -2,8 +2,21 @@ import mongoose from "mongoose";
 import Return from "../models/ReturnModel.js";
 import Sale from "../models/SaleModel.js";
 import ProductModel from "../models/ProductModel.js";
+import CashRegister from "../models/CashRegisterModel.js";
+import CashFlow from "../models/CashFlowModel.js";
 
 const Product = ProductModel.getNativeModel();
+
+// Función para mapear nombre del método de pago al formato de CashFlow
+const mapPaymentMethodToCashFlow = (paymentMethodName) => {
+  if (!paymentMethodName) return "cash";
+  const name = paymentMethodName.toLowerCase();
+  if (name.includes("efectivo") || name.includes("cash")) return "cash";
+  if (name.includes("débito") || name.includes("debito") || name.includes("debit")) return "debit_card";
+  if (name.includes("crédito") || name.includes("credito") || name.includes("credit")) return "credit_card";
+  if (name.includes("transfer")) return "transfer";
+  return "cash";
+};
 
 const ReturnController = {
   getAll: async (req, res) => {
@@ -49,6 +62,21 @@ const ReturnController = {
         return res
           .status(404)
           .json({ success: false, message: "Venta original no encontrada" });
+      }
+
+      // No permitir devolver ventas ya devueltas o canceladas
+      if (originalSale.has_returns === true) {
+        return res.status(400).json({
+          success: false,
+          message: "Esta venta ya tiene devoluciones registradas y no puede ser devuelta nuevamente."
+        });
+      }
+
+      if (originalSale.status === "CANCELLED") {
+        return res.status(400).json({
+          success: false,
+          message: "Esta venta está cancelada y no puede ser devuelta."
+        });
       }
 
       const saleDate = new Date(originalSale.createdAt);
@@ -235,20 +263,78 @@ const ReturnController = {
         console.error("Error al reintegrar stock:", stockError);
       }
 
-      // 4. Actualizar venta original con el ID de la devolución
+      // 4. Actualizar venta original
       const currentReturnIds = originalSale.return_ids || [];
-      await Sale.patch(original_sale_id, {
+      
+      // Si es devolución pura (RETURN), cancelar la venta original
+      const shouldCancelSale = type === "RETURN";
+      
+      const updateData = {
         return_ids: [...currentReturnIds, returnData._id],
         has_returns: true,
-      });
+      };
+      
+      if (shouldCancelSale) {
+        updateData.status = "CANCELLED";
+        updateData.metadata = {
+          ...(originalSale.metadata || {}),
+          cancel_reason: `Devolución: ${reason}${reason_custom ? ' - ' + reason_custom : ''}`,
+          cancelled_at: new Date().toISOString(),
+          return_id: returnData._id
+        };
+      }
+      
+      await Sale.patch(original_sale_id, updateData);
 
-      // 5. Actualizar la devolución con el ID de la venta de reemplazo si existe
+      // 5. REGISTRAR EGRESO EN CAJA si el pago original fue en EFECTIVO
+      try {
+        const openRegister = await CashRegister.findOpenRegister();
+        
+        if (openRegister) {
+          // Popular la venta original para obtener el nombre del método de pago
+          const saleWithPaymentMethod = await Sale.model.findById(original_sale_id)
+            .populate("payments.method");
+          
+          if (saleWithPaymentMethod.payments && saleWithPaymentMethod.payments.length > 0) {
+            for (const payment of saleWithPaymentMethod.payments) {
+              if (payment.status !== "CONFIRMED") continue;
+              
+              const methodName = payment.method?.name || "";
+              const cfPaymentMethod = mapPaymentMethodToCashFlow(methodName);
+              
+              // Solo registrar egreso si fue en efectivo
+              if (cfPaymentMethod === "cash") {
+                const refundAmount = shouldCancelSale ? payment.amount : returnData.total;
+                
+                await CashFlow.create({
+                  type: "EXPENSE",
+                  amount: refundAmount,
+                  paymentMethod: "cash",
+                  concept: `${shouldCancelSale ? 'Devolución' : 'Cambio'} - Venta #${(original_sale_id).toString().slice(-8).toUpperCase()}`,
+                  sourceType: "RETURN",
+                  sourceId: returnData._id,
+                  cashRegisterId: openRegister._id,
+                  operatorId: req.user?._id || req.body.employee_id,
+                  notes: `${reason}${reason_custom ? ' - ' + reason_custom : ''}`
+                });
+              }
+            }
+          }
+        } else {
+          console.warn("⚠️ No hay caja abierta. No se registró el egreso por devolución.");
+        }
+      } catch (cashFlowError) {
+        console.error("Error registrando egreso en caja por devolución:", cashFlowError);
+      }
+
+      // 6. Actualizar la devolución con el ID de la venta de reemplazo si existe
       if (replacementSaleId) {
         await Return.patch(returnData._id, {
           replacement_sale_id: replacementSaleId,
         });
       }
 
+      
       const populatedReturn = await Return.findById(returnData._id);
 
       return res.status(201).json({

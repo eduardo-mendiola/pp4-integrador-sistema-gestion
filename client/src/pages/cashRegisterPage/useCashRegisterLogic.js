@@ -17,6 +17,7 @@ export default function useCashRegisterLogic() {
 
   // Filtros de movimientos
   const [filters, setFilters] = useState({
+    period: 'since_opening',
     type: '',
     paymentMethod: ''
   });
@@ -155,6 +156,9 @@ export default function useCashRegisterLogic() {
     openCashRegister,
     closeCashRegister,
     handleFilterChange,
+    loadCashFlows,
+    loadCashRegisterStatus,
+    loadDailySummary,
     loadCashFlows
   };
 }

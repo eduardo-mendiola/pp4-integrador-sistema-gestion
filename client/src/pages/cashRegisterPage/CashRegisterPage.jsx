@@ -24,16 +24,34 @@ export default function CashRegisterPage() {
     setShowCloseModal,
     openCashRegister,
     closeCashRegister,
-    handleFilterChange
+    handleFilterChange,
+    loadCashRegisterStatus,
+    loadDailySummary,
+    loadCashFlows
   } = useCashRegisterLogic();
 
   const isOpen = cashRegister?.status === 'OPEN';
 
-  return (
+  const handleRefresh = async () => {
+    await loadCashRegisterStatus();
+    if (cashRegister?.status === 'OPEN') {
+      await loadDailySummary();
+      await loadCashFlows();
+    }
+  };
+
+    return (
     <div className="cash-register-page">
       <div className="cash-register-header">
         <h1>Estado de Caja</h1>
         <div className="cash-register-header-actions">
+          <button 
+            className="btn-secondary" 
+            onClick={handleRefresh}
+            title="Refrescar datos"
+          >
+            🔄 Refrescar
+          </button>
           {!isOpen ? (
             <button 
               className="btn-primary" 
@@ -79,6 +97,7 @@ export default function CashRegisterPage() {
           {isOpen && (
             <CashFlowTable 
               cashFlows={cashFlows}
+              cashRegister={cashRegister}
               filters={filters}
               onFilterChange={handleFilterChange}
             />
