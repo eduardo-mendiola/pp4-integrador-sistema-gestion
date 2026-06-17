@@ -7,6 +7,7 @@ import {
   FiChevronDown,
   FiBell,
 } from 'react-icons/fi';
+import { apiRequest } from '../../services/api.js';
 import SearchResults from './SearchResults.jsx';
 import './Header.css';
 
@@ -35,11 +36,11 @@ export default function Header({ onProductSelect }) {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const response = await fetch('/api/products');
-        const data = await response.json();
+        const response = await apiRequest('/api/products?limit=100');
+        const products = response.data || response;
         
-        if (data.success) {
-          setAllProducts(data.data);
+        if (Array.isArray(products)) {
+          setAllProducts(products);
           productsLoaded.current = true;
         }
       } catch (error) {
