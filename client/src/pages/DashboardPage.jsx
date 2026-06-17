@@ -16,8 +16,8 @@ const DashboardPage = () => {
     {
       title: "Caja",
       items: [
-        { label: "FLUJO DE CAJA", path: "/caja", color: "green-card" },
-        { label: "COMPROBANTE INTERNO", path: "/comprobantes", color: "green-card" },
+        { label: "MOVIMIENTOS", path: "/caja/movimientos", color: "green-card" },
+        { label: "COMPROBANTES", path: "/caja/comprobantes", color: "green-card" },
       ]
     },
     {

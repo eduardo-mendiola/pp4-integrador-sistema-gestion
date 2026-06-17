@@ -45,6 +45,32 @@ export const menuConfig = [
     submenu: null,
   },
   {
+    id: "caja",
+    label: "Caja",
+    icon: "FiDollarSign",
+    permission: "view_cash_register",
+    submenu: [
+      {
+        id: "caja-estado",
+        label: "Estado de caja",
+        path: "/caja/estado",
+        permission: "view_cash_register",
+      },
+      {
+        id: "caja-movimientos",
+        label: "Movimientos",
+        path: "/caja/movimientos",
+        permission: "view_cash_flow",
+      },
+      {
+        id: "caja-comprobantes",
+        label: "Comprobantes",
+        path: "/caja/comprobantes",
+        permission: "view_internal_vouchers",
+      },
+    ],
+  },
+  {
     id: "ventas",
     label: "Ventas",
     icon: "FiShoppingCart",
@@ -128,7 +154,7 @@ export const menuConfig = [
     id: "pagos",
     label: "Pagos",
     icon: "FiCreditCard",
-    permission: "view_supplier_payments", // Cambiado
+    permission: "view_supplier_payments",
     submenu: [
       {
         id: "pagos-proveedores",
