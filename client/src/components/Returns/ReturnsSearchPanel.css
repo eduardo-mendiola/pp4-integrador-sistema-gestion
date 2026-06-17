@@ -42,7 +42,7 @@
 }
 
 .clear-filters-btn:hover:not(:disabled) {
-  background: #f8f9fa;
+  background: #f2f2f2;
   color: #dc3545;
   border-color: #dc3545;
 }
@@ -126,7 +126,7 @@
 }
 
 .search-results-table th {
-  background: #f8f9fa;
+  background: #f2f2f2;
   padding: 14px;
   text-align: left;
   font-size: 13px;
@@ -197,14 +197,14 @@
   text-align: center;
   color: #8898aa;
   padding: 32px;
-  background: #f8f9fa;
+  background: #f2f2f2;
   border-radius: 8px;
 }
 
 /* Filtros de columna */
 .column-filters th {
   padding: 8px 12px !important;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   border-bottom: 2px solid #e1e8ed;
 }
 

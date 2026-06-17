@@ -40,10 +40,12 @@ export default function PromotionModal({ isOpen, promotion, discountRules, savin
   // Calcular fecha de fin automáticamente
   useEffect(() => {
     if (formData.startDate && formData.durationDays > 0) {
-      const start = new Date(formData.startDate);
-      const end = new Date(start);
-      end.setDate(end.getDate() + Number(formData.durationDays));
-      setCalculatedEndDate(end.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }));
+      const [year, month, day] = formData.startDate.split('-').map(Number);
+      const end = new Date(year, month - 1, day);
+      end.setDate(end.getDate() + Number(formData.durationDays) - 1);
+      
+      const formattedEnd = `${String(end.getDate()).padStart(2, '0')}/${String(end.getMonth() + 1).padStart(2, '0')}/${end.getFullYear()}`;
+      setCalculatedEndDate(formattedEnd);
     } else {
       setCalculatedEndDate('-');
     }
@@ -217,7 +219,9 @@ export default function PromotionModal({ isOpen, promotion, discountRules, savin
                   {calculatedEndDate}
                 </div>
                 <small className="promotion-form-hint">
-                  Se calcula automáticamente sumando los días de duración a la fecha de inicio.
+                  Se calcula automáticamente: Fecha de inicio + (duración - 1) días.
+                  <br/>
+                  Ejemplo: Inicio 15/06 + 1 día = Fin 15/06 (válido todo el día 15)
                 </small>
               </div>
 

@@ -41,7 +41,7 @@
 .client-details-code {
   display: inline-block;
   padding: 4px 12px;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   color: #8898aa;
   border-radius: 4px;
   font-size: 12px;
@@ -67,7 +67,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   padding: 16px;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   border-radius: 8px;
 }
 
@@ -104,7 +104,7 @@
 
 .client-details-address {
   padding: 16px;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   border-radius: 8px;
   display: flex;
   flex-direction: column;

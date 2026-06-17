@@ -11,7 +11,7 @@
 }
 
 .rules-table thead {
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   border-bottom: 2px solid #e1e8ed;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .rules-table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
 }
 
 .rules-table th.text-center,

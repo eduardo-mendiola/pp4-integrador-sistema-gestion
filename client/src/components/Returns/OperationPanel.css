@@ -66,7 +66,7 @@
 
 .reason-chip {
   padding: 8px 14px;
-  background: #f8f9fa;
+  background: #f2f2f2;
   border: 2px solid #e1e8ed;
   border-radius: 20px;
   font-size: 15px;
@@ -150,7 +150,7 @@
 }
 
 .exchange-search-result:hover {
-  background: #f8f9fa;
+  background: #f2f2f2;
 }
 
 .exchange-search-result:last-child {
@@ -177,7 +177,7 @@
 }
 
 .exchange-item {
-  background: #f8f9fa;
+  background: #f2f2f2;
   border: 1px solid #e1e8ed;
   border-radius: 8px;
   padding: 12px;
@@ -234,7 +234,7 @@
 
 /* Balance */
 .balance-section {
-  background: #f8f9fa;
+  background: #f2f2f2;
   border-radius: 8px;
   padding: 16px;
   margin-top: 8px; /* ✅ Reducido para evitar espacio muerto */

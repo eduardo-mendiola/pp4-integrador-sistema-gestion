@@ -45,6 +45,7 @@ export default function CartTable({
                 <th>SKU</th>
                 <th>Nombre del Producto</th>
                 <th className="text-center" style={{ width: '100px' }}>Cant.</th>
+                <th className="text-center" style={{ width: '80px' }}>Stock</th>
                 <th className="text-right" style={{ width: '120px' }}>Precio</th>
                 <th className="text-center" style={{ width: '90px' }}>Desc. %</th>
                 <th className="text-right" style={{ width: '130px' }}>Total</th>

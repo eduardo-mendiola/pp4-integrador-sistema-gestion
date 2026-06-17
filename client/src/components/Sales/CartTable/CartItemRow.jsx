@@ -77,9 +77,15 @@ export default function CartItemRow({
           onBlur={() => onQuantityBlur(item._id)}
           onKeyDown={(e) => onQuantityKeyDown(e, item._id)}
           min="1"
+          max={item.stock}
           onClick={(e) => e.stopPropagation()}
           disabled={!isActive}
         />
+      </td>
+      <td className="text-center">
+        <span className={`sales-stock ${item.stock <= 5 ? 'low-stock' : ''}`}>
+          {item.stock}
+        </span>
       </td>
       <td className="text-right">
         {item.originalPrice > item.price && (

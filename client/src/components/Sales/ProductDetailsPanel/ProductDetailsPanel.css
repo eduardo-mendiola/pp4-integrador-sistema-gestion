@@ -65,7 +65,7 @@
   width: 100%;
   aspect-ratio: 4/3; 
   max-height: 220px; 
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -140,7 +140,7 @@
 
 .sales-detail-value.code {
   font-family: monospace;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   padding: 2px 8px;
   border-radius: 4px;
   font-size: 13px;

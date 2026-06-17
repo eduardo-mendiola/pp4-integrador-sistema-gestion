@@ -1,7 +1,7 @@
 /* Variables CSS para temas */
 :root {
   /* Fondos */
-  --bg-primary: #f8f9fa;
+  --bg-primary: #f2f2f2;
   --bg-secondary: #ffffff;
   --bg-sidebar: #e9ecef;
 
@@ -45,13 +45,13 @@
   --form-focus-label: #495057;
 
   /* Accordions */
-  --accordion-bg: #f8f9fa;
+  --accordion-bg: #f2f2f2;
   --accordion-button-bg: #e9ecef;
   --accordion-border: #dee2e6;
 
   /* Modales */
   --modal-bg: #ffffff;
-  --modal-header-bg: #f8f9fa;
+  --modal-header-bg: #f2f2f2;
 
   /* Gráficos */
   --chart-grid: #dee2e6;
@@ -475,7 +475,7 @@ html:not([data-theme="dark"]) .btn-outline-warning:hover {
 /* Corregir fondos de acordeones en modo claro */
 html:not([data-theme="dark"]) body .accordion,
 html:not([data-theme="dark"]) .accordion {
-  background-color: #f8f9fa !important;
+  background-color: #f2f2f2 !important;
 }
 
 html:not([data-theme="dark"]) body .accordion-item,
@@ -504,11 +504,11 @@ html:not([data-theme="dark"]) .accordion-body {
 
 /* Corregir fondo del área de checkbox en acordeones para modo claro */
 html:not([data-theme="dark"]) .accordion-header .d-flex[style*="background-color: #4a5057"] {
-  background-color: #f8f9fa !important;
+  background-color: #f2f2f2 !important;
 }
 
 html:not([data-theme="dark"]) .accordion-header .d-flex[style*="background-color: #343a40"] {
-  background-color: #f8f9fa !important;
+  background-color: #f2f2f2 !important;
 }
 
 /* Fix para botones en formularios tipo card */
@@ -670,7 +670,7 @@ html:not([data-theme="dark"]) .btn-outline-warning:hover {
 /* Corregir fondos de acordeones en modo claro */
 html:not([data-theme="dark"]) body .accordion,
 html:not([data-theme="dark"]) .accordion {
-  background-color: #f8f9fa !important;
+  background-color: #f2f2f2 !important;
 }
 
 html:not([data-theme="dark"]) body .accordion-item,
@@ -699,11 +699,11 @@ html:not([data-theme="dark"]) .accordion-body {
 
 /* Corregir fondo del área de checkbox en acordeones para modo claro */
 html:not([data-theme="dark"]) .accordion-header .d-flex[style*="background-color: #4a5057"] {
-  background-color: #f8f9fa !important;
+  background-color: #f2f2f2 !important;
 }
 
 html:not([data-theme="dark"]) .accordion-header .d-flex[style*="background-color: #343a40"] {
-  background-color: #f8f9fa !important;
+  background-color: #f2f2f2 !important;
 }
 
 /* Fix para botones en formularios tipo card */

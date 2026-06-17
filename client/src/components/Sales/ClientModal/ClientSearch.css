@@ -130,7 +130,7 @@
 
 .client-search-item:hover {
   border-color: #007bff;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   transform: translateX(4px);
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
 }
@@ -189,7 +189,7 @@
   color: #8898aa;
   font-family: monospace;
   padding: 4px 8px;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   border-radius: 4px;
 }
 

@@ -39,7 +39,7 @@
   align-items: center;
   padding: 20px 24px;
   border-bottom: 1px solid #e1e8ed;
-  background: #f8f9fa;
+  background: #f2f2f2;
   border-radius: 12px 12px 0 0;
 }
 
@@ -77,7 +77,7 @@
 
 .payment-process-summary {
   padding: 16px 24px;
-  background: #f8f9fa;
+  background: #f2f2f2;
   border-bottom: 1px solid #e1e8ed;
 }
 

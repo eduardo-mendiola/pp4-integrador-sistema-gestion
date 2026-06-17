@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import useSalesLogic from './useSalesLogic';
 import useClientLogic from './useClientLogic';
-import { apiRequest } from '../../../services/api';
 import ProductSearchBar from '../../../components/Sales/ProductSearchBar/ProductSearchBar';
 import CartTable from '../../../components/Sales/CartTable/CartTable';
 import ProductDetailsPanel from '../../../components/Sales/ProductDetailsPanel/ProductDetailsPanel';
@@ -16,7 +15,6 @@ import './NewSalePage.css';
 export default function NewSalePage() {
   const sales = useSalesLogic();
   const client = useClientLogic();
-  const [cashRegisterStatus, setCashRegisterStatus] = useState(null);
 
   useEffect(() => {
     const mainArea = document.querySelector('.main-area');
@@ -24,18 +22,6 @@ export default function NewSalePage() {
     return () => {
       if (mainArea) mainArea.classList.remove('no-padding');
     };
-  }, []);
-
-  useEffect(() => {
-    const checkCashRegister = async () => {
-      try {
-        const response = await apiRequest('/api/cash-register/status');
-        setCashRegisterStatus(response.data);
-      } catch (error) {
-        console.error('Error checking cash register:', error);
-      }
-    };
-    checkCashRegister();
   }, []);
 
   const handlePayClick = () => {
@@ -83,30 +69,28 @@ export default function NewSalePage() {
         onClearClient={client.clearClient}
       />
 
+      <SalesMessage
+        message={sales.message}
+        onClose={() => sales.setMessage('')}
+      />
+
       <div className="sales-main-content">
-        <div className="sales-cart-section">
-          <SalesMessage
-            message={sales.message}
-            onClose={() => sales.setMessage('')}
-            cashRegisterStatus={cashRegisterStatus}
-          />
-          <CartTable
-            items={sales.cartItems}
-            selectedItemId={sales.selectedItem?._id}
-            editingQuantities={sales.editingQuantities}
-            itemDiscounts={sales.itemDiscounts}
-            automaticDiscounts={sales.automaticDiscounts}
-            manualDiscounts={sales.manualDiscounts}
-            onSelectItem={sales.selectItem}
-            onRemoveItem={sales.removeFromCart}
-            onToggleActive={sales.toggleItemActive}
-            onRowFocus={sales.handleQuantityFocus}
-            onQuantityChange={sales.handleQuantityChange}
-            onQuantityBlur={sales.handleQuantityBlur}
-            onQuantityKeyDown={sales.handleQuantityKeyDown}
-            onItemDiscountChange={sales.setItemDiscount}
-          />
-        </div>
+        <CartTable
+          items={sales.cartItems}
+          selectedItemId={sales.selectedItem?._id}
+          editingQuantities={sales.editingQuantities}
+          itemDiscounts={sales.itemDiscounts}
+          automaticDiscounts={sales.automaticDiscounts}
+          manualDiscounts={sales.manualDiscounts}
+          onSelectItem={sales.selectItem}
+          onRemoveItem={sales.removeFromCart}
+          onToggleActive={sales.toggleItemActive}
+          onRowFocus={sales.handleQuantityFocus}
+          onQuantityChange={sales.handleQuantityChange}
+          onQuantityBlur={sales.handleQuantityBlur}
+          onQuantityKeyDown={sales.handleQuantityKeyDown}
+          onItemDiscountChange={sales.setItemDiscount}
+        />
 
         <ProductDetailsPanel
           selectedItem={sales.selectedItem}

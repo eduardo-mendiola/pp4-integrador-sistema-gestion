@@ -69,7 +69,7 @@
 
 .client-form-field input:disabled,
 .client-form-field select:disabled {
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   color: #8898aa;
   cursor: not-allowed;
 }

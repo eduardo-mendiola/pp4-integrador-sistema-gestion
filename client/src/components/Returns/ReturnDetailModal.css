@@ -42,7 +42,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  background: #f8f9fa;
+  background: #f2f2f2;
 }
 
 .return-detail-header h2 {
@@ -169,7 +169,7 @@
 }
 
 .return-detail-totals {
-  background: #f8f9fa;
+  background: #f2f2f2;
   padding: 16px;
   border-radius: 8px;
   display: flex;
@@ -202,7 +202,7 @@
   display: flex;
   justify-content: space-between;
   padding: 12px;
-  background: #f8f9fa;
+  background: #f2f2f2;
   border-radius: 8px;
   margin-top: 12px;
   font-weight: 700;
@@ -222,7 +222,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  background: #f8f9fa;
+  background: #f2f2f2;
 }
 
 .return-detail-btn {

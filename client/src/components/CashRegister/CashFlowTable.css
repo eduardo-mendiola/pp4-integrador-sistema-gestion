@@ -7,7 +7,7 @@
 
 .cash-flow-header {
   padding: 16px 24px;
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   border-bottom: 1px solid #e1e8ed;
   display: flex;
   justify-content: space-between;
@@ -99,7 +99,7 @@
 }
 
 .cash-flow-table thead {
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
   border-bottom: 2px solid #e1e8ed;
 }
 
@@ -136,7 +136,7 @@
 }
 
 .cash-flow-table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: #f2f2f2;
 }
 
 .cash-flow-table tbody tr.flow-row-income {
