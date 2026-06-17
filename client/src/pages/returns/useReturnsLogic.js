@@ -74,7 +74,7 @@ export default function useReturnsLogic() {
     }
   }, [returnReason, customReason]);
 
-  const performSearch = async () => {
+    const performSearch = async () => {
     setIsSearching(true);
     setHasSearched(true); 
     setError('');
@@ -86,6 +86,15 @@ export default function useReturnsLogic() {
       let allSales = response.data || response;
 
       const results = allSales.filter(sale => {
+        // Excluir ventas ya devueltas, canceladas o con más de 30 días
+        if (sale.has_returns === true) return false;
+        if (sale.status === 'CANCELLED') return false;
+        
+        const saleDate = new Date(sale.createdAt || sale.created_at);
+        const today = new Date();
+        const daysDiff = Math.floor((today - saleDate) / (1000 * 60 * 60 * 24));
+        if (daysDiff > RETURN_PERIOD_DAYS) return false;
+
         const invoiceNumber = (sale._id || '').slice(-8).toUpperCase();
         const clientName = (
           sale.customer_name || 
@@ -95,8 +104,6 @@ export default function useReturnsLogic() {
           sale.client_id?.document_number ||
           ''
         ).toLowerCase();
-        
-        const saleDate = new Date(sale.createdAt || sale.created_at);
 
         if (searchFilters.invoiceNumber && !invoiceNumber.includes(searchFilters.invoiceNumber.toUpperCase())) return false;
         if (searchFilters.clientName && !clientName.includes(searchFilters.clientName.toLowerCase())) return false;

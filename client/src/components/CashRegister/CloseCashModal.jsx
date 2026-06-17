@@ -107,7 +107,7 @@ export default function CloseCashModal({ isOpen, onClose, onConfirm, cashRegiste
 
         <form onSubmit={handleSubmit} className="close-cash-body">
           
-          {/* ✅ NUEVA SECCIÓN: Resumen por Método de Pago (Solo lectura) */}
+          {/* Resumen por Método de Pago (Solo lectura) */}
           <div className="payment-methods-summary">
             <h3>Resumen del Día por Método de Pago</h3>
             <div className="pm-grid">
@@ -195,8 +195,18 @@ export default function CloseCashModal({ isOpen, onClose, onConfirm, cashRegiste
           {/* Diferencia Final */}
           <div className={`close-cash-difference ${getDifferenceInfo().className}`}>
             <div className="close-cash-difference-header">
-              <div className="close-cash-difference-row"><span>Efectivo Esperado (Sistema):</span><strong>${formatCurrency(expectedCash)}</strong></div>
-              <div className="close-cash-difference-row"><span>Efectivo Contado (Real):</span><strong>${formatCurrency(loadedAmount)}</strong></div>
+              <div className="close-cash-difference-row">
+                <span>Saldo Inicial (Apertura):</span>
+                <strong>${formatCurrency(initialAmount)}</strong>
+              </div>
+              <div className="close-cash-difference-row">
+                <span>Efectivo Esperado (Sistema):</span>
+                <strong>${formatCurrency(expectedCash)}</strong>
+              </div>
+              <div className="close-cash-difference-row">
+                <span>Efectivo Contado (Real):</span>
+                <strong>${formatCurrency(loadedAmount)}</strong>
+              </div>
               <div className="close-cash-difference-row difference-row">
                 <span>DIFERENCIA:</span>
                 <strong className="difference-value">

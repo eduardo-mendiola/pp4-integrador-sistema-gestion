@@ -46,7 +46,7 @@ const CashRegisterController = {
     }
   },
 
-  // Cerrar caja (con arqueo)
+    // Cerrar caja (con arqueo)
   close: async (req, res) => {
     try {
       const openRegister = await CashRegister.findOpenRegister();
@@ -67,11 +67,11 @@ const CashRegisterController = {
         });
       }
 
-      // Calcular monto esperado: inicial + ingresos - egresos del día
+      // Calcular monto esperado SOLO con efectivo
       const todaySummary = await CashFlow.getDailySummary(openRegister._id);
-      const expectedAmount = openRegister.initialAmount + 
-                             todaySummary.totalIncomes - 
-                             todaySummary.totalExpenses;
+      const cashIncomes = todaySummary.byPaymentMethod?.cash?.incomes || 0;
+      const cashExpenses = todaySummary.byPaymentMethod?.cash?.expenses || 0;
+      const expectedAmount = openRegister.initialAmount + cashIncomes - cashExpenses;
       const difference = Number(finalAmount) - expectedAmount;
 
       const updatedRegister = await CashRegister.patch(openRegister._id, {
@@ -105,9 +105,10 @@ const CashRegisterController = {
       }
 
       const todaySummary = await CashFlow.getDailySummary(openRegister._id);
-      const expectedAmount = openRegister.initialAmount + 
-                             todaySummary.totalIncomes - 
-                             todaySummary.totalExpenses;
+      // Calcular saldo esperado SOLO con efectivo
+      const cashIncomes = todaySummary.byPaymentMethod?.cash?.incomes || 0;
+      const cashExpenses = todaySummary.byPaymentMethod?.cash?.expenses || 0;
+      const expectedAmount = openRegister.initialAmount + cashIncomes - cashExpenses;
 
       return res.json({
         success: true,

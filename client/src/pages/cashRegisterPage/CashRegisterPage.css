@@ -107,6 +107,23 @@
   border: 1px solid #c3e6cb;
 }
 
+.btn-secondary {
+  padding: 12px 24px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
 @media (max-width: 768px) {
   .cash-register-header {
     flex-direction: column;

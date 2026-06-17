@@ -62,28 +62,41 @@ class CashFlowModel extends BaseModel {
     ]);
   }
 
-  // Resumen del día para una caja
+  // Resumen desde la apertura de la caja, no desde medianoche
   async getDailySummary(cashRegisterId, date = new Date()) {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
+    // Buscar la caja para obtener su fecha de apertura
+    const CashRegister = (await import('../models/CashRegisterModel.js')).default;
+    const register = await CashRegister.model.findById(cashRegisterId).lean();
+    
+    // Usar la fecha de apertura de la caja, o el inicio del día si no existe
+    const startDate = register?.openingDate 
+      ? new Date(register.openingDate) 
+      : new Date(date);
+    
+    if (!register?.openingDate) {
+      startDate.setHours(0, 0, 0, 0);
+    }
+    
+    const endDate = new Date(date);
+    endDate.setHours(23, 59, 59, 999);
 
     const flows = await this.model.find({
       cashRegisterId,
-      date: { $gte: startOfDay, $lte: endOfDay }
+      date: { $gte: startDate, $lte: endDate }
     }).lean();
 
     const summary = {
       totalIncomes: 0,
       totalExpenses: 0,
+      incomeCount: 0,
+      expenseCount: 0,
       balance: 0,
       count: flows.length,
       byPaymentMethod: {
-        cash: { incomes: 0, expenses: 0 },
-        debit_card: { incomes: 0, expenses: 0 },
-        credit_card: { incomes: 0, expenses: 0 },
-        transfer: { incomes: 0, expenses: 0 }
+        cash: { incomes: 0, expenses: 0, incomeCount: 0, expenseCount: 0 },
+        debit_card: { incomes: 0, expenses: 0, incomeCount: 0, expenseCount: 0 },
+        credit_card: { incomes: 0, expenses: 0, incomeCount: 0, expenseCount: 0 },
+        transfer: { incomes: 0, expenses: 0, incomeCount: 0, expenseCount: 0 }
       },
       bySourceType: {}
     };
@@ -91,10 +104,14 @@ class CashFlowModel extends BaseModel {
     flows.forEach(flow => {
       if (flow.type === "INCOME") {
         summary.totalIncomes += flow.amount;
+        summary.incomeCount += 1;
         summary.byPaymentMethod[flow.paymentMethod].incomes += flow.amount;
+        summary.byPaymentMethod[flow.paymentMethod].incomeCount += 1;
       } else {
         summary.totalExpenses += flow.amount;
+        summary.expenseCount += 1;
         summary.byPaymentMethod[flow.paymentMethod].expenses += flow.amount;
+        summary.byPaymentMethod[flow.paymentMethod].expenseCount += 1;
       }
 
       if (!summary.bySourceType[flow.sourceType]) {

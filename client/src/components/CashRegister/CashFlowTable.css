@@ -221,6 +221,17 @@
   font-size: 18px;
 }
 
+/* Indicador de información */
+.cash-flow-info {
+  padding: 10px 16px;
+  background-color: #eff6ff;
+  border-left: 3px solid #1e40af;
+  color: #1e40af;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .cash-flow-filters {
     flex-direction: column;
