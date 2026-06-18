@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import useMovementsLogic from './useMovementsLogic';
-import MovementsTable from '../../components/CashRegister/Movements/MovementsTable';
-import MovementDetailModal from '../../components/CashRegister/Movements/MovementDetailModal';
-import MovementReceiptModal from '../../components/CashRegister/Movements/MovementReceiptModal';
+import MovementsTable from '../../../components/CashRegister/Movements/MovementsTable';
+import MovementDetailModal from '../../../components/CashRegister/Movements/MovementDetailModal';
+import MovementReceiptModal from '../../../components/CashRegister/Movements/MovementReceiptModal';
 import './MovementsPage.css';
 
 const typeLabels = {

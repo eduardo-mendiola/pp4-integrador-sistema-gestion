@@ -1,4 +1,4 @@
 allowBuilds:
   bcrypt: false
-  core-js: set this to true or false
+  core-js: true
   mongodb-memory-server: false

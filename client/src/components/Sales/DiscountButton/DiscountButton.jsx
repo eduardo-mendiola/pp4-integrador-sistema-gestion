@@ -45,7 +45,7 @@ export default function DiscountButton({ discountRate, onDiscountChange }) {
       >
         <span className="discount-icon">%</span>
         <span className="discount-label">
-          {discountRate > 0 ? `${discountRate}%` : 'Descuento'}
+          {discountRate > 0 ? `${discountRate}%` : 'Aplicar Descuento'}
         </span>
       </button>
 

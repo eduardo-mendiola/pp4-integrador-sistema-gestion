@@ -1,10 +1,10 @@
 import React from 'react';
 import useCashRegisterLogic from './useCashRegisterLogic';
-import CashRegisterStatsCards from '../../components/CashRegister/Status/CashRegisterStatsCards';
-import CashRegisterStatus from '../../components/CashRegister/Status/CashRegisterStatus';
-import CashFlowTable from '../../components/CashRegister/Status/CashFlowTable';
-import OpenCashModal from '../../components/CashRegister/Status/OpenCashModal';
-import CloseCashModal from '../../components/CashRegister/Status/CloseCashModal';
+import CashRegisterStatsCards from '../../../components/CashRegister/Status/CashRegisterStatsCards';
+import CashRegisterStatus from '../../../components/CashRegister/Status/CashRegisterStatus';
+import CashFlowTable from '../../../components/CashRegister/Status/CashFlowTable';
+import OpenCashModal from '../../../components/CashRegister/Status/OpenCashModal';
+import CloseCashModal from '../../../components/CashRegister/Status/CloseCashModal';
 import './CashRegisterPage.css';
 
 export default function CashRegisterPage() {

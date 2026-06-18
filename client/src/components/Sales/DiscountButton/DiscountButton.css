@@ -14,14 +14,21 @@
 }
 
 .discount-btn:hover {
-  background: #e9ecef;
-  border-color: #cbd3da;
+  background: #356090;
+  border-color: #3c90da;
+  color: white;
 }
 
 .discount-btn.active {
   background: #ffc107;
   border-color: #ffc107;
   color: #333;
+}
+
+.discount-btn.active:hover {
+  background: #686250;
+  border-color: #ffc107;
+  color: white;
 }
 
 .discount-icon {
