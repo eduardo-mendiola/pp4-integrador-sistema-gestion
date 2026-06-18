@@ -1,0 +1,35 @@
+.under-construction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+}
+
+.construction-content {
+  padding: 3rem;
+}
+
+.construction-icon {
+  width: 80px;
+  height: 80px;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.construction-content h1 {
+  font-size: 2rem;
+  color: var(--ink);
+  margin: 0 0 1rem 0;
+}
+
+.construction-content p {
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin: 0.5rem 0;
+}
+
+.construction-subtitle {
+  font-size: 0.9rem;
+  font-style: italic;
+}

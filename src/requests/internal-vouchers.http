@@ -1,0 +1,305 @@
+@baseUrl = http://localhost:4000
+
+# ============================================================
+# INTERNAL VOUCHERS (Comprobantes Internos)
+# ============================================================
+
+### Get all vouchers
+GET {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get vouchers summary
+GET {{baseUrl}}/api/internal-vouchers/summary
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# FILTROS
+# ------------------------------------------------------------
+
+### Get vouchers filtered by type (INCOME)
+GET {{baseUrl}}/api/internal-vouchers?type=INCOME
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get vouchers filtered by type (EXPENSE)
+GET {{baseUrl}}/api/internal-vouchers?type=EXPENSE
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get vouchers filtered by type (ADJUSTMENT)
+GET {{baseUrl}}/api/internal-vouchers?type=ADJUSTMENT
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get vouchers filtered by status (CONFIRMED)
+GET {{baseUrl}}/api/internal-vouchers?status=CONFIRMED
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get vouchers filtered by status (CANCELLED)
+GET {{baseUrl}}/api/internal-vouchers?status=CANCELLED
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get vouchers filtered by date range
+GET {{baseUrl}}/api/internal-vouchers?startDate=2026-06-01&endDate=2026-06-30
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get vouchers summary with date range
+GET {{baseUrl}}/api/internal-vouchers/summary?startDate=2026-06-01&endDate=2026-06-30
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# CREACIÓN DE COMPROBANTES (SIN AFECTAR CAJA)
+# ------------------------------------------------------------
+
+### Create EXPENSE voucher WITHOUT affecting cash flow
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "concept": "Compra de mercadería - Proveedor ABC",
+  "amount": 15000,
+  "paymentMethod": "none",
+  "notes": "Factura A-0001-00000456 - Se pagará en 30 días"
+}
+
+### Create ADJUSTMENT voucher (inventory adjustment)
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "ADJUSTMENT",
+  "concept": "Ajuste de stock - Mercadería dañada",
+  "amount": 2500,
+  "paymentMethod": "none",
+  "relatedEntityType": "PRODUCT",
+  "notes": "3 unidades de producto XYZ rotas por accidente"
+}
+
+### Create INCOME voucher without affecting cash flow
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "concept": "Registro contable - Aporte no monetario",
+  "amount": 5000,
+  "paymentMethod": "none",
+  "notes": "Aporte en especie (equipamiento)"
+}
+
+# ------------------------------------------------------------
+# CREACIÓN DE COMPROBANTES (AFECTANDO CAJA)
+# ------------------------------------------------------------
+
+### Create INCOME voucher that AFFECTS cash flow (needs open register)
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "concept": "Ingreso de capital - Aporte socio",
+  "amount": 50000,
+  "paymentMethod": "cash",
+  "affectsCashFlow": true,
+  "notes": "Aporte inicial para capital de trabajo"
+}
+
+### Create EXPENSE voucher that AFFECTS cash flow (cash)
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "concept": "Pago de alquiler local",
+  "amount": 8500,
+  "paymentMethod": "cash",
+  "affectsCashFlow": true,
+  "notes": "Alquiler mes de junio 2026"
+}
+
+### Create EXPENSE voucher that AFFECTS cash flow (transfer)
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "concept": "Pago servicio de internet",
+  "amount": 2500,
+  "paymentMethod": "transfer",
+  "affectsCashFlow": true,
+  "notes": "Factura Fibertel junio 2026"
+}
+
+### Create EXPENSE voucher that AFFECTS cash flow (debit card)
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "concept": "Compra de insumos de oficina",
+  "amount": 1200,
+  "paymentMethod": "debit_card",
+  "affectsCashFlow": true,
+  "notes": "Papel, tóner, carpetas"
+}
+
+# ------------------------------------------------------------
+# VALIDACIONES (deben devolver 400)
+# ------------------------------------------------------------
+
+### Try to create voucher with invalid type (Should return 400)
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INVALID",
+  "concept": "Tipo inválido",
+  "amount": 1000
+}
+
+### Try to create voucher without concept (Should return 400)
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "amount": 1000
+}
+
+### Try to create voucher with negative amount (Should return 400)
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "concept": "Monto negativo",
+  "amount": -500
+}
+
+### Try to create voucher affecting cash without open register
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "concept": "Prueba sin caja abierta",
+  "amount": 1000,
+  "paymentMethod": "cash",
+  "affectsCashFlow": true
+}
+
+### Try to create voucher with invalid payment method (Should return 400)
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "concept": "Método inválido",
+  "amount": 1000,
+  "paymentMethod": "bitcoin"
+}
+
+# ------------------------------------------------------------
+# DETALLE Y CANCELACIÓN
+# ------------------------------------------------------------
+
+### Get specific voucher by ID (reemplazar con ID real)
+GET {{baseUrl}}/api/internal-vouchers/REEMPLAZAR_CON_ID
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Cancel voucher (soft delete - reemplazar con ID real)
+PATCH {{baseUrl}}/api/internal-vouchers/REEMPLAZAR_CON_ID/cancel
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+### Try to cancel already cancelled voucher (Should return 400)
+PATCH {{baseUrl}}/api/internal-vouchers/REEMPLAZAR_CON_ID/cancel
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+# ------------------------------------------------------------
+# FLUJO END-TO-END
+# ------------------------------------------------------------
+
+### 1. Abrir caja para pruebas
+POST {{baseUrl}}/api/cash-register/open
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "initialAmount": 10000,
+  "notes": "Apertura para prueba end-to-end de comprobantes"
+}
+
+### 2. Ver estado inicial de la caja
+GET {{baseUrl}}/api/cash-register/status
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### 3. Crear comprobante de egreso que afecta caja
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "concept": "Pago de servicios públicos",
+  "amount": 3500,
+  "paymentMethod": "cash",
+  "affectsCashFlow": true,
+  "notes": "Luz + gas + agua"
+}
+
+### 4. Crear comprobante de ingreso que afecta caja
+POST {{baseUrl}}/api/internal-vouchers
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "concept": "Cobro de deuda pendiente",
+  "amount": 5000,
+  "paymentMethod": "cash",
+  "affectsCashFlow": true,
+  "notes": "Cliente XYZ - Factura A-0001-00000123"
+}
+
+### 5. Ver resumen del día (debería mostrar: 10000 + 5000 - 3500 = 11500)
+GET {{baseUrl}}/api/cash-register/daily-summary
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### 6. Ver todos los movimientos (debería incluir apertura + 2 comprobantes)
+GET {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### 7. Cerrar caja con el monto esperado (11500)
+POST {{baseUrl}}/api/cash-register/close
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "finalAmount": 11500,
+  "notes": "Cierre sin diferencia - Todos los comprobantes conciliados"
+}

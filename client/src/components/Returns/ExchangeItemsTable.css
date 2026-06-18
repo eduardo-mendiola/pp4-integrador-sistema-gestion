@@ -1,0 +1,258 @@
+/* Panel de items de cambio */
+.exchange-items-panel {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.exchange-items-header {
+  padding: 12px 16px;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #e1e8ed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exchange-items-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.exchange-items-count {
+  background-color: #9CADCE;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.exchange-items-table-wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.exchange-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.exchange-table thead {
+  background-color: #f2f2f2;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.exchange-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #525f7f;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.exchange-table th.text-right {
+  text-align: right;
+}
+
+.exchange-table th.text-center {
+  text-align: center;
+}
+
+.exchange-table tbody tr {
+  border-bottom: 1px solid #f0f4f8;
+  transition: background-color 0.2s;
+}
+
+.exchange-table tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+.exchange-table td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+.exchange-table td.text-right {
+  text-align: right;
+}
+
+.exchange-table td.text-center {
+  text-align: center;
+}
+
+/* Checkbox */
+.exchange-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Product Info */
+.exchange-product-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 13px;
+}
+
+.exchange-product-sku {
+  font-size: 12px;
+  color: #8898aa;
+}
+
+/* Quantity Input */
+.exchange-quantity-input {
+  width: 60px;
+  padding: 6px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.exchange-quantity-input:focus {
+  outline: none;
+  border-color: #9CADCE;
+}
+
+/* Discount Input */
+.exchange-discount-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.exchange-discount-input {
+  width: 50px;
+  padding: 6px 18px 6px 6px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.exchange-discount-input:focus {
+  outline: none;
+  border-color: #ffc107;
+  background-color: #fffbf0;
+}
+
+.exchange-discount-input:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+.exchange-discount-suffix {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 700;
+  color: #8898aa;
+  pointer-events: none;
+}
+
+/* Price Display */
+.exchange-price {
+  font-weight: 600;
+  color: #333;
+  font-size: 13px;
+}
+
+.exchange-price-final {
+  color: #333;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.exchange-price-discount {
+  display: block;
+  color: #ffc107;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+/* Delete Button */
+.exchange-delete-btn {
+  background: none;
+  border: none;
+  color: #f5365c;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exchange-delete-btn:hover {
+  background-color: #fee;
+  transform: scale(1.1);
+}
+
+.exchange-delete-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Empty State */
+.exchange-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #8898aa;
+  background: #f2f2f2;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.exchange-empty-state svg {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 12px;
+  opacity: 0.3;
+}
+
+.exchange-empty-state p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Fila inactiva (desmarcada) */
+.exchange-table tbody tr.inactive {
+  opacity: 0.5;
+  background-color: #f2f2f2;
+}
+
+.exchange-table tbody tr.inactive:hover {
+  background-color: #e9ecef;
+}
+
+.exchange-table tbody tr.inactive .exchange-product-name,
+.exchange-table tbody tr.inactive .exchange-product-sku {
+  text-decoration: line-through;
+  color: #adb5bd;
+}
+
+.exchange-table tbody tr.inactive .exchange-price,
+.exchange-table tbody tr.inactive .exchange-price-final {
+  color: #adb5bd;
+}
+
+.exchange-table tbody tr.inactive .exchange-quantity-input,
+.exchange-table tbody tr.inactive .exchange-discount-input {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}

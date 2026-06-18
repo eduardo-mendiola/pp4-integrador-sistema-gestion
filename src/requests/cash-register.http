@@ -1,0 +1,131 @@
+@baseUrl = http://localhost:4000
+
+# ============================================================
+# CASH REGISTER (Caja)
+# ============================================================
+
+### Get cash register status (should return CLOSED initially)
+GET {{baseUrl}}/api/cash-register/status
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get daily summary (should fail if no open register)
+GET {{baseUrl}}/api/cash-register/daily-summary
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get all cash registers history
+GET {{baseUrl}}/api/cash-register
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# APERTURA DE CAJA
+# ------------------------------------------------------------
+
+### Open cash register with initial amount
+POST {{baseUrl}}/api/cash-register/open
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "initialAmount": 5000,
+  "notes": "Apertura del día - Billetes de $1000 y $500"
+}
+
+### Try to open another register (Should return 400 - already open)
+POST {{baseUrl}}/api/cash-register/open
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "initialAmount": 3000,
+  "notes": "Intento de apertura duplicada"
+}
+
+### Open register with zero initial amount
+POST {{baseUrl}}/api/cash-register/open
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "initialAmount": 0,
+  "notes": "Apertura sin monto inicial"
+}
+
+### Open register with negative amount (Should return 400)
+POST {{baseUrl}}/api/cash-register/open
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "initialAmount": -100,
+  "notes": "Monto negativo inválido"
+}
+
+# ------------------------------------------------------------
+# ESTADO Y RESUMEN
+# ------------------------------------------------------------
+
+### Get status after opening
+GET {{baseUrl}}/api/cash-register/status
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get daily summary after opening
+GET {{baseUrl}}/api/cash-register/daily-summary
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# CIERRE DE CAJA
+# ------------------------------------------------------------
+
+### Close cash register (with final amount matching expected)
+POST {{baseUrl}}/api/cash-register/close
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "finalAmount": 5000,
+  "notes": "Cierre del día - Arqueo realizado sin diferencia"
+}
+
+### Close cash register with difference (arqueo real distinto)
+POST {{baseUrl}}/api/cash-register/close
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "finalAmount": 4800,
+  "notes": "Cierre con diferencia de $200"
+}
+
+### Try to close without open register (Should return 400)
+POST {{baseUrl}}/api/cash-register/close
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "finalAmount": 5000,
+  "notes": "Intento de cierre sin caja abierta"
+}
+
+### Close with negative amount (Should return 400)
+POST {{baseUrl}}/api/cash-register/close
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "finalAmount": -100,
+  "notes": "Monto negativo inválido"
+}
+
+# ------------------------------------------------------------
+# DETALLE POR ID
+# ------------------------------------------------------------
+
+### Get specific register by ID (reemplazar con ID real)
+GET {{baseUrl}}/api/cash-register/REEMPLAZAR_CON_ID
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json

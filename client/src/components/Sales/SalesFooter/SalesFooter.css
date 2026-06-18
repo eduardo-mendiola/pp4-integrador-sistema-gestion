@@ -1,0 +1,114 @@
+.sales-footer {
+  background-color: #333333;
+  color: white;
+  padding: 10px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sales-totals-info {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.sales-total-item {
+  text-align: right;
+}
+
+.sales-total-label {
+  font-size: 13px;
+  color: #8898aa;
+  margin-bottom: 4px;
+}
+
+.sales-total-value {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.sales-total-value.main {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.sales-total-badge {
+  display: inline-block;
+  background-color: #525f7f;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-left: 8px;
+  text-transform: uppercase;
+}
+
+.sales-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.sales-btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sales-btn-cancel {
+  background-color: #525f7f;
+  color: white;
+}
+
+.sales-btn-cancel:hover {
+  background-color: #414975;
+}
+
+.sales-btn-pay {
+  background-color: #007bff;
+  color: white;
+}
+
+.sales-btn-pay:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+}
+
+.sales-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sales-total-item.discount {
+  color: #ffc107;
+}
+
+.sales-total-item.discount .sales-total-value {
+  color: #ffc107;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .sales-footer {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .sales-actions {
+    width: 100%;
+  }
+  
+  .sales-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

@@ -8,16 +8,16 @@ const DashboardPage = () => {
     {
       title: "Ventas",
       items: [
-        { label: "VENTAS", path: "/ventas", color: "blue-card" },
+        { label: "VENTAS", path: "/ventas/nueva", color: "blue-card" },
         { label: "CLIENTES", path: "/clientes", color: "blue-card" },
-        { label: "CAMBIOS Y DEVOLUCIONES", path: "/devoluciones", color: "blue-card" },
+        { label: "CAMBIOS Y DEVOLUCIONES", path: "/ventas/devoluciones", color: "blue-card" },
       ]
     },
     {
       title: "Caja",
       items: [
-        { label: "FLUJO DE CAJA", path: "/caja", color: "green-card" },
-        { label: "COMPROBANTE INTERNO", path: "/comprobantes", color: "green-card" },
+        { label: "MOVIMIENTOS", path: "/caja/movimientos", color: "green-card" },
+        { label: "COMPROBANTES", path: "/caja/comprobantes", color: "green-card" },
       ]
     },
     {

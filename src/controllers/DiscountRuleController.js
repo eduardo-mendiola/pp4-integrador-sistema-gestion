@@ -1,7 +1,6 @@
 import DiscountRule from "../models/DiscountRuleModel.js";
 
 const DiscountRuleController = {
-
   create: async (req, res) => {
     try {
       const rule = await DiscountRule.create(req.body);
@@ -24,10 +23,34 @@ const DiscountRuleController = {
     try {
       const rule = await DiscountRule.findById(req.params.id);
       if (!rule) {
-        return res.status(404).json({ success: false, message: 'Regla de descuento no encontrada' });
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message: "Regla de descuento no encontrada",
+          });
       }
       return res.json({ success: true, data: rule });
     } catch (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  getPromotionsCount: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      // Importar Promotion aquí para evitar dependencias circulares
+      const Promotion = (await import("../models/PromotionModel.js")).default;
+
+      // Contar promociones que tienen esta regla en su array discountRuleIds
+      const count = await Promotion.model.countDocuments({
+        discountRuleIds: id,
+      });
+
+      return res.json({ success: true, data: { count } });
+    } catch (error) {
+      console.error("Error contando promociones:", error);
       return res.status(500).json({ success: false, message: error.message });
     }
   },
@@ -49,33 +72,55 @@ const DiscountRuleController = {
 
       // Validar rangos numéricos
       if (updateData.timeWithoutSaleMonths !== undefined) {
-        if (typeof updateData.timeWithoutSaleMonths !== 'number' || updateData.timeWithoutSaleMonths < 0) {
-          return res.status(400).json({ success: false, message: 'timeWithoutSaleMonths debe ser un número mayor o igual a 0' });
+        if (
+          typeof updateData.timeWithoutSaleMonths !== "number" ||
+          updateData.timeWithoutSaleMonths < 0
+        ) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message:
+                "timeWithoutSaleMonths debe ser un número mayor o igual a 0",
+            });
         }
       }
 
       if (updateData.percentage !== undefined) {
-        if (typeof updateData.percentage !== 'number' || updateData.percentage < 0 || updateData.percentage > 100) {
-          return res.status(400).json({ success: false, message: 'percentage debe estar entre 0 y 100' });
+        if (
+          typeof updateData.percentage !== "number" ||
+          updateData.percentage < 0 ||
+          updateData.percentage > 100
+        ) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message: "percentage debe estar entre 0 y 100",
+            });
         }
       }
 
       const updatedRule = await DiscountRule.patch(id, updateData);
 
       if (!updatedRule) {
-        return res.status(404).json({ success: false, message: 'Regla de descuento no encontrada' });
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message: "Regla de descuento no encontrada",
+          });
       }
 
       return res.json({ success: true, data: updatedRule });
-
     } catch (error) {
-      console.error('Error en partialUpdate discountRule:', error);
+      console.error("Error en partialUpdate discountRule:", error);
 
-      if (error.name === 'ValidationError') {
+      if (error.name === "ValidationError") {
         return res.status(400).json({
           success: false,
-          message: 'Error de validación',
-          errors: Object.values(error.errors).map(e => e.message)
+          message: "Error de validación",
+          errors: Object.values(error.errors).map((e) => e.message),
         });
       }
 
@@ -96,23 +141,27 @@ const DiscountRuleController = {
       const updatedRule = await DiscountRule.model.findByIdAndUpdate(
         id,
         { $set: updateData },
-        { new: true, runValidators: true }
+        { new: true, runValidators: true },
       );
 
       if (!updatedRule) {
-        return res.status(404).json({ success: false, message: 'Regla de descuento no encontrada' });
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message: "Regla de descuento no encontrada",
+          });
       }
 
       return res.json({ success: true, data: updatedRule });
-
     } catch (error) {
-      console.error('Error en update discountRule:', error);
+      console.error("Error en update discountRule:", error);
 
-      if (error.name === 'ValidationError') {
+      if (error.name === "ValidationError") {
         return res.status(400).json({
           success: false,
-          message: 'Error de validación',
-          errors: Object.values(error.errors).map(e => e.message)
+          message: "Error de validación",
+          errors: Object.values(error.errors).map((e) => e.message),
         });
       }
 
@@ -123,21 +172,27 @@ const DiscountRuleController = {
   delete: async (req, res) => {
     try {
       const { id } = req.params;
-      
+
       const deletedRule = await DiscountRule.model.findByIdAndDelete(id);
 
       if (!deletedRule) {
-        return res.status(404).json({ success: false, message: 'Regla de descuento no encontrada' });
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message: "Regla de descuento no encontrada",
+          });
       }
 
-      return res.json({ success: true, message: 'Regla de descuento eliminada' });
-
+      return res.json({
+        success: true,
+        message: "Regla de descuento eliminada",
+      });
     } catch (error) {
-      console.error('Error en delete discountRule:', error);
+      console.error("Error en delete discountRule:", error);
       return res.status(500).json({ success: false, message: error.message });
     }
-  }
-
+  },
 };
 
 export default DiscountRuleController;

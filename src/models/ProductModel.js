@@ -4,12 +4,14 @@ import BaseModel from "./BaseModel.js";
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   sku: { type: String, trim: true, index: true },
+  brand: { type: String, trim: true, default: '' }, 
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
   supplier: { type: mongoose.Schema.Types.ObjectId, ref: "Supplier", required: true },
   age_range: { type: String, trim: true },
   price: { type: Number, default: 0 },
   stock: { type: Number, default: 0 },
   min_stock_alert: { type: Number, default: 0 },
+  lastSaleDate: { type: Date, default: null },
   metadata: { type: mongoose.Schema.Types.Mixed }
 }, {
   collection: "products",
@@ -31,9 +33,14 @@ class ProductModel extends BaseModel {
     return super.findById(id, ["category", "supplier"]);
   }
 
-  // 👇 NUEVO: acceso directo para optimización batch
   getNativeModel() {
     return mongooseModel;
+  }
+
+  
+  async getUniqueBrands() {
+    const brands = await mongooseModel.distinct('brand');
+    return brands.filter(b => b && b.trim() !== '');
   }
 }
 

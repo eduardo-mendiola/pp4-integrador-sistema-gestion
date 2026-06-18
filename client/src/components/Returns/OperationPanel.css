@@ -1,0 +1,456 @@
+.operation-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* ✅ Reducido de 20px a 16px para compactar */
+}
+
+.operation-panel h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Botonera de tipo de operación */
+.operation-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.operation-type-btn {
+  padding: 14px 12px;
+  border: 2px solid;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.operation-type-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.operation-type-btn.active {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.operation-type-label {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.operation-type-desc {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* Motivo */
+.reason-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reason-chip {
+  padding: 8px 14px;
+  background: #f2f2f2;
+  border: 2px solid #e1e8ed;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #525f7f;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reason-chip:hover {
+  background: #e9ecef;
+}
+
+.reason-chip.active {
+  background: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+/* ✅ NUEVO: Estilos para el textarea real */
+.custom-reason-input {
+  margin-top: 12px; /* ✅ Solo se separa cuando aparece */
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #333;
+  resize: vertical; /* Permite al usuario estirarlo si lo necesita */
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.custom-reason-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Búsqueda de productos de cambio */
+.exchange-search-wrapper {
+  position: relative;
+}
+
+.exchange-search-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.exchange-search-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.exchange-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  margin-top: 4px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.exchange-search-result {
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f0f4f8;
+}
+
+.exchange-search-result:hover {
+  background: #f2f2f2;
+}
+
+.exchange-search-result:last-child {
+  border-bottom: none;
+}
+
+.product-name {
+  font-size: 15px;
+  color: #333;
+  font-weight: 600;
+}
+
+.product-price {
+  font-size: 15px;
+  color: #007bff;
+  font-weight: 700;
+}
+
+.exchange-items-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exchange-item {
+  background: #f2f2f2;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exchange-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.exchange-item-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exchange-item-price {
+  font-size: 14px;
+  color: #8898aa;
+}
+
+.exchange-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.exchange-qty-input {
+  width: 55px;
+  padding: 6px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+}
+
+.exchange-item-subtotal {
+  font-size: 16px;
+  font-weight: 700;
+  color: #007bff;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Balance */
+.balance-section {
+  background: #f2f2f2;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 8px; /* ✅ Reducido para evitar espacio muerto */
+}
+
+.balance-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 16px;
+  color: #525f7f;
+}
+
+.balance-difference {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 14px;
+  background: white;
+  border: 2px solid;
+  border-radius: 8px;
+}
+
+.balance-label {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.balance-amount {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Botón procesar */
+.process-btn {
+  width: 100%;
+  padding: 16px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+}
+
+.process-btn:hover {
+  background: #218838;
+}
+
+/* Estilos para el mensaje de Cambio (Mismo) */
+.exchange-same-info {
+  background: #e7f8e7;
+  border: 2px solid #28a745;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.exchange-same-info p {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #155724;
+  font-weight: 600;
+}
+
+.exchange-same-info p:last-child {
+  margin: 0;
+  font-size: 14px;
+  color: #155724;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+
+
+/* Error */
+.operation-error {
+  background: #fde8e8;
+  border: 2px solid #dc3545;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #721c24;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* Campo requerido */
+.required {
+  color: #dc3545;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Operación completada */
+.operation-completed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.completed-icon {
+  width: 80px;
+  height: 80px;
+  background: #28a745;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.operation-completed h3 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  color: #28a745;
+  font-weight: 700;
+}
+
+.operation-completed p {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #525f7f;
+}
+
+.completed-hint {
+  font-size: 14px !important;
+  color: #8898aa !important;
+  font-style: italic;
+}
+
+/* ... mantener todos los estilos existentes ... */
+
+/* ✅ Error en rojo */
+.operation-error {
+  background: #fde8e8;
+  border: 2px solid #dc3545;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #721c24;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* Warning en amarillo con letras grises oscuras */
+.operation-warning {
+  background: #fff8e1;
+  border: 2px solid #ffb300;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #5d4037;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 16px;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* Resaltar chips cuando falta selección */
+.reason-chip.needs-selection {
+  animation: pulse 1s ease-in-out 2;
+  border-color: #ffb300;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 179, 0, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 179, 0, 0); }
+}
+
+.custom-reason-input.needs-input {
+  border-color: #ffb300;
+  animation: pulse 1s ease-in-out 2;
+}
+
+/* sección para descuento global */
+.balance-discount-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px dashed #e1e8ed;
+  margin-top: 8px;
+}
+
+.balance-discount-label {
+  font-size: 13px;
+  color: #ffc107;
+  font-weight: 600;
+}

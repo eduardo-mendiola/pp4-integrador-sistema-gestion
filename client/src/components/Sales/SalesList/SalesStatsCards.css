@@ -1,0 +1,71 @@
+.sales-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sales-stat-card {
+  border-radius: 12px;
+  padding: 24px;
+  color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.sales-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.sales-stat-content {
+  flex: 1;
+}
+
+.sales-stat-label {
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.sales-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sales-stat-suffix {
+  font-size: 20px;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-left: 4px;
+}
+
+@media (max-width: 1024px) {
+  .sales-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .sales-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sales-stat-value {
+    font-size: 28px;
+  }
+  
+  .sales-stat-card {
+    padding: 20px;
+  }
+}

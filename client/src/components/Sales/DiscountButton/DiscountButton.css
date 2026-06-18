@@ -1,0 +1,203 @@
+.discount-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #f2f2f2;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #525f7f;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.discount-btn:hover {
+  background: #e9ecef;
+  border-color: #cbd3da;
+}
+
+.discount-btn.active {
+  background: #ffc107;
+  border-color: #ffc107;
+  color: #333;
+}
+
+.discount-icon {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.discount-label {
+  font-size: 14px;
+}
+
+/* Modal */
+.discount-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.discount-modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.discount-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: #f2f2f2;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.discount-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 700;
+}
+
+.discount-modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #8898aa;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.discount-modal-close:hover {
+  background: #e9ecef;
+}
+
+.discount-modal-body {
+  padding: 24px;
+}
+
+.discount-modal-hint {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: #8898aa;
+}
+
+.discount-input-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.discount-input {
+  width: 100%;
+  padding: 14px 40px 14px 16px;
+  font-size: 24px;
+  font-weight: 700;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.discount-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.discount-suffix {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  font-weight: 700;
+  color: #8898aa;
+}
+
+.discount-quick-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.discount-quick-options button {
+  padding: 10px;
+  background: #f2f2f2;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #525f7f;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.discount-quick-options button:hover {
+  background: #e9ecef;
+  border-color: #cbd3da;
+}
+
+.discount-modal-actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  background: #f2f2f2;
+  border-top: 1px solid #e1e8ed;
+}
+
+.discount-btn-clear,
+.discount-btn-apply {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.discount-btn-clear {
+  background: #f2f2f2;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+}
+
+.discount-btn-clear:hover {
+  background: #fde8e8;
+}
+
+.discount-btn-apply {
+  background: #28a745;
+  color: white;
+}
+
+.discount-btn-apply:hover {
+  background: #218838;
+}

@@ -1,0 +1,118 @@
+.cancel-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3100;
+  animation: fadeIn 0.2s ease-out;
+  padding: 20px;
+}
+
+.cancel-confirm-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 460px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+  text-align: center;
+}
+
+.cancel-confirm-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.cancel-confirm-title {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.cancel-confirm-text {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  color: #525f7f;
+  line-height: 1.6;
+}
+
+.cancel-confirm-info {
+  background: #f2f2f2;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.cancel-confirm-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #525f7f;
+}
+
+.cancel-confirm-info-row strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.cancel-confirm-total {
+  color: #dc3545 !important;
+  font-size: 16px;
+}
+
+.cancel-confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.cancel-confirm-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+}
+
+.cancel-confirm-btn.secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.cancel-confirm-btn.secondary:hover {
+  background: #5a6268;
+}
+
+.cancel-confirm-btn.danger {
+  background: #dc3545;
+  color: white;
+}
+
+.cancel-confirm-btn.danger:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+@media (max-width: 480px) {
+  .cancel-confirm-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .cancel-confirm-modal {
+    padding: 24px;
+  }
+}

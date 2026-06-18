@@ -1,0 +1,235 @@
+/* Desglose de efectivo - Estilos compartidos */
+.cash-breakdown-section {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.cash-breakdown-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cash-breakdown-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.cash-breakdown-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cash-breakdown-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cash-type-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.cash-type-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #374151;
+}
+
+.cash-type-btn:hover {
+  border-color: #059669;
+  background: #f0fdf4;
+}
+
+.cash-type-btn.active {
+  border-color: #059669;
+  background: #059669;
+  color: white;
+}
+
+.cash-breakdown-field select,
+.cash-breakdown-field input {
+  padding: 10px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 15px;
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.cash-breakdown-field select:focus,
+.cash-breakdown-field input:focus {
+  outline: none;
+  border-color: #059669;
+}
+
+.cash-breakdown-add-btn {
+  padding: 10px 20px;
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.cash-breakdown-add-btn:hover {
+  background: #047857;
+  transform: translateY(-1px);
+}
+
+.cash-breakdown-error {
+  color: #dc2626;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+/* Tabla de desglose */
+.cash-breakdown-table-wrapper {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.cash-breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cash-breakdown-table thead {
+  background: #f3f4f6;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.cash-breakdown-table th {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cash-breakdown-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 15px;
+}
+
+.cash-breakdown-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.cash-type-badge {
+  font-size: 20px;
+}
+
+.denomination-cell {
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.quantity-edit-input {
+  width: 80px;
+  padding: 6px 8px;
+  border: 2px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 15px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.quantity-edit-input:focus {
+  outline: none;
+  border-color: #059669;
+}
+
+.subtotal-cell {
+  font-weight: 700;
+  color: #059669;
+  text-align: right;
+}
+
+.remove-item-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.remove-item-btn:hover {
+  background: #fee2e2;
+  transform: scale(1.1);
+}
+
+.cash-breakdown-table tfoot {
+  background: #f9fafb;
+  border-top: 2px solid #e5e7eb;
+}
+
+.cash-breakdown-table tfoot td {
+  padding: 16px 12px;
+  font-weight: 700;
+}
+
+.total-label {
+  text-align: right;
+  font-size: 16px;
+  color: #374151;
+}
+
+.total-value {
+  text-align: right;
+  font-size: 20px;
+  color: #059669;
+}
+
+.cash-breakdown-empty {
+  text-align: center;
+  padding: 24px;
+  color: #6b7280;
+  font-size: 15px;
+  font-style: italic;
+  background: white;
+  border-radius: 6px;
+  margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .cash-breakdown-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .cash-breakdown-add-btn {
+    width: 100%;
+  }
+}
