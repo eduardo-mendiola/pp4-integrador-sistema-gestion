@@ -144,7 +144,7 @@ export default function ReturnDetailModal({ returnData, onClose }) {
             </div>
           )}
 
-          {/* ✅ SECCIÓN: Desglose del Crédito Aplicado (Claro y sin confusiones) */}
+          {/* Desglose del Crédito Aplicado (Claro y sin confusiones) */}
           {returnData.metadata?.is_replacement && (
             <div className="return-detail-section">
               <h3 className="return-detail-section-title">Desglose del Cambio</h3>

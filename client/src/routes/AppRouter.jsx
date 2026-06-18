@@ -11,6 +11,7 @@ import ProductsPage from '../pages/products/ProductsPage.jsx';
 import CategoriesPage from '../pages/categories/CategoriesPage.jsx';
 import ClientsPage from '../pages/clients/ClientsPage.jsx';
 import CashRegisterPage from '../pages/cashRegisterPage/CashRegisterPage.jsx';
+import MovementsPage from '../pages/cashRegisterPage/MovementsPage.jsx';
 import SalesListPage from '../pages/sales/SalesListPage/SalesListPage.jsx';
 import UsersPage from '../pages/users/UsersPage.jsx';
 import RolesPage from '../pages/roles/RolesPage.jsx';
@@ -53,6 +54,7 @@ export default function AppRouter() {
 
         {/* Caja */}
         <Route path="caja/estado" element={<ProtectedRoute><CashRegisterPage /></ProtectedRoute>} />
+        <Route path="caja/movimientos" element={<ProtectedRoute><MovementsPage /></ProtectedRoute>} />
         
         {/* Ventas */}
         <Route path="ventas" element={<ProtectedRoute><SalesListPage /></ProtectedRoute>} />
