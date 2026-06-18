@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiRequest } from '../../services/api.js';
+import { apiRequest } from '../../../services/api.js';
 
 export default function useCashRegisterLogic() {
   const [cashRegister, setCashRegister] = useState(null);

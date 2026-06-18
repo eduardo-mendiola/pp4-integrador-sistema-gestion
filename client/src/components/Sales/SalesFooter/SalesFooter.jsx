@@ -13,19 +13,24 @@ export default function SalesFooter({ totals, itemsCount, loading, onCancel, onP
           <div className="sales-total-label">Subtotal</div>
           <div className="sales-total-value">${formatCurrency(totals.subtotal)}</div>
         </div>
+
+        <div className="sales-total-item">
+          <div className="sales-total-label">Subtotal con desc.</div>
+          <div className="sales-total-value">${formatCurrency(totals.subtotal - totals.discount)}</div>
+        </div>
         
         <div className="sales-total-item">
           <div className="sales-total-label">IVA ({totals.tax_rate}%)</div>
           <div className="sales-total-value">${formatCurrency(totals.tax)}</div>
         </div>
         
-        {/* ✅ Botón de descuento antes del total */}
+        {/* Botón de descuento antes del total */}
         <DiscountButton 
           discountRate={discountRate}
           onDiscountChange={onDiscountChange}
         />
         
-        {/* ✅ Si hay descuento, mostrar el cálculo */}
+        {/* Si hay descuento, mostrar el cálculo */}
         {totals.discount > 0 && (
           <div className="sales-total-item discount">
             <div className="sales-total-label">
