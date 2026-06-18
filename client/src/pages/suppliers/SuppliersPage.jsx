@@ -1,41 +1,39 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { apiRequest, unwrapList } from '../../services/api.js';
 import { exportToCsv, slugify } from '../../utils/csvExport.js';
-import ClientFormModal from './ClientFormModal.jsx';
-import ClientDetailModal from './ClientDetailModal.jsx';
+import SupplierFormModal from './SupplierFormModal.jsx';
+import SupplierDetailModal from './SupplierDetailModal.jsx';
 
 const PAGE_SIZE = 10;
 
 const STATUS_TABS = [
   { key: 'all', label: 'Todos' },
-  { key: 'active', label: 'En Stock' },
-  { key: 'cancelled', label: 'Cancelados' }
+  { key: 'ACTIVO', label: 'Activos' },
+  { key: 'SUSPENDIDO', label: 'Suspendidos' },
+  { key: 'CANCELADO', label: 'Cancelados' }
 ];
 
-const getFullName = (client) => {
-  const composed = `${client.first_name || ''} ${client.last_name || ''}`.trim();
-  return client.full_name || composed || client.business_name || '-';
+const STATUS_META = {
+  ACTIVO: { label: 'Activo', className: 'badge-success' },
+  SUSPENDIDO: { label: 'Suspendido', className: 'badge-info' },
+  CANCELADO: { label: 'Cancelado', className: 'badge-danger' }
 };
 
-const formatDate = (value) => {
-  if (!value) {
-    return '-';
+const getStatus = (supplier) => supplier.status || 'ACTIVO';
+
+const SUPPLIER_COLUMNS = [
+  { header: 'NRO. DE PROVEEDOR', value: (supplier) => supplier.supplier_code || '-' },
+  { header: 'NOMBRE', value: (supplier) => supplier.name || '-' },
+  { header: 'NOMBRE DE CONTACTO', value: (supplier) => supplier.contact_name || '-' },
+  { header: 'TELÉFONO', value: (supplier) => supplier.phone || '-' },
+  { header: 'EMAIL', value: (supplier) => supplier.email || '-' },
+  {
+    header: 'ESTADO',
+    value: (supplier) => (STATUS_META[getStatus(supplier)] || STATUS_META.ACTIVO).label
   }
-
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString('es-AR');
-};
-
-const CLIENT_COLUMNS = [
-  { header: 'NRO. DE CLIENTE', value: (client) => client.client_code || '-' },
-  { header: 'NOMBRE', value: (client) => getFullName(client) },
-  { header: 'TELÉFONO', value: (client) => client.phone || '-' },
-  { header: 'EMAIL', value: (client) => client.email || '-' },
-  { header: 'FECHA DE REGISTRO', value: (client) => formatDate(client.created_at) },
-  { header: 'ESTADO', value: (client) => (client.active ? 'Activo' : 'Cancelado') }
 ];
 
-function RowMenu({ client, onEdit, onDetail, onToggleActive }) {
+function RowMenu({ supplier, onEdit, onDetail, onDelete }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -71,18 +69,14 @@ function RowMenu({ client, onEdit, onDetail, onToggleActive }) {
       </button>
       {open ? (
         <div className="row-menu-dropdown">
-          <button type="button" onClick={() => runAction(() => onDetail(client))}>
+          <button type="button" onClick={() => runAction(() => onDetail(supplier))}>
             Ver detalle
           </button>
-          <button type="button" onClick={() => runAction(() => onEdit(client))}>
+          <button type="button" onClick={() => runAction(() => onEdit(supplier))}>
             Editar
           </button>
-          <button
-            type="button"
-            className={client.active ? 'danger-text' : ''}
-            onClick={() => runAction(() => onToggleActive(client))}
-          >
-            {client.active ? 'Borrar' : 'Reactivar'}
+          <button type="button" className="danger-text" onClick={() => runAction(() => onDelete(supplier))}>
+            Borrar
           </button>
         </div>
       ) : null}
@@ -90,8 +84,8 @@ function RowMenu({ client, onEdit, onDetail, onToggleActive }) {
   );
 }
 
-export default function ClientsPage() {
-  const [clients, setClients] = useState([]);
+export default function SuppliersPage() {
+  const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -99,17 +93,17 @@ export default function ClientsPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [page, setPage] = useState(1);
 
-  const [formClient, setFormClient] = useState(null);
+  const [formSupplier, setFormSupplier] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [detailClient, setDetailClient] = useState(null);
+  const [detailSupplier, setDetailSupplier] = useState(null);
 
   const loadData = async () => {
     setLoading(true);
     setError('');
 
     try {
-      const payload = await apiRequest('/api/clients');
-      setClients(unwrapList(payload));
+      const payload = await apiRequest('/api/suppliers');
+      setSuppliers(unwrapList(payload));
     } catch (loadError) {
       setError(loadError.message);
     } finally {
@@ -125,14 +119,11 @@ export default function ClientsPage() {
     setPage(1);
   }, [search, statusFilter]);
 
-  const filteredClients = useMemo(() => {
+  const filteredSuppliers = useMemo(() => {
     const term = search.trim().toLowerCase();
 
-    return clients.filter((client) => {
-      if (statusFilter === 'active' && !client.active) {
-        return false;
-      }
-      if (statusFilter === 'cancelled' && client.active) {
+    return suppliers.filter((supplier) => {
+      if (statusFilter !== 'all' && getStatus(supplier) !== statusFilter) {
         return false;
       }
 
@@ -141,11 +132,11 @@ export default function ClientsPage() {
       }
 
       const haystack = [
-        client.client_code,
-        getFullName(client),
-        client.business_name,
-        client.email,
-        client.phone
+        supplier.supplier_code,
+        supplier.name,
+        supplier.contact_name,
+        supplier.email,
+        supplier.phone
       ]
         .filter(Boolean)
         .join(' ')
@@ -153,64 +144,54 @@ export default function ClientsPage() {
 
       return haystack.includes(term);
     });
-  }, [clients, search, statusFilter]);
+  }, [suppliers, search, statusFilter]);
 
-  const total = filteredClients.length;
+  const total = filteredSuppliers.length;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const pageItems = filteredClients.slice(startIndex, startIndex + PAGE_SIZE);
+  const pageItems = filteredSuppliers.slice(startIndex, startIndex + PAGE_SIZE);
   const rangeFrom = total === 0 ? 0 : startIndex + 1;
   const rangeTo = Math.min(startIndex + PAGE_SIZE, total);
 
   const handleExport = () => {
     const statusLabel = STATUS_TABS.find((tab) => tab.key === statusFilter)?.label || 'todos';
-    exportToCsv(`clientes_${slugify(statusLabel)}`, filteredClients, CLIENT_COLUMNS);
+    exportToCsv(`proveedores_${slugify(statusLabel)}`, filteredSuppliers, SUPPLIER_COLUMNS);
   };
 
   const openCreate = () => {
-    setFormClient(null);
+    setFormSupplier(null);
     setShowForm(true);
   };
 
-  const openEdit = (client) => {
-    setFormClient(client);
+  const openEdit = (supplier) => {
+    setFormSupplier(supplier);
     setShowForm(true);
   };
 
   const handleSaved = async () => {
     setShowForm(false);
-    setFormClient(null);
+    setFormSupplier(null);
     await loadData();
   };
 
-  const handleToggleActive = async (client) => {
-    const id = client._id || client.id;
-    const cancelling = client.active;
-    const confirmed = window.confirm(
-      cancelling ? '¿Borrar este cliente?' : '¿Reactivar este cliente?'
-    );
+  const handleDelete = async (supplier) => {
+    const id = supplier._id || supplier.id;
+    const confirmed = window.confirm('¿Borrar este proveedor?');
     if (!confirmed) {
       return;
     }
 
     try {
-      if (cancelling) {
-        await apiRequest(`/api/clients/${id}`, { method: 'DELETE' });
-      } else {
-        await apiRequest(`/api/clients/${id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ active: true })
-        });
-      }
+      await apiRequest(`/api/suppliers/${id}`, { method: 'DELETE' });
       await loadData();
-    } catch (toggleError) {
-      setError(toggleError.message);
+    } catch (deleteError) {
+      setError(deleteError.message);
     }
   };
 
   if (loading) {
-    return <div className="state-box">Cargando clientes...</div>;
+    return <div className="state-box">Cargando proveedores...</div>;
   }
 
   return (
@@ -218,7 +199,7 @@ export default function ClientsPage() {
       <header className="section-header">
         <div>
           <p className="eyebrow">Módulo</p>
-          <h2>Listado de clientes</h2>
+          <h2>Listado de proveedores</h2>
         </div>
         <button type="button" className="btn-with-icon" onClick={openCreate}>
           <svg
@@ -236,7 +217,7 @@ export default function ClientsPage() {
             <line x1="12" y1="8" x2="12" y2="16" />
             <line x1="8" y1="12" x2="16" y2="12" />
           </svg>
-          Nuevo Cliente
+          Nuevo Proveedor
         </button>
       </header>
 
@@ -245,7 +226,7 @@ export default function ClientsPage() {
           <div className="search-input">
             <input
               type="search"
-              placeholder="Buscar cliente..."
+              placeholder="Buscar proveedor..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
             />
@@ -269,7 +250,7 @@ export default function ClientsPage() {
             type="button"
             className="secondary-button"
             onClick={handleExport}
-            disabled={filteredClients.length === 0}
+            disabled={filteredSuppliers.length === 0}
           >
             Exportar a Excel
           </button>
@@ -294,11 +275,11 @@ export default function ClientsPage() {
           <table>
             <thead>
               <tr>
-                <th>NRO. DE CLIENTE</th>
+                <th>NRO. DE PROVEEDOR</th>
                 <th>NOMBRE</th>
+                <th>NOMBRE DE CONTACTO</th>
                 <th>TELÉFONO</th>
                 <th>EMAIL</th>
-                <th>FECHA DE REGISTRO</th>
                 <th>ESTADO</th>
                 <th aria-label="Acciones" />
               </tr>
@@ -306,39 +287,42 @@ export default function ClientsPage() {
             <tbody>
               {pageItems.length === 0 ? (
                 <tr>
-                  <td colSpan={7}>No hay clientes para mostrar.</td>
+                  <td colSpan={7}>No hay proveedores para mostrar.</td>
                 </tr>
               ) : (
-                pageItems.map((client) => (
-                  <tr key={client._id || client.id}>
-                    <td>
-                      <button
-                        type="button"
-                        className="code-link"
-                        onClick={() => setDetailClient(client)}
-                      >
-                        {client.client_code || '-'}
-                      </button>
-                    </td>
-                    <td>{getFullName(client)}</td>
-                    <td>{client.phone || '-'}</td>
-                    <td>{client.email || '-'}</td>
-                    <td>{formatDate(client.created_at)}</td>
-                    <td>
-                      <span className={`badge ${client.active ? 'badge-success' : 'badge-danger'}`}>
-                        {client.active ? 'Activo' : 'Cancelado'}
-                      </span>
-                    </td>
-                    <td>
-                      <RowMenu
-                        client={client}
-                        onEdit={openEdit}
-                        onDetail={setDetailClient}
-                        onToggleActive={handleToggleActive}
-                      />
-                    </td>
-                  </tr>
-                ))
+                pageItems.map((supplier) => {
+                  const status = getStatus(supplier);
+                  const meta = STATUS_META[status] || STATUS_META.ACTIVO;
+
+                  return (
+                    <tr key={supplier._id || supplier.id}>
+                      <td>
+                        <button
+                          type="button"
+                          className="code-link"
+                          onClick={() => setDetailSupplier(supplier)}
+                        >
+                          {supplier.supplier_code || '-'}
+                        </button>
+                      </td>
+                      <td>{supplier.name || '-'}</td>
+                      <td>{supplier.contact_name || '-'}</td>
+                      <td>{supplier.phone || '-'}</td>
+                      <td>{supplier.email || '-'}</td>
+                      <td>
+                        <span className={`badge ${meta.className}`}>{meta.label}</span>
+                      </td>
+                      <td>
+                        <RowMenu
+                          supplier={supplier}
+                          onEdit={openEdit}
+                          onDetail={setDetailSupplier}
+                          onDelete={handleDelete}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
@@ -370,15 +354,15 @@ export default function ClientsPage() {
       </div>
 
       {showForm ? (
-        <ClientFormModal
-          client={formClient}
+        <SupplierFormModal
+          supplier={formSupplier}
           onClose={() => setShowForm(false)}
           onSaved={handleSaved}
         />
       ) : null}
 
-      {detailClient ? (
-        <ClientDetailModal client={detailClient} onClose={() => setDetailClient(null)} />
+      {detailSupplier ? (
+        <SupplierDetailModal supplier={detailSupplier} onClose={() => setDetailSupplier(null)} />
       ) : null}
     </section>
   );

@@ -26,6 +26,13 @@ export const moduleCards = [
     allowedRoles: ['admin', 'manager', 'Administrador', 'Gerente de Proyecto', 'CEO', 'executive']
   },
   {
+    key: 'suppliers',
+    path: '/proveedores',
+    label: 'Proveedores',
+    permission: 'view_suppliers',
+    allowedRoles: ['admin', 'manager', 'Administrador', 'Gerente de Proyecto', 'CEO', 'executive']
+  },
+  {
     key: 'sales',
     path: '/ventas',
     label: 'Ventas',

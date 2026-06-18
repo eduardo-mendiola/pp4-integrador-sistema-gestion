@@ -10,6 +10,7 @@ import NotFoundPage from '../pages/NotFoundPage.jsx';
 import ProductsPage from '../pages/products/ProductsPage.jsx';
 import CategoriesPage from '../pages/categories/CategoriesPage.jsx';
 import ClientsPage from '../pages/clients/ClientsPage.jsx';
+import SuppliersPage from '../pages/suppliers/SuppliersPage.jsx';
 import SalesPage from '../pages/sales/SalesPage.jsx';
 import UsersPage from '../pages/users/UsersPage.jsx';
 
@@ -17,6 +18,7 @@ const pageByKey = {
   products: ProductsPage,
   categories: CategoriesPage,
   clients: ClientsPage,
+  suppliers: SuppliersPage,
   sales: SalesPage,
   users: UsersPage
 };

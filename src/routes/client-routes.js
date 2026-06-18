@@ -9,7 +9,7 @@ router.use(isAuthenticated);
 router.get('/', ClientController.getAll);
 router.get('/:id', ClientController.getById);
 router.post('/', ClientController.create);
-router.patch('/:id', ClientController.update);
+router.patch('/:id', ClientController.partialUpdate);
 router.put('/:id', ClientController.update);
 router.delete('/:id', ClientController.remove);
 
