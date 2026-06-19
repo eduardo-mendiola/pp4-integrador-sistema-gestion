@@ -4,6 +4,9 @@ import KPICards from '../../components/Statistics/KPICards/KPICards';
 import EvolutionChart from '../../components/Statistics/EvolutionChart/EvolutionChart';
 import PaymentMethodChart from '../../components/Statistics/PaymentMethodChart/PaymentMethodChart';
 import TopProductsChart from '../../components/Statistics/TopProductsChart/TopProductsChart';
+import SalesByHourChart from '../../components/Statistics/SalesByHourChart/SalesByHourChart';
+import SalesByStatusChart from '../../components/Statistics/SalesByStatusChart/SalesByStatusChart';
+import SalesByCategoryChart from '../../components/Statistics/SalesByCategoryChart/SalesByCategoryChart';
 import './StatisticsPage.css';
 
 export default function StatisticsPage() {
@@ -95,7 +98,7 @@ export default function StatisticsPage() {
           {/* KPIs */}
           <KPICards kpis={statisticsData.kpis} />
           
-          {/* Gráficos en grid */}
+          {/* Gráficos principales */}
           <div className="charts-grid">
             <EvolutionChart data={statisticsData.evolution} />
             <PaymentMethodChart data={statisticsData.byPaymentMethod} />
@@ -103,6 +106,15 @@ export default function StatisticsPage() {
           
           {/* Top productos */}
           <TopProductsChart data={statisticsData.topProducts} />
+          
+          {/* Gráficos secundarios */}
+          <div className="charts-grid-secondary">
+            <SalesByHourChart data={statisticsData.byHour} />
+            <SalesByStatusChart data={statisticsData.byStatus} />
+          </div>
+          
+          {/* Ventas por categoría */}
+          <SalesByCategoryChart data={statisticsData.byCategory} />
         </div>
       )}
     </div>
