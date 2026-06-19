@@ -1,9 +1,23 @@
+import mongoose from "mongoose";
 import Supplier from "../models/SupplierModel.js";
+import CodeGenerator from "../utils/CodeGenerator.js";
+
+const codeGenerator = new CodeGenerator("suppliers");
 
 const SupplierController = {
   create: async (req, res) => {
     try {
-      const supplier = await Supplier.create(req.body);
+      const payload = { ...req.body };
+
+      // Generar código automático
+      if (!payload.supplier_code) {
+        payload.supplier_code = codeGenerator.generateCodeFromId(
+          new mongoose.Types.ObjectId(),
+          "PRO-",
+        );
+      }
+
+      const supplier = await Supplier.create(payload);
       return res.status(201).json({ success: true, data: supplier });
     } catch (error) {
       return res.status(400).json({ success: false, message: error.message });
@@ -40,6 +54,7 @@ const SupplierController = {
 
       // Sanitizar campos inmutables y timestamps
       delete updateData._id;
+      delete updateData.supplier_code;
       delete updateData.createdAt;
       delete updateData.updatedAt;
 
@@ -102,15 +117,20 @@ const SupplierController = {
     }
   },
 
+  // Baja lógica
   remove: async (req, res) => {
     try {
-      const deleted = await Supplier.model.findByIdAndDelete(req.params.id);
+      const supplier = await Supplier.model.findByIdAndUpdate(
+        req.params.id,
+        { status: "CANCELADO" },
+        { new: true },
+      );
 
-      if (!deleted) {
+      if (!supplier) {
         return res.status(404).json({ success: false, message: "Proveedor no encontrado" });
       }
 
-      return res.json({ success: true, message: "Proveedor eliminado" });
+      return res.json({ success: true, message: "Proveedor cancelado" });
     } catch (error) {
       return res.status(500).json({ success: false, message: error.message });
     }
