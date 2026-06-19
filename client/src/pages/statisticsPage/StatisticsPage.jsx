@@ -2,6 +2,8 @@ import React from 'react';
 import useStatisticsLogic from './useStatisticsLogic';
 import KPICards from '../../components/Statistics/KPICards/KPICards';
 import EvolutionChart from '../../components/Statistics/EvolutionChart/EvolutionChart';
+import PaymentMethodChart from '../../components/Statistics/PaymentMethodChart/PaymentMethodChart';
+import TopProductsChart from '../../components/Statistics/TopProductsChart/TopProductsChart';
 import './StatisticsPage.css';
 
 export default function StatisticsPage() {
@@ -93,8 +95,14 @@ export default function StatisticsPage() {
           {/* KPIs */}
           <KPICards kpis={statisticsData.kpis} />
           
-          {/* Gráfico de evolución */}
-          <EvolutionChart data={statisticsData.evolution} />
+          {/* Gráficos en grid */}
+          <div className="charts-grid">
+            <EvolutionChart data={statisticsData.evolution} />
+            <PaymentMethodChart data={statisticsData.byPaymentMethod} />
+          </div>
+          
+          {/* Top productos */}
+          <TopProductsChart data={statisticsData.topProducts} />
         </div>
       )}
     </div>

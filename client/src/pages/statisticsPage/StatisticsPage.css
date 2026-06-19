@@ -197,6 +197,25 @@
   text-align: left;
 }
 
+/* Grid de gráficos */
+.statistics-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .period-buttons {
     flex-direction: column;
