@@ -1,0 +1,196 @@
+.cash-closing-report {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Detalle por caja */
+.register-detail {
+  background: white;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.register-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.register-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+  font-weight: 700;
+}
+
+.register-id {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: #6c757d;
+  background: #f8f9fa;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+.register-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 13px;
+  color: #6c757d;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.info-value.positive {
+  color: #28a745;
+}
+
+.info-value.negative {
+  color: #dc3545;
+}
+
+.info-value.income {
+  color: #28a745;
+}
+
+.info-value.expense {
+  color: #dc3545;
+}
+
+/* Movimientos de la caja */
+.register-movements {
+  margin-top: 24px;
+}
+
+.register-movements h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.movements-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.movements-table th {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #525f7f;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.movements-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f4f8;
+  font-size: 14px;
+  color: #333;
+}
+
+.movements-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.movements-table th.text-right,
+.movements-table td.text-right {
+  text-align: right;
+}
+
+/* Badges */
+.movement-type-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.movement-type-badge.income {
+  background: #d4edda;
+  color: #155724;
+}
+
+.movement-type-badge.expense {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.movement-amount {
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+.movement-amount.income {
+  color: #28a745;
+}
+
+.movement-amount.expense {
+  color: #dc3545;
+}
+
+/* Estilos para impresión */
+@media print {
+  .report-actions {
+    display: none !important;
+  }
+  
+  .report-content {
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  .register-detail {
+    page-break-inside: avoid;
+    box-shadow: none;
+  }
+  
+  .movements-table {
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .register-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
