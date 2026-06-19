@@ -5,6 +5,7 @@ import MovementsReport from '../../../components/CashRegister/Reports/MovementsR
 import CashClosingReport from '../../../components/CashRegister/Reports/CashClosingReport';
 import SalesReport from '../../../components/CashRegister/Reports/SalesReport';
 import TopProductsReport from '../../../components/CashRegister/Reports/TopProductsReport';
+import ReturnsReport from '../../../components/CashRegister/Reports/ReturnsReport';
 import './ReportsPage.css';
 
 export default function ReportsPage() {
@@ -41,13 +42,7 @@ export default function ReportsPage() {
       case 'top-products':
         return <TopProductsReport data={reportData} />;
       case 'returns':
-        return (
-          <div className="report-results">
-            <h3>Reporte: {reportTitles[selectedReport]}</h3>
-            <p>Próximamente...</p>
-            <pre>{JSON.stringify(reportData, null, 2)}</pre>
-          </div>
-        );
+        return <ReturnsReport data={reportData} />;
       default:
         return null;
     }

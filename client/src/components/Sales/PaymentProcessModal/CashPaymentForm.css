@@ -85,7 +85,7 @@
 }
 
 .cash-form-change.negative .cash-form-change-value {
-  color: #dc3545;
+  color: #dc4655;
 }
 
 .cash-form-change.positive {
@@ -98,7 +98,7 @@
 }
 
 .cash-form-change.positive .cash-form-change-value {
-  color: #28a745;
+  color: #43a258;
 }
 
 .cash-form-change.exact {
@@ -152,7 +152,7 @@
 }
 
 .cash-form-btn.process {
-  background: #28a745;
+  background: #43a258;
   color: white;
 }
 

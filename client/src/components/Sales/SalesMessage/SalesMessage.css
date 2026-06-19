@@ -54,11 +54,11 @@
 .sales-message.success {
   background-color: #d4edda;
   color: #155724;
-  border-left-color: #28a745;
+  border-left-color: #43a258;
 }
 
 .sales-message.success .sales-message-icon {
-  background-color: #28a745;
+  background-color: #43a258;
   color: white;
 }
 
@@ -66,11 +66,11 @@
 .sales-message.error {
   background-color: #f8d7da;
   color: #721c24;
-  border-left-color: #dc3545;
+  border-left-color: #dc4655;
 }
 
 .sales-message.error .sales-message-icon {
-  background-color: #dc3545;
+  background-color: #dc4655;
   color: white;
 }
 
@@ -78,11 +78,11 @@
 .sales-message.warning {
   background-color: #fff3cd;
   color: #856404;
-  border-left-color: #ffc107;
+  border-left-color: #fcc92e;
 }
 
 .sales-message.warning .sales-message-icon {
-  background-color: #ffc107;
+  background-color: #fcc92e;
   color: #856404;
 }
 
@@ -125,7 +125,7 @@
 }
 
 .sales-message.idle .sales-message-icon {
-  background-color: #28a745;
+  background-color: #43a258;
   color: white;
   font-size: 10px;
   animation: pulse 2s infinite;
@@ -150,11 +150,11 @@
 .sales-message.closed {
   background-color: #f8d7da;
   color: #721c24;
-  border-left-color: #dc3545;
+  border-left-color: #dc4655;
 }
 
 .sales-message.closed .sales-message-icon {
-  background-color: #dc3545;
+  background-color: #dc4655;
   color: white;
   animation: none;
 }

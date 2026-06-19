@@ -41,9 +41,9 @@
 }
 
 .client-selector-btn.edit {
-  background-color: #ffc107;
+  background-color: #fcc92e;
   color: #212529;
-  border-color: #ffc107;
+  border-color: #fcc92e;
 }
 
 .client-selector-btn.edit:hover {
@@ -52,12 +52,12 @@
 
 .client-selector-btn.change {
   background-color: white;
-  color: #dc3545;
-  border-color: #dc3545;
+  color: #dc4655;
+  border-color: #dc4655;
 }
 
 .client-selector-btn.change:hover {
-  background-color: #dc3545;
+  background-color: #dc4655;
   color: white;
 }
 

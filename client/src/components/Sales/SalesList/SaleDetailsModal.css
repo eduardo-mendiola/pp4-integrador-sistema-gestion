@@ -268,7 +268,7 @@
   background: #f8d7da;
   padding: 14px;
   border-radius: 8px;
-  border-left: 4px solid #dc3545;
+  border-left: 4px solid #dc4655;
 }
 
 .sale-details-cancel-reason p {
@@ -382,12 +382,12 @@
 }
 
 .sale-details-item-discount-rate {
-  color: #ffc107;
+  color: #fcc92e;
   font-weight: 700;
 }
 
 .sale-details-item-discount {
-  color: #ffc107;
+  color: #fcc92e;
   font-weight: 600;
 }
 

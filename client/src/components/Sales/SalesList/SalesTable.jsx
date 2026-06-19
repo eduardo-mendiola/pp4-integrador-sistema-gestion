@@ -8,9 +8,9 @@ const statusLabels = {
 };
 
 const statusColors = {
-  PAID: '#28a745',
-  PENDING: '#ffc107',
-  CANCELLED: '#dc3545'
+  PAID: '#43a258',
+  PENDING: '#fcc92e',
+  CANCELLED: '#dc4655'
 };
 
 // Función auxiliar fuera del componente para que sea estable

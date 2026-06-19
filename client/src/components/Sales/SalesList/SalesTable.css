@@ -171,22 +171,22 @@
 
 .sales-action-btn.reprint {
   background: #e7f8e7;
-  color: #28a745;
+  color: #43a258;
 }
 
 .sales-action-btn.reprint:hover {
-  background: #28a745;
+  background: #43a258;
   color: white;
   transform: translateY(-1px);
 }
 
 .sales-action-btn.cancel {
   background: #fde8e8;
-  color: #dc3545;
+  color: #dc4655;
 }
 
 .sales-action-btn.cancel:hover {
-  background: #dc3545;
+  background: #dc4655;
   color: white;
   transform: translateY(-1px);
 }

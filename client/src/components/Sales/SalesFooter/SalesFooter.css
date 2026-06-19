@@ -89,11 +89,11 @@
 }
 
 .sales-total-item.discount {
-  color: #ffc107;
+  color: #fcc92e;
 }
 
 .sales-total-item.discount .sales-total-value {
-  color: #ffc107;
+  color: #fcc92e;
   font-weight: 700;
 }
 

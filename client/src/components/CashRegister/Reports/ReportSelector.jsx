@@ -7,7 +7,7 @@ const reportTypes = [
     icon: '💰',
     title: 'Cierre de Caja',
     description: 'Resumen de apertura y cierre de caja con ingresos, egresos y diferencia.',
-    color: '#28a745'
+    color: '#43a258'
   },
   {
     key: 'sales',
@@ -35,7 +35,7 @@ const reportTypes = [
     icon: '↩️',
     title: 'Devoluciones y Cambios',
     description: 'Reporte de devoluciones procesadas con motivos y montos.',
-    color: '#dc3545'
+    color: '#dc4655'
   }
 ];
 

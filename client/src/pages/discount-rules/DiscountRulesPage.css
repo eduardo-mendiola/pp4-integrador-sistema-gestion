@@ -54,7 +54,7 @@
 
 .btn-danger {
   padding: 10px 20px;
-  background: #dc3545;
+  background: #dc4655;
   color: white;
   border: none;
   border-radius: 6px;
@@ -182,7 +182,7 @@
 
 .warning-box {
   background: #fff3cd;
-  border: 1px solid #ffc107;
+  border: 1px solid #fcc92e;
   border-radius: 6px;
   padding: 12px 16px;
   color: #856404;
@@ -338,8 +338,8 @@
 .clear-all-btn {
   padding: 4px 10px;
   background: transparent;
-  color: #dc3545;
-  border: 1px solid #dc3545;
+  color: #dc4655;
+  border: 1px solid #dc4655;
   border-radius: 4px;
   font-size: 15px;
   font-weight: 600;
@@ -348,7 +348,7 @@
 }
 
 .clear-all-btn:hover {
-  background: #dc3545;
+  background: #dc4655;
   color: white;
 }
 
@@ -391,7 +391,7 @@
   border: none;
   border-radius: 50%;
   background: #fde8e8;
-  color: #dc3545;
+  color: #dc4655;
   font-size: 15px;
   cursor: pointer;
   transition: all 0.2s;
@@ -402,7 +402,7 @@
 }
 
 .selected-product-remove:hover {
-  background: #dc3545;
+  background: #dc4655;
   color: white;
 }
 
