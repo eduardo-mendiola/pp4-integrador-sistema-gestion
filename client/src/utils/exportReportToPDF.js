@@ -17,13 +17,16 @@ export async function exportReportToPDF(element, filename = 'reporte', options =
     orientation = 'portrait',
     unit = 'mm',
     format = 'a4',
-    margin = 10
+    marginTop = 0,
+    marginBottom = 0,
+    marginLeft = 10,
+    marginRight = 10
   } = options;
 
   try {
     // Capturar el elemento como imagen
     const canvas = await html2canvas(element, {
-      scale: 2,
+      scale: 1.8,
       useCORS: true,
       backgroundColor: '#ffffff',
       logging: false
@@ -41,21 +44,21 @@ export async function exportReportToPDF(element, filename = 'reporte', options =
     // Calcular dimensiones
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pageWidth - (margin * 2);
+    const imgWidth = pageWidth - marginLeft - marginRight;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
     // Si la imagen es más alta que la página, dividir en páginas
     let heightLeft = imgHeight;
-    let position = margin;
+    let position = marginTop;
 
-    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-    heightLeft -= (pageHeight - margin * 2);
+    pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
+    heightLeft -= (pageHeight - marginTop - marginBottom);
 
     while (heightLeft > 0) {
-      position = heightLeft - imgHeight + margin;
+      position = heightLeft - imgHeight + marginTop;
       pdf.addPage();
-      pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-      heightLeft -= (pageHeight - margin * 2);
+      pdf.addImage(imgData, 'PNG', marginLeft, position, imgWidth, imgHeight);
+      heightLeft -= (pageHeight - marginTop - marginBottom);
     }
 
     // Descargar
