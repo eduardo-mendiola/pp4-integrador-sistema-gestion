@@ -1,0 +1,83 @@
+.top-products-report {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* SKU del producto */
+.product-sku {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: #525f7f;
+  background: #f2f2f2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #e1e8ed;
+}
+
+/* Nombre del producto */
+.product-name {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Badge de ranking */
+.rank-badge {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Badge de cantidad */
+.quantity-badge {
+  display: inline-block;
+  background: #e7f3ff;
+  color: #007bff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Ingresos */
+.revenue {
+  font-weight: 700;
+  color: #28a745;
+  font-size: 16px;
+}
+
+/* Filas top 3 */
+.report-table tbody tr.top-3 {
+  background: #fff9e6;
+}
+
+.report-table tbody tr.top-3:hover {
+  background: #fff3cd;
+}
+
+/* Estilos para impresión */
+@media print {
+  .report-actions {
+    display: none !important;
+  }
+  
+  .report-content {
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  .report-table {
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .report-table th,
+  .report-table td {
+    padding: 8px;
+    font-size: 13px;
+  }
+  
+  .rank-badge {
+    font-size: 16px;
+  }
+}

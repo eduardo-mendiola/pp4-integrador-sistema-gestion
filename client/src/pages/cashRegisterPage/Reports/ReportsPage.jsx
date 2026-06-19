@@ -4,6 +4,7 @@ import ReportSelector from '../../../components/CashRegister/Reports/ReportSelec
 import MovementsReport from '../../../components/CashRegister/Reports/MovementsReport';
 import CashClosingReport from '../../../components/CashRegister/Reports/CashClosingReport';
 import SalesReport from '../../../components/CashRegister/Reports/SalesReport';
+import TopProductsReport from '../../../components/CashRegister/Reports/TopProductsReport';
 import './ReportsPage.css';
 
 export default function ReportsPage() {
@@ -38,6 +39,7 @@ export default function ReportsPage() {
       case 'sales':
         return <SalesReport data={reportData} />;
       case 'top-products':
+        return <TopProductsReport data={reportData} />;
       case 'returns':
         return (
           <div className="report-results">
@@ -100,7 +102,7 @@ export default function ReportsPage() {
               onClick={generateReport}
               disabled={loading}
             >
-              {loading ? 'Generando...' : '📄 Generar Reporte'}
+              {loading ? 'Generando...' : 'Generar Reporte'}
             </button>
           </div>
 

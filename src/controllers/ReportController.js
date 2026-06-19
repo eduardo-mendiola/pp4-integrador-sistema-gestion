@@ -290,7 +290,9 @@ const ReportController = {
         }
       }
 
-      const sales = await Sale.model.find(query).lean();
+      const sales = await Sale.model.find(query)
+        .populate("items.product", "name sku")
+        .lean();
 
       // Acumular ventas por producto
       const productMap = {};
