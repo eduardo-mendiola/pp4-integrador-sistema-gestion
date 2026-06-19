@@ -155,11 +155,11 @@
 
 .rules-action-btn.delete {
   background: #fde8e8;
-  color: #dc3545;
+  color: #dc4655;
 }
 
 .rules-action-btn.delete:hover {
-  background: #dc3545;
+  background: #dc4655;
   color: white;
   transform: translateY(-1px);
 }

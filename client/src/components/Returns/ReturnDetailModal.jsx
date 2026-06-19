@@ -168,7 +168,7 @@ export default function ReturnDetailModal({ returnData, onClose }) {
                 </div>
 
                 {returnData.difference <= 0 && (
-                  <div className="return-detail-total-row" style={{ color: '#28a745', fontWeight: '700', marginTop: '8px' }}>
+                  <div className="return-detail-total-row" style={{ color: '#43a258', fontWeight: '700', marginTop: '8px' }}>
                     <span>✓ El crédito cubre el total de la nueva compra</span>
                     <span>$0,00</span>
                   </div>

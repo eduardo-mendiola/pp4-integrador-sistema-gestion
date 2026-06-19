@@ -140,7 +140,7 @@
 
 .exchange-discount-input:focus {
   outline: none;
-  border-color: #ffc107;
+  border-color: #fcc92e;
   background-color: #fffbf0;
 }
 
@@ -175,7 +175,7 @@
 
 .exchange-price-discount {
   display: block;
-  color: #ffc107;
+  color: #fcc92e;
   font-size: 11px;
   font-weight: 600;
   margin-bottom: 2px;

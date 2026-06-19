@@ -40,9 +40,9 @@ export default function SaleDetailsModal({ sale, onClose, onReprint }) {
   };
 
   const statusConfig = {
-    PAID: { label: 'Pagada', color: '#28a745' },
-    PENDING: { label: 'Pendiente', color: '#ffc107', textColor: '#333' },
-    CANCELLED: { label: 'Anulada', color: '#dc3545' }
+    PAID: { label: 'Pagada', color: '#43a258' },
+    PENDING: { label: 'Pendiente', color: '#fcc92e', textColor: '#333' },
+    CANCELLED: { label: 'Anulada', color: '#dc4655' }
   };
 
   const status = statusConfig[sale.status] || statusConfig.PENDING;

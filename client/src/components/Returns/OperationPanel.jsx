@@ -103,9 +103,9 @@ export default function OperationPanel({
       return { text: 'Sin diferencia a pagar', color: '#6c757d' };
     }
     if (totals.difference > 0) {
-      return { text: 'DIFERENCIA A PAGAR (con IVA)', color: '#28a745' };
+      return { text: 'DIFERENCIA A PAGAR (con IVA)', color: '#43a258' };
     }
-    return { text: 'SALDO A FAVOR DEL CLIENTE', color: '#dc3545' };
+    return { text: 'SALDO A FAVOR DEL CLIENTE', color: '#dc4655' };
   };
 
   const balanceLabel = getBalanceLabel();

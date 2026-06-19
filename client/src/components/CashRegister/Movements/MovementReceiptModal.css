@@ -56,7 +56,7 @@
 }
 
 .movement-receipt-btn.print {
-  background: #28a745;
+  background: #43a258;
   color: white;
 }
 
@@ -151,11 +151,11 @@
 }
 
 .movement-receipt-amount-value.income {
-  color: #28a745;
+  color: #43a258;
 }
 
 .movement-receipt-amount-value.expense {
-  color: #dc3545;
+  color: #dc4655;
 }
 
 .movement-receipt-footer {

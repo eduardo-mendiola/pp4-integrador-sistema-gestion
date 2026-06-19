@@ -274,7 +274,7 @@
 .process-btn {
   width: 100%;
   padding: 16px;
-  background: #28a745;
+  background: #43a258;
   color: white;
   border: none;
   border-radius: 8px;
@@ -294,7 +294,7 @@
 /* Estilos para el mensaje de Cambio (Mismo) */
 .exchange-same-info {
   background: #e7f8e7;
-  border: 2px solid #28a745;
+  border: 2px solid #43a258;
   border-radius: 8px;
   padding: 16px;
   margin-top: 12px;
@@ -321,7 +321,7 @@
 /* Error */
 .operation-error {
   background: #fde8e8;
-  border: 2px solid #dc3545;
+  border: 2px solid #dc4655;
   border-radius: 8px;
   padding: 12px 16px;
   color: #721c24;
@@ -332,7 +332,7 @@
 
 /* Campo requerido */
 .required {
-  color: #dc3545;
+  color: #dc4655;
   font-weight: 700;
   font-size: 16px;
 }
@@ -350,7 +350,7 @@
 .completed-icon {
   width: 80px;
   height: 80px;
-  background: #28a745;
+  background: #43a258;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -374,7 +374,7 @@
 .operation-completed h3 {
   margin: 0 0 12px 0;
   font-size: 24px;
-  color: #28a745;
+  color: #43a258;
   font-weight: 700;
 }
 
@@ -395,7 +395,7 @@
 /* ✅ Error en rojo */
 .operation-error {
   background: #fde8e8;
-  border: 2px solid #dc3545;
+  border: 2px solid #dc4655;
   border-radius: 8px;
   padding: 12px 16px;
   color: #721c24;
@@ -451,6 +451,6 @@
 
 .balance-discount-label {
   font-size: 13px;
-  color: #ffc107;
+  color: #fcc92e;
   font-weight: 600;
 }

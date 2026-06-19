@@ -141,13 +141,13 @@
 
 .promotion-form-group input.error,
 .promotion-form-group select.error {
-  border-color: #dc3545;
+  border-color: #dc4655;
 }
 
 .promotion-error-message {
   display: block;
   font-size: 13px;
-  color: #dc3545;
+  color: #dc4655;
   font-weight: 500;
   margin-top: 4px;
 }
@@ -185,7 +185,7 @@
 }
 
 .promotion-rules-list.error-border {
-  border-color: #dc3545;
+  border-color: #dc4655;
 }
 
 .promotion-empty-rules {

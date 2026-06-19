@@ -60,7 +60,7 @@
 
 .returns-placeholder li::before {
   content: "✓ ";
-  color: #28a745;
+  color: #43a258;
   font-weight: bold;
   margin-right: 8px;
 }
@@ -72,14 +72,14 @@
   border-radius: 8px;
   font-size: 14px;
   font-weight: 700;
-  color: #dc3545;
+  color: #dc4655;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .cancel-operation-btn:hover {
   background: #fde8e8;
-  border-color: #dc3545;
+  border-color: #dc4655;
 }
 
 .operation-workspace {

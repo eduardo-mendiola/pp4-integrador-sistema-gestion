@@ -236,8 +236,8 @@ export const printSaleReceipt = (sale) => {
           text-align: center;
           font-size: 14pt;
           font-weight: bold;
-          color: #dc3545;
-          border: 3px double #dc3545;
+          color: #dc4655;
+          border: 3px double #dc4655;
           padding: 10px;
           margin: 10px 0;
           letter-spacing: 2px;

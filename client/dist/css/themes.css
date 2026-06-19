@@ -436,7 +436,7 @@ html:not([data-theme="dark"]) .table-dark .text-success {
 
 html:not([data-theme="dark"]) table .text-danger,
 html:not([data-theme="dark"]) .table-dark .text-danger {
-  color: #dc3545 !important;
+  color: #dc4655 !important;
 }
 
 /* Modo oscuro */
@@ -644,7 +644,7 @@ html:not([data-theme="dark"]) .text-success {
 
 html:not([data-theme="dark"]) body .text-danger,
 html:not([data-theme="dark"]) .text-danger {
-  color: #dc3545 !important;
+  color: #dc4655 !important;
 }
 
 /* Ajustar intensidad de text-themed para que no sea tan fuerte */

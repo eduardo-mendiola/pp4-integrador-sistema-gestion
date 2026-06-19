@@ -120,7 +120,7 @@ export default function MovementsPage() {
       <hr style="border: 1px dashed #ccc; margin: 15px 0;" />
       
       <div style="text-align: center; padding: 20px; background: ${movement.type === 'INCOME' ? '#d4edda' : '#f8d7da'}; border-radius: 8px; margin: 15px 0;">
-        <div style="font-size: 28px; font-weight: bold; font-family: 'Courier New', monospace; color: ${movement.type === 'INCOME' ? '#28a745' : '#dc3545'};">
+        <div style="font-size: 28px; font-weight: bold; font-family: 'Courier New', monospace; color: ${movement.type === 'INCOME' ? '#43a258' : '#dc4655'};">
           ${movement.type === 'INCOME' ? '+' : '-'}$${(movement.amount || 0).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
         </div>
       </div>

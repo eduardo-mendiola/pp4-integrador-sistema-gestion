@@ -78,7 +78,7 @@
 
 .movement-detail-close:hover {
   background: #e9ecef;
-  color: #dc3545;
+  color: #dc4655;
 }
 
 /* Body */
@@ -101,12 +101,12 @@
 
 .movement-detail-amount.income {
   background: #d4edda;
-  color: #28a745;
+  color: #43a258;
 }
 
 .movement-detail-amount.expense {
   background: #f8d7da;
-  color: #dc3545;
+  color: #dc4655;
 }
 
 /* Secciones */
@@ -220,7 +220,7 @@
 }
 
 .movement-detail-btn.download {
-  background: #ffc107;
+  background: #fcc92e;
   color: #333;
 }
 
@@ -230,7 +230,7 @@
 }
 
 .movement-detail-btn.primary {
-  background: #28a745;
+  background: #43a258;
   color: white;
 }
 

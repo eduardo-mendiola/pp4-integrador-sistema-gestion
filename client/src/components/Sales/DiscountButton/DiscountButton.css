@@ -20,14 +20,14 @@
 }
 
 .discount-btn.active {
-  background: #ffc107;
-  border-color: #ffc107;
+  background: #fcc92e;
+  border-color: #fcc92e;
   color: #333;
 }
 
 .discount-btn.active:hover {
   background: #686250;
-  border-color: #ffc107;
+  border-color: #fcc92e;
   color: white;
 }
 
@@ -192,8 +192,8 @@
 
 .discount-btn-clear {
   background: #f2f2f2;
-  color: #dc3545;
-  border: 2px solid #dc3545;
+  color: #dc4655;
+  border: 2px solid #dc4655;
 }
 
 .discount-btn-clear:hover {
@@ -201,7 +201,7 @@
 }
 
 .discount-btn-apply {
-  background: #28a745;
+  background: #43a258;
   color: white;
 }
 

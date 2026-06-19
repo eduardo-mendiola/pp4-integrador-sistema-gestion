@@ -136,9 +136,9 @@
   gap: 12px;
   padding: 16px;
   background: #fff3cd;
-  border: 1px solid #ffc107;
+  border: 1px solid #fcc92e;
   border-radius: 8px;
-  border-left: 4px solid #ffc107;
+  border-left: 4px solid #fcc92e;
 }
 
 .rule-delete-alert-icon {
@@ -181,7 +181,7 @@
 }
 
 .rule-delete-btn.danger {
-  background: #dc3545;
+  background: #dc4655;
   color: white;
 }
 

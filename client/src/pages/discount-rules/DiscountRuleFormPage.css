@@ -137,13 +137,13 @@
 }
 
 .rule-form-group input.error {
-  border-color: #dc3545;
+  border-color: #dc4655;
 }
 
 .rule-form-error {
   display: block;
   font-size: 15px;
-  color: #dc3545;
+  color: #dc4655;
   font-weight: 500;
   margin-top: 4px;
 }

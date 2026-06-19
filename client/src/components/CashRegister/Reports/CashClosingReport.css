@@ -66,19 +66,19 @@
 }
 
 .info-value.positive {
-  color: #28a745;
+  color: #43a258;
 }
 
 .info-value.negative {
-  color: #dc3545;
+  color: #dc4655;
 }
 
 .info-value.income {
-  color: #28a745;
+  color: #43a258;
 }
 
 .info-value.expense {
-  color: #dc3545;
+  color: #dc4655;
 }
 
 /* Movimientos de la caja */
@@ -155,11 +155,11 @@
 }
 
 .movement-amount.income {
-  color: #28a745;
+  color: #43a258;
 }
 
 .movement-amount.expense {
-  color: #dc3545;
+  color: #dc4655;
 }
 
 /* Estilos para impresión */

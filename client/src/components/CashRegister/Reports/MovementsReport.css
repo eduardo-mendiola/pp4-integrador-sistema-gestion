@@ -23,7 +23,7 @@
 }
 
 .report-action-btn.pdf {
-  background: #dc3545;
+  background: #dc4655;
 }
 
 .report-action-btn.pdf:hover {
@@ -32,7 +32,7 @@
 }
 
 .report-action-btn.excel {
-  background: #28a745;
+  background: #43a258;
 }
 
 .report-action-btn.excel:hover {
@@ -41,7 +41,7 @@
 }
 
 .report-action-btn.csv {
-  background: #ffc107;
+  background: #fcc92e;
   color: #333;
 }
 
@@ -105,12 +105,12 @@
 }
 
 .summary-card.income {
-  border-left-color: #28a745;
+  border-left-color: #43a258;
   background: #d4edda;
 }
 
 .summary-card.expense {
-  border-left-color: #dc3545;
+  border-left-color: #dc4655;
   background: #f8d7da;
 }
 
@@ -251,11 +251,11 @@
 }
 
 .movement-amount.income {
-  color: #28a745;
+  color: #43a258;
 }
 
 .movement-amount.expense {
-  color: #dc3545;
+  color: #dc4655;
 }
 
 /* Estilos para impresión */
