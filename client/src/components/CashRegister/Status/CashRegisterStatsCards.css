@@ -1,0 +1,82 @@
+.cash-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cash-stat-card {
+  border-radius: 12px;
+  padding: 24px;
+  color: white;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+  min-height: 110px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cash-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cash-stat-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+}
+
+.cash-stat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.cash-stat-label {
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.cash-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cash-stat-suffix {
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-left: 4px;
+}
+
+@media (max-width: 1024px) {
+  .cash-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .cash-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cash-stat-value {
+    font-size: 24px;
+  }
+  
+  .cash-stat-card {
+    padding: 20px;
+  }
+  
+  .cash-stat-icon {
+    font-size: 28px;
+  }
+}

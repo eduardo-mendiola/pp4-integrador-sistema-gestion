@@ -8,6 +8,7 @@ router.use(isAuthenticated);
 
 router.get('/', ProductController.getAll);
 router.get('/:id', ProductController.getById);
+router.get('/brands', ProductController.getUniqueBrands);
 router.post('/', ProductController.create);
 router.patch('/:id', ProductController.partialUpdate);
 router.put('/:id', ProductController.update);

@@ -1,0 +1,160 @@
+@baseUrl = http://localhost:4000
+
+# ============================================================
+# REPORTES (Reports)
+# ============================================================
+
+# ------------------------------------------------------------
+# REPORTE 1: CIERRE DE CAJA
+# ------------------------------------------------------------
+
+### Get cash closing report for today
+GET {{baseUrl}}/api/reports/cash-closing
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get cash closing report for specific date range
+GET {{baseUrl}}/api/reports/cash-closing?from=2026-06-01&to=2026-06-19
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get cash closing report for current month
+GET {{baseUrl}}/api/reports/cash-closing?from=2026-06-01&to=2026-06-30
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# REPORTE 2: VENTAS POR PERÍODO
+# ------------------------------------------------------------
+
+### Get all sales report (no filters)
+GET {{baseUrl}}/api/reports/sales
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get sales report for date range
+GET {{baseUrl}}/api/reports/sales?from=2026-06-01&to=2026-06-19
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get sales report filtered by payment method (cash)
+GET {{baseUrl}}/api/reports/sales?from=2026-06-01&to=2026-06-19&paymentMethod=cash
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get sales report filtered by payment method (credit_card)
+GET {{baseUrl}}/api/reports/sales?from=2026-06-01&to=2026-06-19&paymentMethod=credit_card
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get sales report for current month
+GET {{baseUrl}}/api/reports/sales?from=2026-06-01&to=2026-06-30
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# REPORTE 3: MOVIMIENTOS DE CAJA
+# ------------------------------------------------------------
+
+### Get all movements (no filters)
+GET {{baseUrl}}/api/reports/movements
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get movements for date range
+GET {{baseUrl}}/api/reports/movements?from=2026-06-01&to=2026-06-19
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get only INCOME movements
+GET {{baseUrl}}/api/reports/movements?from=2026-06-01&to=2026-06-19&type=INCOME
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get only EXPENSE movements
+GET {{baseUrl}}/api/reports/movements?from=2026-06-01&to=2026-06-19&type=EXPENSE
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get movements filtered by payment method
+GET {{baseUrl}}/api/reports/movements?from=2026-06-01&to=2026-06-19&paymentMethod=cash
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get movements filtered by source type (SALE)
+GET {{baseUrl}}/api/reports/movements?from=2026-06-01&to=2026-06-19&sourceType=SALE
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get movements filtered by source type (MANUAL)
+GET {{baseUrl}}/api/reports/movements?from=2026-06-01&to=2026-06-19&sourceType=MANUAL
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# REPORTE 4: PRODUCTOS MÁS VENDIDOS
+# ------------------------------------------------------------
+
+### Get top products (default limit: 20)
+GET {{baseUrl}}/api/reports/top-products
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get top products for date range
+GET {{baseUrl}}/api/reports/top-products?from=2026-06-01&to=2026-06-19
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get top 10 products
+GET {{baseUrl}}/api/reports/top-products?from=2026-06-01&to=2026-06-19&limit=10
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get top 50 products
+GET {{baseUrl}}/api/reports/top-products?from=2026-06-01&to=2026-06-19&limit=50
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get top products for current month
+GET {{baseUrl}}/api/reports/top-products?from=2026-06-01&to=2026-06-30
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# REPORTE 5: DEVOLUCIONES Y CAMBIOS
+# ------------------------------------------------------------
+
+### Get all returns (no filters)
+GET {{baseUrl}}/api/reports/returns
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get returns for date range
+GET {{baseUrl}}/api/reports/returns?from=2026-06-01&to=2026-06-19
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get returns filtered by type (RETURN)
+GET {{baseUrl}}/api/reports/returns?from=2026-06-01&to=2026-06-19&type=RETURN
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get returns filtered by type (EXCHANGE_SAME)
+GET {{baseUrl}}/api/reports/returns?from=2026-06-01&to=2026-06-19&type=EXCHANGE_SAME
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get returns filtered by type (EXCHANGE_OTHER)
+GET {{baseUrl}}/api/reports/returns?from=2026-06-01&to=2026-06-19&type=EXCHANGE_OTHER
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get returns filtered by reason
+GET {{baseUrl}}/api/reports/returns?from=2026-06-01&to=2026-06-19&reason=defectuoso
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get returns for current month
+GET {{baseUrl}}/api/reports/returns?from=2026-06-01&to=2026-06-30
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json

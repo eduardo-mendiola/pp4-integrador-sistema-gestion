@@ -1,0 +1,352 @@
+/* Overlay */
+.promotion-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  animation: promoFadeIn 0.2s ease-out;
+  padding: 20px;
+}
+
+@keyframes promoFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal Container */
+.promotion-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: promoSlideUp 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes promoSlideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Header */
+.promotion-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e1e8ed;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #f2f2f2;
+}
+
+.promotion-modal-header h2 {
+  margin: 0 0 4px 0;
+  font-size: 20px;
+  color: #333;
+  font-weight: 700;
+}
+
+.promotion-modal-id {
+  font-size: 15px;
+  color: #8898aa;
+  font-family: monospace;
+  background: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #e1e8ed;
+}
+
+.promotion-modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.promotion-modal-close:hover {
+  background: #e9ecef;
+}
+
+/* Body */
+.promotion-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.promotion-modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.promotion-modal-section-title {
+  margin: 0;
+  font-size: 16px;
+  color: #525f7f;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+/* Form Groups */
+.promotion-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.promotion-form-group label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.promotion-form-group input[type="text"],
+.promotion-form-group input[type="number"],
+.promotion-form-group input[type="date"],
+.promotion-form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+  background: white;
+}
+
+.promotion-form-group input:focus,
+.promotion-form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.promotion-form-group input.error,
+.promotion-form-group select.error {
+  border-color: #dc4655;
+}
+
+.promotion-error-message {
+  display: block;
+  font-size: 13px;
+  color: #dc4655;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.promotion-form-hint {
+  font-size: 13px;
+  color: #8898aa;
+  line-height: 1.4;
+}
+
+.promotion-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.promotion-readonly-field {
+  padding: 12px;
+  background: #f2f2f2;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #525f7f;
+  font-weight: 600;
+}
+
+/* Rules List */
+.promotion-rules-list {
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  padding: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #fafbfc;
+}
+
+.promotion-rules-list.error-border {
+  border-color: #dc4655;
+}
+
+.promotion-empty-rules {
+  text-align: center;
+  color: #8898aa;
+  font-size: 14px;
+  padding: 20px;
+  margin: 0;
+}
+
+.promotion-rule-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.promotion-rule-checkbox:last-child {
+  border-bottom: none;
+}
+
+.promotion-rule-checkbox:hover {
+  background: #e7f3ff;
+}
+
+.promotion-rule-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #007bff;
+}
+
+.rule-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rule-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.rule-detail {
+  font-size: 13px;
+  color: #525f7f;
+}
+
+/* Checkbox */
+.promotion-checkbox-group {
+  margin-top: 8px;
+}
+
+.promotion-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.promotion-checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #007bff;
+}
+
+/* Footer */
+.promotion-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e1e8ed;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #f2f2f2;
+}
+
+.promotion-modal-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.promotion-modal-btn.secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.promotion-modal-btn.secondary:hover {
+  background: #5a6268;
+}
+
+.promotion-modal-btn.primary {
+  background: #007bff;
+  color: white;
+}
+
+.promotion-modal-btn.primary:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.promotion-modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ✅ Form wrapper - CRÍTICO para el scroll */
+.promotion-modal form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0; /* Importante: permite que el flexbox funcione */
+  overflow: hidden;
+}
+
+/* Scrollbar personalizado */
+.promotion-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.promotion-modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.promotion-modal-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.promotion-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .promotion-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .promotion-modal-footer {
+    flex-direction: column;
+  }
+  
+  .promotion-modal-btn {
+    width: 100%;
+  }
+}

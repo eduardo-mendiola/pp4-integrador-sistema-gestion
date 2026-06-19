@@ -1,233 +1,211 @@
 export const allPermissions = [
-  'view_dashboard',
+  // Dashboard
+  "view_dashboard",
 
-  'create_clients',
-  'view_clients',
-  'edit_clients',
-  'delete_clients',
+  // Clientes
+  "view_clients",
+  "create_clients",
+  "edit_clients",
+  "delete_clients",
 
-  'create_contacts',
-  'view_contacts',
-  'edit_contacts',
-  'delete_contacts',
+  // Contactos (personas)
+  "view_contacts",
+  "create_contacts",
+  "edit_contacts",
+  "delete_contacts",
 
-  'create_projects',
-  'view_projects',
-  'edit_projects',
-  'delete_projects',
+  // Productos
+  "view_products",
+  "create_products",
+  "edit_products",
+  "delete_products",
 
-  'create_tasks',
-  'view_tasks',
-  'edit_tasks',
-  'delete_tasks',
-  'view_all_tasks',
+  // Categorías
+  "view_categories",
+  "create_categories",
+  "edit_categories",
+  "delete_categories",
 
-  'create_time_entries',
-  'view_time_entries',
-  'edit_time_entries',
-  'delete_time_entries',
-  'view_all_time_entries',
+  // Proveedores
+  "view_suppliers",
+  "create_suppliers",
+  "edit_suppliers",
+  "delete_suppliers",
 
-  'create_document_files',
-  'view_document_files',
-  'edit_document_files',
-  'delete_document_files',
-  'view_all_document_files',
+  // Pagos a Proveedores
+  "view_supplier_payments",
+  "create_supplier_payments",
+  "edit_supplier_payments",
+  "delete_supplier_payments",
 
-  'create_invoices',
-  'view_invoices',
-  'edit_invoices',
-  'delete_invoices',
+  // Promociones
+  "view_promotions",
+  "create_promotions",
+  "edit_promotions",
+  "delete_promotions",
 
-  'create_payments',
-  'view_payments',
-  'edit_payments',
-  'delete_payments',
+  // Descuentos
+  "view_discount_rules",
+  "create_discount_rules",
+  "edit_discount_rules",
+  "delete_discount_rules",
 
-  'create_receipts',
-  'view_receipts',
-  'edit_receipts',
-  'delete_receipts',
+  // Ventas
+  "view_sales",
+  "create_sales",
+  "edit_sales",
+  "delete_sales",
 
-  'create_estimates',
-  'view_estimates',
-  'edit_estimates',
-  'delete_estimates',
+  // Métodos de Pago
+  "view_payment_methods",
+  "create_payment_methods",
+  "edit_payment_methods",
+  "delete_payment_methods",
 
-  'create_expenses',
-  'view_expenses',
-  'edit_expenses',
-  'delete_expenses',
+  // CAJA (Cash Register)
+  "view_cash_register",
+  "open_cash_register",
+  "close_cash_register",
 
-  'create_expense_categories',
-  'view_expense_categories',
-  'edit_expense_categories',
-  'delete_expense_categories',
+  // MOVIMIENTOS DE CAJA (Cash Flow)
+  "view_cash_flow",
+  "create_cash_flow",
+  "delete_cash_flow",
 
-  'create_users',
-  'view_users',
-  'edit_users',
-  'delete_users',
+  // COMPROBANTES INTERNOS (Internal Vouchers)
+  "view_internal_vouchers",
+  "create_internal_vouchers",
+  "cancel_internal_vouchers",
 
-  'create_employees',
-  'view_employees',
-  'edit_employees',
-  'delete_employees',
+  // Usuarios
+  "view_users",
+  "create_users",
+  "edit_users",
+  "delete_users",
 
-  'create_roles',
-  'view_roles',
-  'edit_roles',
-  'delete_roles',
+  // Empleados
+  "view_employees",
+  "create_employees",
+  "edit_employees",
+  "delete_employees",
 
-  'create_areas',
-  'view_areas',
-  'edit_areas',
-  'delete_areas',
+  // Roles
+  "view_roles",
+  "create_roles",
+  "edit_roles",
+  "delete_roles",
 
-  'create_positions',
-  'view_positions',
-  'edit_positions',
-  'delete_positions',
+  // Reportes
+  "view_reports",
+  "export_reports",
 
-  'create_teams',
-  'view_teams',
-  'edit_teams',
-  'delete_teams',
-
-  'create_team_roles',
-  'view_team_roles',
-  'edit_team_roles',
-  'delete_team_roles',
-
-  // Permisos ejecutivos y dashboards
-  'view_executive_dashboard',
-  'view_financial_reports',
-  'view_client_reports',
-  'view_project_reports',
-  'view_revenue_analysis',
-  'view_profitability_analysis',
-  'export_reports',
-  'view_all_invoices',
-  'view_all_payments',
-  'view_all_receipts',
-
-  // Chat
-  'view_chat'
+  // Analytics / Statistics
+  "view_analytics",
+  "export_analytics",
 ];
 
 export const permissionLabels = {
+  // Dashboard
   view_dashboard: "Dashboard: Ver",
 
-  create_clients: "Clientes: Crear",
+  // Clientes
   view_clients: "Clientes: Ver",
+  create_clients: "Clientes: Crear",
   edit_clients: "Clientes: Editar",
   delete_clients: "Clientes: Eliminar",
 
-  create_contacts: "Contactos: Crear",
+  // Contactos
   view_contacts: "Contactos: Ver",
+  create_contacts: "Contactos: Crear",
   edit_contacts: "Contactos: Editar",
   delete_contacts: "Contactos: Eliminar",
 
-  create_projects: "Proyectos: Crear",
-  view_projects: "Proyectos: Ver",
-  edit_projects: "Proyectos: Editar",
-  delete_projects: "Proyectos: Eliminar",
+  // Productos
+  view_products: "Productos: Ver",
+  create_products: "Productos: Crear",
+  edit_products: "Productos: Editar",
+  delete_products: "Productos: Eliminar",
 
-  create_tasks: "Tareas: Crear",
-  view_tasks: "Tareas: Ver",
-  edit_tasks: "Tareas: Editar",
-  delete_tasks: "Tareas: Eliminar",
-  view_all_tasks: "Tareas: Ver Todas (Admin)",
+  // Categorías
+  view_categories: "Categorías: Ver",
+  create_categories: "Categorías: Crear",
+  edit_categories: "Categorías: Editar",
+  delete_categories: "Categorías: Eliminar",
 
-  create_time_entries: "Registro de Actividades: Crear",
-  view_time_entries: "Registro de Actividades: Ver",
-  edit_time_entries: "Registro de Actividades: Editar",
-  delete_time_entries: "Registro de Actividades: Eliminar",
-  view_all_time_entries: "Registro de Actividades: Ver Todas (Admin)",
+  // Proveedores
+  view_suppliers: "Proveedores: Ver",
+  create_suppliers: "Proveedores: Crear",
+  edit_suppliers: "Proveedores: Editar",
+  delete_suppliers: "Proveedores: Eliminar",
 
-  create_document_files: "Documentos: Crear",
-  view_document_files: "Documentos: Ver",
-  edit_document_files: "Documentos: Editar",
-  delete_document_files: "Documentos: Eliminar",
-  view_all_document_files: "Documentos: Ver Todos (Admin)",
+  // Pagos a Proveedores
+  view_supplier_payments: "Pagos a Proveedores: Ver",
+  create_supplier_payments: "Pagos a Proveedores: Crear",
+  edit_supplier_payments: "Pagos a Proveedores: Editar",
+  delete_supplier_payments: "Pagos a Proveedores: Eliminar",
 
-  create_invoices: "Facturas: Crear",
-  view_invoices: "Facturas: Ver",
-  edit_invoices: "Facturas: Editar",
-  delete_invoices: "Facturas: Eliminar",
+  // Promociones
+  view_promotions: "Promociones: Ver",
+  create_promotions: "Promociones: Crear",
+  edit_promotions: "Promociones: Editar",
+  delete_promotions: "Promociones: Eliminar",
 
-  create_payments: "Pagos: Crear",
-  view_payments: "Pagos: Ver",
-  edit_payments: "Pagos: Editar",
-  delete_payments: "Pagos: Eliminar",
+  // Descuentos
+  view_discount_rules: "Reglas de Descuento: Ver",
+  create_discount_rules: "Reglas de Descuento: Crear",
+  edit_discount_rules: "Reglas de Descuento: Editar",
+  delete_discount_rules: "Reglas de Descuento: Eliminar",
 
-  create_receipts: "Cobros: Crear",
-  view_receipts: "Cobros: Ver",
-  edit_receipts: "Cobros: Editar",
-  delete_receipts: "Cobros: Eliminar",
+  // Ventas
+  view_sales: "Ventas: Ver",
+  create_sales: "Ventas: Crear",
+  edit_sales: "Ventas: Editar",
+  delete_sales: "Ventas: Eliminar",
 
-  create_estimates: "Presupuestos: Crear",
-  view_estimates: "Presupuestos: Ver",
-  edit_estimates: "Presupuestos: Editar",
-  delete_estimates: "Presupuestos: Eliminar",
+  // Métodos de Pago
+  view_payment_methods: "Métodos de Pago: Ver",
+  create_payment_methods: "Métodos de Pago: Crear",
+  edit_payment_methods: "Métodos de Pago: Editar",
+  delete_payment_methods: "Métodos de Pago: Eliminar",
 
-  create_expenses: "Gastos: Crear",
-  view_expenses: "Gastos: Ver",
-  edit_expenses: "Gastos: Editar",
-  delete_expenses: "Gastos: Eliminar",
+  // CAJA (Cash Register)
+  view_cash_register: "Caja: Ver estado",
+  open_cash_register: "Caja: Aperturar",
+  close_cash_register: "Caja: Cerrar",
 
-  create_expense_categories: "Categorías de Gastos: Crear",
-  view_expense_categories: "Categorías de Gastos: Ver",
-  edit_expense_categories: "Categorías de Gastos: Editar",
-  delete_expense_categories: "Categorías de Gastos: Eliminar",
+  // MOVIMIENTOS DE CAJA (Cash Flow)
+  view_cash_flow: "Movimientos de Caja: Ver",
+  create_cash_flow: "Movimientos de Caja: Crear",
+  delete_cash_flow: "Movimientos de Caja: Eliminar",
 
-  create_users: "Usuarios: Crear",
+  // COMPROBANTES INTERNOS (Internal Vouchers)
+  view_internal_vouchers: "Comprobantes Internos: Ver",
+  create_internal_vouchers: "Comprobantes Internos: Crear",
+  cancel_internal_vouchers: "Comprobantes Internos: Cancelar",
+
+  // Usuarios
   view_users: "Usuarios: Ver",
+  create_users: "Usuarios: Crear",
   edit_users: "Usuarios: Editar",
   delete_users: "Usuarios: Eliminar",
 
-  create_employees: "Empleados: Crear",
+  // Empleados
   view_employees: "Empleados: Ver",
+  create_employees: "Empleados: Crear",
   edit_employees: "Empleados: Editar",
   delete_employees: "Empleados: Eliminar",
 
-  create_roles: "Roles: Crear",
+  // Roles
   view_roles: "Roles: Ver",
+  create_roles: "Roles: Crear",
   edit_roles: "Roles: Editar",
   delete_roles: "Roles: Eliminar",
 
-  create_areas: "Áreas: Crear",
-  view_areas: "Áreas: Ver",
-  edit_areas: "Áreas: Editar",
-  delete_areas: "Áreas: Eliminar",
-
-  create_positions: "Cargos: Crear",
-  view_positions: "Cargos: Ver",
-  edit_positions: "Cargos: Editar",
-  delete_positions: "Cargos: Eliminar",
-
-  create_teams: "Equipos: Crear",
-  view_teams: "Equipos: Ver",
-  edit_teams: "Equipos: Editar",
-  delete_teams: "Equipos: Eliminar",
-
-  create_team_roles: "Roles de Equipo: Crear",
-  view_team_roles: "Roles de Equipo: Ver",
-  edit_team_roles: "Roles de Equipo: Editar",
-  delete_team_roles: "Roles de Equipo: Eliminar",
-
-  // Etiquetas para permisos ejecutivos
-  view_executive_dashboard: "Dashboard Ejecutivo: Ver",
-  view_financial_reports: "Reportes Financieros: Ver",
-  view_client_reports: "Reportes de Clientes: Ver",
-  view_project_reports: "Reportes de Proyectos: Ver",
-  view_revenue_analysis: "Análisis de Ingresos: Ver",
-  view_profitability_analysis: "Análisis de Rentabilidad: Ver",
+  // Reportes
+  view_reports: "Reportes: Ver",
   export_reports: "Reportes: Exportar",
-  view_all_invoices: "Facturas: Ver Todas (Admin)",
-  view_all_payments: "Pagos: Ver Todos (Admin)",
-  view_all_receipts: "Cobros: Ver Todos (Admin)",
 
-  // Chat
-  view_chat: "Chat: Ver y Usar"
+  // Analytics
+  view_analytics: "Analytics: View",
+  export_analytics: "Analytics: Export",
 };

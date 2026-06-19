@@ -1,0 +1,241 @@
+@baseUrl = http://localhost:4000
+
+# ============================================================
+# CASH FLOW (Movimientos de caja)
+# ============================================================
+
+### Get all cash flows
+GET {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get cash flow summary
+GET {{baseUrl}}/api/cash-flow/summary
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# FILTROS
+# ------------------------------------------------------------
+
+### Get cash flows filtered by type (INCOME)
+GET {{baseUrl}}/api/cash-flow?type=INCOME
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get cash flows filtered by type (EXPENSE)
+GET {{baseUrl}}/api/cash-flow?type=EXPENSE
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get cash flows filtered by payment method (cash)
+GET {{baseUrl}}/api/cash-flow?paymentMethod=cash
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get cash flows filtered by payment method (transfer)
+GET {{baseUrl}}/api/cash-flow?paymentMethod=transfer
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get cash flows filtered by source type (MANUAL)
+GET {{baseUrl}}/api/cash-flow?sourceType=MANUAL
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get cash flows filtered by date range
+GET {{baseUrl}}/api/cash-flow?startDate=2026-06-01&endDate=2026-06-30
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get cash flow summary with date range
+GET {{baseUrl}}/api/cash-flow/summary?startDate=2026-06-01&endDate=2026-06-30
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# CREACIÓN DE MOVIMIENTOS
+# ------------------------------------------------------------
+
+### Create INCOME - Manual cash income
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "amount": 1500,
+  "paymentMethod": "cash",
+  "concept": "Cobro de deuda cliente Juan Pérez",
+  "notes": "Recibido en efectivo"
+}
+
+### Create EXPENSE - Manual cash expense
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "amount": 500,
+  "paymentMethod": "cash",
+  "concept": "Compra de insumos de limpieza",
+  "notes": "Factura A-0001-00000123"
+}
+
+### Create INCOME - Transfer
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "amount": 25000,
+  "paymentMethod": "transfer",
+  "concept": "Transferencia bancaria - Pago proveedor",
+  "notes": "Ref: TRF-2026-001"
+}
+
+### Create EXPENSE - Debit card
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "EXPENSE",
+  "amount": 3200,
+  "paymentMethod": "debit_card",
+  "concept": "Pago de luz - Edenor",
+  "notes": "Factura E-0001-00005678"
+}
+
+### Create INCOME - Credit card
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "amount": 8500,
+  "paymentMethod": "credit_card",
+  "concept": "Cobro con tarjeta - Cliente corporativo",
+  "notes": "Cuota 3/6"
+}
+
+# ------------------------------------------------------------
+# VALIDACIONES (deben devolver 400)
+# ------------------------------------------------------------
+
+### Try to create flow without open register (close first, then try)
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "amount": 1000,
+  "paymentMethod": "cash",
+  "concept": "Prueba sin caja abierta"
+}
+
+### Try to create flow with negative amount (Should return 400)
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "amount": -500,
+  "paymentMethod": "cash",
+  "concept": "Monto negativo inválido"
+}
+
+### Try to create flow with invalid type (Should return 400)
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INVALID",
+  "amount": 1000,
+  "paymentMethod": "cash",
+  "concept": "Tipo inválido"
+}
+
+### Try to create flow without concept (Should return 400)
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "amount": 1000,
+  "paymentMethod": "cash"
+}
+
+### Try to create flow with invalid payment method (Should return 400)
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "amount": 1000,
+  "paymentMethod": "bitcoin",
+  "concept": "Método de pago inválido"
+}
+
+# ------------------------------------------------------------
+# DETALLE Y ELIMINACIÓN
+# ------------------------------------------------------------
+
+### Get specific cash flow by ID (reemplazar con ID real)
+GET {{baseUrl}}/api/cash-flow/REEMPLAZAR_CON_ID
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Delete manual cash flow (reemplazar con ID real)
+DELETE {{baseUrl}}/api/cash-flow/REEMPLAZAR_CON_ID
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+# ------------------------------------------------------------
+# FLUJO END-TO-END
+# ------------------------------------------------------------
+
+### 1. Abrir caja para pruebas
+POST {{baseUrl}}/api/cash-register/open
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "initialAmount": 10000,
+  "notes": "Apertura para pruebas de flujo"
+}
+
+### 2. Registrar varios movimientos
+POST {{baseUrl}}/api/cash-flow
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "type": "INCOME",
+  "amount": 5000,
+  "paymentMethod": "cash",
+  "concept": "Cobro deuda cliente"
+}
+
+### 3. Ver resumen del día (debería mostrar: 10000 + 5000 = 15000)
+GET {{baseUrl}}/api/cash-register/daily-summary
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### 4. Cerrar caja
+POST {{baseUrl}}/api/cash-register/close
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Content-Type: application/json
+
+{
+  "finalAmount": 15000,
+  "notes": "Cierre sin diferencia"
+}

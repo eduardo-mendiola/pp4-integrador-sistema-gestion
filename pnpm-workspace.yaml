@@ -1,7 +1,4 @@
-packages:
-  - 'client'
-
 allowBuilds:
   bcrypt: false
+  core-js: true
   mongodb-memory-server: false
-  esbuild: true

@@ -1,0 +1,240 @@
+.returns-search-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.search-header-text h2 {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+  color: #333;
+}
+
+.search-header-text p {
+  margin: 0;
+  color: #8898aa;
+  font-size: 14px;
+}
+
+
+.clear-filters-btn {
+  background: transparent;
+  border: 1px solid #e1e8ed;
+  color: #6c757d;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0; /* Evita que se aplaste */
+}
+
+.clear-filters-btn:hover:not(:disabled) {
+  background: #f2f2f2;
+  color: #dc4655;
+  border-color: #dc4655;
+}
+
+.clear-filters-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.search-filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #525f7f;
+  margin-bottom: 6px;
+}
+
+.filter-group input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.filter-group input:focus {
+  outline: none;
+  border-color: #84A3D3;
+}
+
+
+.search-action-btn.full-width {
+  width: 100%;
+  padding: 14px;
+  background: #84A3D3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 24px;
+}
+
+.search-action-btn.full-width:hover {
+  background: #6f8ec2;
+}
+
+.search-action-btn.full-width:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.search-error {
+  margin-bottom: 24px;
+  padding: 12px;
+  background: #fde8e8;
+  color: #721c24;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.search-results-table {
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.search-results-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.search-results-table th {
+  background: #f2f2f2;
+  padding: 14px;
+  text-align: left;
+  font-size: 13px;
+  color: #525f7f;
+  text-transform: uppercase;
+}
+
+.search-results-table td {
+  padding: 14px;
+  border-top: 1px solid #f0f4f8;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.font-mono { font-family: 'Courier New', monospace; font-weight: 700; color: #007bff; }
+.font-bold { font-weight: 700; }
+
+.row-expired {
+  background-color: #fdf2f2;
+}
+
+.row-expired td {
+  color: #8898aa;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-badge.valid {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.expired {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.select-btn {
+  padding: 8px 16px;
+  background: #43a258;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.select-btn:hover { background: #218838; }
+
+.select-btn.disabled {
+  background: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+.select-btn.disabled:hover {
+  background: #e9ecef;
+}
+
+.search-empty {
+  margin-top: 24px;
+  text-align: center;
+  color: #8898aa;
+  padding: 32px;
+  background: #f2f2f2;
+  border-radius: 8px;
+}
+
+/* Filtros de columna */
+.column-filters th {
+  padding: 8px 12px !important;
+  background-color: #f2f2f2;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.column-filter-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.column-filter-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.column-filter-input::placeholder {
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+/* Columnas ordenables */
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.sortable:hover {
+  background-color: #e9ecef;
+}

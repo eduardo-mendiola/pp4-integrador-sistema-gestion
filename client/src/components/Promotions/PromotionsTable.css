@@ -1,0 +1,261 @@
+.promotions-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.promotions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.promotions-table thead {
+  background-color: #f2f2f2;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.promotions-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #525f7f;
+  letter-spacing: 0.5px;
+}
+
+.promotions-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f0f4f8;
+  font-size: 15px;
+  color: #333;
+}
+
+.promotions-table tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+.promotions-table th.text-center,
+.promotions-table td.text-center {
+  text-align: center;
+}
+
+.promotions-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.promotions-table th.sortable:hover {
+  background-color: #e9ecef;
+  color: #007bff;
+}
+
+.promo-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.promo-product {
+  color: #525f7f;
+  font-size: 14px;
+}
+
+.promo-rules-count {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #e7f3ff;
+  color: #007bff;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.status-toggle {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.status-toggle.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-toggle.active:hover {
+  background: #c3e6cb;
+}
+
+.status-toggle.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-toggle.inactive:hover {
+  background: #f5c6cb;
+}
+
+.status-toggle.scheduled {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-toggle.scheduled:hover {
+  background: #ffeaa7;
+}
+
+.status-toggle.expired {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.status-toggle.expired:hover {
+  background: #d6d8db;
+}
+
+.promotions-table-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.promotions-action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.promotions-action-btn.edit {
+  background: #e7f3ff;
+  color: #007bff;
+}
+
+.promotions-action-btn.edit:hover {
+  background: #007bff;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.promotions-action-btn.delete {
+  background: #fde8e8;
+  color: #dc4655;
+}
+
+.promotions-action-btn.delete:hover {
+  background: #dc4655;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.promotions-table-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+  color: #8898aa;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.promotions-table-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.promotions-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #8898aa;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.promotions-table-empty svg {
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.promotions-table-empty p {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* Días activos */
+.promo-active-days {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #e7f3ff;
+  color: #007bff;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Lista de reglas aplicadas */
+.promo-rules-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.promo-rule-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.promo-no-rules {
+  color: #8898aa;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* Botón de ver */
+.promotions-action-btn.view {
+  background: #e7f3ff;
+  color: #007bff;
+}
+
+.promotions-action-btn.view:hover {
+  background: #007bff;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.promotions-action-btn.view svg {
+  width: 18px;
+  height: 18px;
+}

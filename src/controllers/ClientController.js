@@ -183,7 +183,7 @@ const ClientController = {
     try {
       const client = await ClientModel.model.findByIdAndUpdate(
         req.params.id,
-        { activo: false },
+        { active: false },
         { new: true },
       );
 

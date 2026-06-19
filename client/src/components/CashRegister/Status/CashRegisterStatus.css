@@ -1,0 +1,113 @@
+.cash-status-panel {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.cash-status-header {
+  padding: 16px 24px;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #e1e8ed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cash-status-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 700;
+}
+
+.cash-status-badge {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cash-status-badge.open {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.cash-status-badge.closed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.cash-status-grid {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.cash-status-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cash-status-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.cash-status-label {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cash-status-value {
+  font-size: 16px;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.cash-status-value.amount {
+  color: #1e40af;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.cash-status-value.notes {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4b5563;
+  font-style: italic;
+  background: #f9fafb;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #d1d5db;
+}
+
+.cash-status-value.difference {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.cash-status-value.difference.zero {
+  color: #059669;
+}
+
+.cash-status-value.difference.positive {
+  color: #1e40af;
+}
+
+.cash-status-value.difference.negative {
+  color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .cash-status-grid {
+    grid-template-columns: 1fr;
+  }
+}

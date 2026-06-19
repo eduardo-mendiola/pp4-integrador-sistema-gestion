@@ -1,0 +1,223 @@
+.movement-receipt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.movement-receipt-modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.movement-receipt-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e1e8ed;
+  background: #f8f9fa;
+}
+
+.movement-receipt-header-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.movement-receipt-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.movement-receipt-btn.print {
+  background: #43a258;
+  color: white;
+}
+
+.movement-receipt-btn.print:hover {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+.movement-receipt-btn.close {
+  background: #6c757d;
+  color: white;
+}
+
+.movement-receipt-btn.close:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+.movement-receipt-ticket {
+  padding: 24px;
+}
+
+.movement-receipt-ticket-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.movement-receipt-store-name {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 700;
+}
+
+.movement-receipt-store-info {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.movement-receipt-title {
+  margin: 16px 0 0 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.movement-receipt-divider {
+  border-top: 1px dashed #ccc;
+  margin: 16px 0;
+}
+
+.movement-receipt-section {
+  margin-bottom: 16px;
+}
+
+.movement-receipt-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.movement-receipt-info-row:last-child {
+  border-bottom: none;
+}
+
+.movement-receipt-label {
+  font-weight: 600;
+  color: #555;
+  font-size: 15px;
+}
+
+.movement-receipt-value {
+  color: #333;
+  font-size: 15px;
+  text-align: right;
+}
+
+.movement-receipt-amount {
+  text-align: center;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.movement-receipt-amount-value {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+.movement-receipt-amount-value.income {
+  color: #43a258;
+}
+
+.movement-receipt-amount-value.expense {
+  color: #dc4655;
+}
+
+.movement-receipt-footer {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.movement-receipt-thank-you {
+  margin: 0;
+  font-size: 14px;
+  color: #888;
+}
+
+/* Estilos para impresión */
+@media print {
+  /* Ocultar todo excepto el modal */
+  body * {
+    visibility: hidden !important;
+  }
+  
+  /* Mostrar solo el modal y su contenido */
+  .movement-receipt-overlay,
+  .movement-receipt-overlay * {
+    visibility: visible !important;
+  }
+  
+  /* Posicionar el modal para impresión */
+  .movement-receipt-overlay {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .movement-receipt-modal {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 20px !important;
+  }
+  
+  /* Ocultar botones de acción */
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Ajustar estilos para impresión */
+  .movement-receipt-ticket {
+    padding: 0 !important;
+  }
+  
+  .movement-receipt-amount {
+    background: #f8f9fa !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

@@ -5,7 +5,6 @@ const config = {
   title: 'Categorías',
   description: 'Catálogo simple de categorías.',
   endpoint: '/api/categories',
-  useModal: true,
   initialValues: { name: '', description: '' },
   fields: [
     { name: 'name', label: 'Nombre', type: 'text', required: true },

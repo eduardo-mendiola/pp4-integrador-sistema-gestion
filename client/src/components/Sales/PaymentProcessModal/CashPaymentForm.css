@@ -1,0 +1,179 @@
+.cash-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cash-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cash-form-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.cash-form-input {
+  padding: 14px 16px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: right;
+  transition: all 0.2s;
+}
+
+.cash-form-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.cash-form-quick-amounts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cash-form-quick-label {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.cash-form-quick-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.cash-form-quick-btn {
+  padding: 10px;
+  background: #f2f2f2;
+  border: 1px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cash-form-quick-btn:hover {
+  background: #e9ecef;
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.cash-form-change {
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.cash-form-change.negative {
+  background: #f8d7da;
+  border: 2px solid #f5c6cb;
+}
+
+.cash-form-change.negative .cash-form-change-label {
+  color: #721c24;
+}
+
+.cash-form-change.negative .cash-form-change-value {
+  color: #dc4655;
+}
+
+.cash-form-change.positive {
+  background: #d4edda;
+  border: 2px solid #c3e6cb;
+}
+
+.cash-form-change.positive .cash-form-change-label {
+  color: #155724;
+}
+
+.cash-form-change.positive .cash-form-change-value {
+  color: #43a258;
+}
+
+.cash-form-change.exact {
+  background: #d1ecf1;
+  border: 2px solid #bee5eb;
+}
+
+.cash-form-change.exact .cash-form-change-label {
+  color: #0c5460;
+}
+
+.cash-form-change.exact .cash-form-change-value {
+  color: #17a2b8;
+}
+
+.cash-form-change-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.cash-form-change-value {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.cash-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cash-form-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cash-form-btn.cancel {
+  background: #6c757d;
+  color: white;
+}
+
+.cash-form-btn.cancel:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.cash-form-btn.process {
+  background: #43a258;
+  color: white;
+}
+
+.cash-form-btn.process:hover:not(:disabled) {
+  background: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.cash-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 480px) {
+  .cash-form-quick-buttons {
+    grid-template-columns: 1fr;
+  }
+  
+  .cash-form-change-value {
+    font-size: 24px;
+  }
+}

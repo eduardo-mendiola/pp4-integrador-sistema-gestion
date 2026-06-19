@@ -1,0 +1,162 @@
+.client-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.client-selector-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.client-selector-btn.add {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.client-selector-btn.add:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.client-selector-btn.view {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+
+.client-selector-btn.view:hover {
+  background-color: #5a6268;
+}
+
+.client-selector-btn.edit {
+  background-color: #fcc92e;
+  color: #212529;
+  border-color: #fcc92e;
+}
+
+.client-selector-btn.edit:hover {
+  background-color: #e0a800;
+}
+
+.client-selector-btn.change {
+  background-color: white;
+  color: #dc4655;
+  border-color: #dc4655;
+}
+
+.client-selector-btn.change:hover {
+  background-color: #dc4655;
+  color: white;
+}
+
+.client-selector-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.client-selector-warning svg {
+  color: #d39e00;
+  flex-shrink: 0;
+}
+
+/* Estado seleccionado */
+.client-selector.selected {
+  background-color: #f2f2f2;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  padding: 8px 12px;
+  gap: 12px;
+}
+
+.client-selector-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.client-selector-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.client-selector-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.client-selector-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.client-selector-doc {
+  font-size: 12px;
+  color: #8898aa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.client-selector-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.client-selector-actions .client-selector-btn {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+@media (max-width: 1200px) {
+  .client-selector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .client-selector.selected {
+    flex-direction: row;
+  }
+  
+  .client-selector-actions {
+    justify-content: flex-end;
+  }
+}
