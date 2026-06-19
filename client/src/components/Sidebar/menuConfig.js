@@ -63,8 +63,8 @@ export const menuConfig = [
         permission: "view_cash_flow",
       },
       {
-        id: "caja-comprobantes",
-        label: "Comprobantes",
+        id: "caja-reportes",
+        label: "Reportes",
         path: "/caja/reportes",
         permission: "view_internal_vouchers",
       },
