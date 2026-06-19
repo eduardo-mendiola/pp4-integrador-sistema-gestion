@@ -3,6 +3,7 @@ import useReportsLogic from './useReportsLogic';
 import ReportSelector from '../../../components/CashRegister/Reports/ReportSelector';
 import MovementsReport from '../../../components/CashRegister/Reports/MovementsReport';
 import CashClosingReport from '../../../components/CashRegister/Reports/CashClosingReport';
+import SalesReport from '../../../components/CashRegister/Reports/SalesReport';
 import './ReportsPage.css';
 
 export default function ReportsPage() {
@@ -35,6 +36,7 @@ export default function ReportsPage() {
       case 'cash-closing':
         return <CashClosingReport data={reportData} />;
       case 'sales':
+        return <SalesReport data={reportData} />;
       case 'top-products':
       case 'returns':
         return (
