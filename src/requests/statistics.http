@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:4000
+
+# ============================================================
+# ESTADÍSTICAS (Statistics)
+# ============================================================
+
+### Get dashboard statistics for today
+GET {{baseUrl}}/api/statistics/dashboard
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get dashboard statistics for current month
+GET {{baseUrl}}/api/statistics/dashboard?from=2026-06-01&to=2026-06-30
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get dashboard statistics for custom range
+GET {{baseUrl}}/api/statistics/dashboard?from=2026-01-01&to=2026-06-19
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get dashboard statistics for current year
+GET {{baseUrl}}/api/statistics/dashboard?from=2026-01-01&to=2026-12-31
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
+
+### Get dashboard statistics for last week
+GET {{baseUrl}}/api/statistics/dashboard?from=2026-06-12&to=2026-06-19
+Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
+Accept: application/json
