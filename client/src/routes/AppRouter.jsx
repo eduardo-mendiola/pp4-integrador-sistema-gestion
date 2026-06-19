@@ -13,7 +13,7 @@ import ClientsPage from '../pages/clients/ClientsPage.jsx';
 import CashRegisterPage from '../pages/cashRegisterPage/CashRegisterPage/CashRegisterPage.jsx';
 import MovementsPage from '../pages/cashRegisterPage/MovementsPage/MovementsPage.jsx';
 import SalesListPage from '../pages/sales/SalesListPage/SalesListPage.jsx';
-import UsersPage from '../pages/users/UsersPage.jsx';
+import UsersPage from '../pages/users/UsersPage/UsersPage.jsx';
 import RolesPage from '../pages/roles/RolesPage.jsx';
 import EmpleadosPage from '../pages/empleados/EmpleadosPage.jsx';
 import ProveedoresPage from '../pages/proveedores/ProveedoresPage.jsx';
