@@ -368,9 +368,31 @@ function TabSeguridad({ data, onChange }) {
 
 // ── Página principal ──
 
+const LS_KEY = 'app_configuracion';
+
+/** Carga la config desde localStorage y la fusiona con los defaults */
+function loadConfig() {
+  try {
+    const saved = localStorage.getItem(LS_KEY);
+    if (!saved) return defaultConfig;
+    const parsed = JSON.parse(saved);
+    // Fusión profunda: preserva nuevos campos de defaultConfig si se agregan en el futuro
+    return {
+      general:        { ...defaultConfig.general,        ...parsed.general },
+      pos:            { ...defaultConfig.pos,            ...parsed.pos },
+      inventario:     { ...defaultConfig.inventario,     ...parsed.inventario },
+      notificaciones: { ...defaultConfig.notificaciones, ...parsed.notificaciones },
+      seguridad:      { ...defaultConfig.seguridad,      ...parsed.seguridad },
+    };
+  } catch {
+    return defaultConfig;
+  }
+}
+
 export default function ConfiguracionPage() {
   const [activeTab, setActiveTab] = useState('general');
-  const [config, setConfig] = useState(defaultConfig);
+  // Inicialización lazy: solo lee localStorage una vez al montar
+  const [config, setConfig] = useState(() => loadConfig());
   const [saved, setSaved] = useState(false);
   const [dirty, setDirty] = useState(false);
 
@@ -388,14 +410,14 @@ export default function ConfiguracionPage() {
   };
 
   const handleSave = () => {
-    // Aquí se conectaría con la API para persistir los cambios
-    console.log('Guardando configuración:', config);
+    localStorage.setItem(LS_KEY, JSON.stringify(config));
     setSaved(true);
     setDirty(false);
     setTimeout(() => setSaved(false), 3000);
   };
 
   const handleReset = () => {
+    localStorage.removeItem(LS_KEY);
     setConfig(defaultConfig);
     setDirty(false);
     setSaved(false);
