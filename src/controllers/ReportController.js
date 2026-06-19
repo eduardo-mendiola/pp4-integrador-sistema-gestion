@@ -146,6 +146,7 @@ const ReportController = {
 
       const sales = await Sale.model.find(query)
         .populate("client_id", "first_name last_name business_name document_number")
+        .populate("payments.method", "name")
         .sort({ createdAt: -1 })
         .lean();
 

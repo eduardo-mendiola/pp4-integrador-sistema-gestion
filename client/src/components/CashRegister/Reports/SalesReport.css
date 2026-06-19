@@ -1,0 +1,67 @@
+.sales-report {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Número de factura */
+.invoice-number {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  font-size: 14px;
+  color: #525f7f;
+  background: #f2f2f2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #e1e8ed;
+  letter-spacing: 0.5px;
+}
+
+/* Badge de estado */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Descuentos */
+.discount {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+/* Total destacado */
+.total {
+  font-weight: 700;
+  color: #007bff;
+  font-size: 16px;
+}
+
+/* Estilos para impresión */
+@media print {
+  .report-actions {
+    display: none !important;
+  }
+  
+  .report-content {
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  .report-table,
+  .breakdown-table {
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .report-table th,
+  .report-table td {
+    padding: 8px;
+    font-size: 13px;
+  }
+}
