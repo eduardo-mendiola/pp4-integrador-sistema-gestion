@@ -22,7 +22,7 @@ import returnRoutes from './routes/return-routes.js'
 import cashRegisterRoutes from "./routes/cashRegister-routes.js";
 import cashFlowRoutes from "./routes/cashFlow-routes.js";
 import internalVoucherRoutes from "./routes/internalVoucher-routes.js";
-
+import reportRoutes from "./routes/report-routes.js";
 
 const app = express();
 
@@ -108,6 +108,7 @@ app.use('/api/returns', returnRoutes);
 app.use("/api/cash-register", cashRegisterRoutes);
 app.use("/api/cash-flow", cashFlowRoutes);
 app.use("/api/internal-vouchers", internalVoucherRoutes);
+app.use("/api/reports", reportRoutes);
 
 // ======================
 // HEALTH CHECK

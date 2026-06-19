@@ -24,7 +24,7 @@ import DiscountRuleFormPage from '../pages/discount-rules/DiscountRuleFormPage.j
 import StockPage from '../pages/products/StockPage.jsx';
 import NewSalesPage from '../pages/sales/NewSalesPage/NewSalePage.jsx';
 import ReturnsPage from '../pages/returns/ReturnsPage.jsx'; 
-import ReportesPage from '../pages/ReportesPage.jsx';
+import ReportsPage from '../pages/cashRegisterPage/Reports/ReportsPage.jsx';
 import ConfiguracionPage from '../pages/ConfiguracionPage.jsx';
 
 export default function AppRouter() {
@@ -55,6 +55,7 @@ export default function AppRouter() {
         {/* Caja */}
         <Route path="caja/estado" element={<ProtectedRoute><CashRegisterPage /></ProtectedRoute>} />
         <Route path="caja/movimientos" element={<ProtectedRoute><MovementsPage /></ProtectedRoute>} />
+        <Route path="caja/reportes" element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
         
         {/* Ventas */}
         <Route path="ventas" element={<ProtectedRoute><SalesListPage /></ProtectedRoute>} />
@@ -78,8 +79,8 @@ export default function AppRouter() {
         <Route path="promociones/descuentos/nuevo" element={<ProtectedRoute><DiscountRuleFormPage /></ProtectedRoute>} />
         <Route path="promociones/descuentos/:id/editar" element={<ProtectedRoute><DiscountRuleFormPage /></ProtectedRoute>} />
         
-        {/* Reportes */}
-        <Route path="reportes" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />
+        {/* Estadisticas */}
+        <Route path="estadisticas" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />
         
         {/* Configuración */}
         <Route path="configuracion" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />

@@ -65,7 +65,7 @@ export const menuConfig = [
       {
         id: "caja-comprobantes",
         label: "Comprobantes",
-        path: "/caja/comprobantes",
+        path: "/caja/reportes",
         permission: "view_internal_vouchers",
       },
     ],
@@ -165,11 +165,11 @@ export const menuConfig = [
     ],
   },
   {
-    id: "reportes",
-    label: "Reportes",
+    id: "estadisticas",
+    label: "Estadísticas",
     icon: "FiBarChart2",
-    path: "/reportes",
-    permission: "view_reports",
+    path: "/estadisticas",
+    permission: "view_analytics",
     submenu: null,
   },
   {

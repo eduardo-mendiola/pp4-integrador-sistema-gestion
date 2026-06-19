@@ -1,0 +1,295 @@
+.movements-report {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Botones de exportación */
+.report-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.report-action-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: white;
+}
+
+.report-action-btn.pdf {
+  background: #dc3545;
+}
+
+.report-action-btn.pdf:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+}
+
+.report-action-btn.excel {
+  background: #28a745;
+}
+
+.report-action-btn.excel:hover {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+.report-action-btn.csv {
+  background: #ffc107;
+  color: #333;
+}
+
+.report-action-btn.csv:hover {
+  background: #e0a800;
+  transform: translateY(-1px);
+}
+
+/* Contenido del reporte */
+.report-content {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado */
+.report-header-section {
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.report-title {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  color: #333;
+  font-weight: 700;
+}
+
+.report-subtitle {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+  color: #525f7f;
+  font-weight: 600;
+}
+
+.report-period {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* Resumen */
+.report-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.summary-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  border-left: 4px solid #6c757d;
+}
+
+.summary-card.income {
+  border-left-color: #28a745;
+  background: #d4edda;
+}
+
+.summary-card.expense {
+  border-left-color: #dc3545;
+  background: #f8d7da;
+}
+
+.summary-card.balance {
+  border-left-color: #007bff;
+  background: #d1ecf1;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* Desgloses */
+.report-breakdown {
+  margin-bottom: 32px;
+}
+
+.report-breakdown h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.breakdown-table th {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #525f7f;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.breakdown-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f4f8;
+  font-size: 15px;
+  color: #333;
+}
+
+.breakdown-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Tabla de movimientos */
+.report-table-section {
+  margin-top: 32px;
+}
+
+.report-table-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.report-table th {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #525f7f;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.report-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f4f8;
+  font-size: 15px;
+  color: #333;
+}
+
+.report-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.report-table th.text-right,
+.report-table td.text-right {
+  text-align: right;
+}
+
+/* Badges */
+.movement-type-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.movement-type-badge.income {
+  background: #d4edda;
+  color: #155724;
+}
+
+.movement-type-badge.expense {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.movement-amount {
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+.movement-amount.income {
+  color: #28a745;
+}
+
+.movement-amount.expense {
+  color: #dc3545;
+}
+
+/* Estilos para impresión */
+@media print {
+  .report-actions {
+    display: none !important;
+  }
+  
+  .report-content {
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  .report-table,
+  .breakdown-table {
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .report-actions {
+    flex-direction: column;
+  }
+  
+  .report-action-btn {
+    width: 100%;
+  }
+  
+  .report-period {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .report-summary {
+    grid-template-columns: 1fr;
+  }
+}
