@@ -1,6 +1,7 @@
 import React from 'react';
 import useStatisticsLogic from './useStatisticsLogic';
 import KPICards from '../../components/Statistics/KPICards/KPICards';
+import EvolutionChart from '../../components/Statistics/EvolutionChart/EvolutionChart';
 import './StatisticsPage.css';
 
 export default function StatisticsPage() {
@@ -92,12 +93,8 @@ export default function StatisticsPage() {
           {/* KPIs */}
           <KPICards kpis={statisticsData.kpis} />
           
-          {/* Placeholder para gráficos (próximamente) */}
-          <div className="charts-placeholder">
-            <h3>Gráficos</h3>
-            <p>Los gráficos se implementarán en las siguientes fases.</p>
-            <pre>{JSON.stringify(statisticsData, null, 2)}</pre>
-          </div>
+          {/* Gráfico de evolución */}
+          <EvolutionChart data={statisticsData.evolution} />
         </div>
       )}
     </div>
