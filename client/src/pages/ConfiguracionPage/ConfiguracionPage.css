@@ -1,0 +1,280 @@
+/* ============================================================
+   ConfiguracionPage – estilos propios (no tocar styles.css)
+   ============================================================ */
+
+/* Contenedor general */
+.cfg-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Encabezado de la página */
+.cfg-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cfg-title {
+  margin: 0 0 0.2rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.cfg-subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.cfg-header-actions {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Botón guardar */
+.cfg-save-btn {
+  background: var(--brand);
+  color: white;
+  border-radius: 10px;
+  padding: 0.6rem 1.1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.cfg-save-btn:hover:not(:disabled) {
+  background: var(--brand-strong);
+  transform: translateY(-1px);
+}
+
+.cfg-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cfg-save-btn--saved {
+  background: #16a34a !important;
+}
+
+/* Banner de cambios sin guardar */
+.cfg-unsaved-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* Layout principal: tabs | contenido */
+.cfg-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+/* Navegación lateral de pestañas */
+.cfg-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: var(--panel);
+  border-radius: 18px;
+  padding: 0.75rem;
+  box-shadow: var(--shadow);
+}
+
+.cfg-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: left;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  width: 100%;
+}
+
+.cfg-tab-btn:hover {
+  background: var(--panel-soft);
+  color: var(--ink);
+}
+
+.cfg-tab-btn--active {
+  background: #dfeaff;
+  color: var(--brand-strong);
+}
+
+/* Contenido del tab activo */
+.cfg-content {
+  min-height: 400px;
+}
+
+/* Título de sección dentro del tab */
+.cfg-section-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Grid de campos de formulario */
+.cfg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+/* Campo individual */
+.cfg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.cfg-field label {
+  font-size: 0.87rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0;
+}
+
+.cfg-field input,
+.cfg-field select {
+  font-size: 0.9rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel-soft);
+  color: var(--ink);
+  transition: border-color 0.18s, box-shadow 0.18s;
+  width: 100%;
+}
+
+.cfg-field input:focus,
+.cfg-field select:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.12);
+}
+
+/* Hint debajo del campo */
+.cfg-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* Lista de toggles */
+.cfg-toggles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cfg-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cfg-toggle-row:last-child {
+  border-bottom: none;
+}
+
+.cfg-toggle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+}
+
+.cfg-toggle-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Toggle switch */
+.cfg-toggle {
+  flex-shrink: 0;
+  width: 44px;
+  height: 24px;
+  background: #d1d5db;
+  border-radius: 999px;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  transition: background 0.22s;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cfg-toggle-on {
+  background: var(--brand);
+}
+
+.cfg-toggle-thumb {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.22s;
+  transform: translateX(0);
+}
+
+.cfg-toggle-on .cfg-toggle-thumb {
+  transform: translateX(20px);
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .cfg-body {
+    grid-template-columns: 1fr;
+  }
+
+  .cfg-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .cfg-tab-btn {
+    width: auto;
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .cfg-grid {
+    grid-template-columns: 1fr;
+  }
+}

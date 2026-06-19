@@ -26,7 +26,7 @@ import NewSalesPage from '../pages/sales/NewSalesPage/NewSalePage.jsx';
 import ReturnsPage from '../pages/returns/ReturnsPage.jsx'; 
 import ReportsPage from '../pages/cashRegisterPage/Reports/ReportsPage.jsx';
 import StatisticsPage from '../pages/statisticsPage/StatisticsPage.jsx';
-import ConfiguracionPage from '../pages/ConfiguracionPage.jsx';
+import ConfiguracionPage from '../pages/ConfiguracionPage/ConfiguracionPage.jsx';
 
 export default function AppRouter() {
   return (
@@ -84,7 +84,7 @@ export default function AppRouter() {
         <Route path="estadisticas" element={<ProtectedRoute><StatisticsPage /></ProtectedRoute>} />
         
         {/* Configuración */}
-        <Route path="configuracion" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />
+        <Route path="configuracion" element={<ProtectedRoute><ConfiguracionPage /></ProtectedRoute>} />
         
         {/* Módulos dinámicos del moduleCards */}
         {moduleCards
