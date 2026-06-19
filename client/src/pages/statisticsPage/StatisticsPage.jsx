@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import useStatisticsLogic from './useStatisticsLogic';
 import KPICards from '../../components/Statistics/KPICards/KPICards';
 import EvolutionChart from '../../components/Statistics/EvolutionChart/EvolutionChart';
@@ -9,6 +9,7 @@ import SalesByStatusChart from '../../components/Statistics/SalesByStatusChart/S
 import SalesByCategoryChart from '../../components/Statistics/SalesByCategoryChart/SalesByCategoryChart';
 import './StatisticsPage.css';
 
+
 export default function StatisticsPage() {
   const {
     statisticsData,
@@ -18,8 +19,13 @@ export default function StatisticsPage() {
     customDates,
     loadStatistics,
     handlePeriodChange,
-    handleCustomDateChange
+    handleCustomDateChange,
+    handleExportPDF,
+    handleExportExcel,
+    handleExportCSV
   } = useStatisticsLogic();
+
+  const contentRef = useRef(null);
 
   const periodLabels = {
     'today': 'Hoy',
@@ -29,10 +35,27 @@ export default function StatisticsPage() {
     'custom': 'Personalizado'
   };
 
+  const onExportPDF = () => {
+    handleExportPDF(contentRef.current);
+  };
+
   return (
     <div className="statistics-container">
       <div className="statistics-header">
         <h1>Estadísticas</h1>
+        {statisticsData && !loading && (
+          <div className="report-actions">
+            <button className="report-action-btn pdf" onClick={onExportPDF}>
+              Descargar PDF
+            </button>
+            <button className="report-action-btn excel" onClick={handleExportExcel}>
+              Descargar Excel
+            </button>
+            <button className="report-action-btn csv" onClick={handleExportCSV}>
+              Descargar CSV
+            </button>
+          </div>
+        )}
       </div>
 
       {error && <div className="statistics-error">{error}</div>}
@@ -94,7 +117,7 @@ export default function StatisticsPage() {
 
       {/* Contenido de estadísticas */}
       {statisticsData && !loading && (
-        <div className="statistics-content">
+        <div className="statistics-content" ref={contentRef}>
           {/* KPIs */}
           <KPICards kpis={statisticsData.kpis} />
           
