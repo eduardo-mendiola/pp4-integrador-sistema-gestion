@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { FiX, FiPackage, FiTag, FiDollarSign, FiAlertCircle } from 'react-icons/fi';
+import { menuConfig } from '../Sidebar/menuConfig.js';
 import './ProductModal.css';
 
 const DEFAULT_IMAGE = '/images/imagen-no-disponible-750x750.png';
@@ -20,7 +21,12 @@ export default function ProductModal({ product, onClose }) {
 
   const handleViewProduct = () => {
     onClose();
-    navigate(`/productos/${product._id}`);
+    // Obtener la ruta configurada para la página de productos en menuConfig.js
+    const productsParent = menuConfig.find(item => item.id === 'productos');
+    const productsSub = productsParent?.submenu?.find(sub => sub.id === 'productos-list');
+    const productsPath = productsSub?.path || '/productos';
+    
+    navigate(productsPath);
   };
 
   return createPortal(
