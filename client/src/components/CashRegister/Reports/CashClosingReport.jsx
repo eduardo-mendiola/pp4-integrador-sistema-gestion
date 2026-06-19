@@ -128,13 +128,13 @@ export default function CashClosingReport({ data }) {
       {/* Botones de exportación */}
       <div className="report-actions">
         <button className="report-action-btn pdf" onClick={handleExportPDF}>
-          📄 Descargar PDF
+          Descargar PDF
         </button>
         <button className="report-action-btn excel" onClick={handleExportExcel}>
-          📊 Descargar Excel
+          Descargar Excel
         </button>
         <button className="report-action-btn csv" onClick={handleExportCSV}>
-          📋 Descargar CSV
+          Descargar CSV
         </button>
       </div>
 
