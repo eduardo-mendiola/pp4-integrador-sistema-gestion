@@ -135,7 +135,7 @@ export default function EmployeesTable({ employees, loading, onView, onEdit, onD
         <thead>
           <tr>
             <th style={{ width: '50px' }}>#</th>
-            <th className="sortable" onClick={() => handleSort('code')} style={{ width: '120px' }}>
+            <th className="sortable" onClick={() => handleSort('code')} style={{ width: '170px' }}>
               Código {getSortIcon('code')}
             </th>
             <th className="sortable" onClick={() => handleSort('person')}>
