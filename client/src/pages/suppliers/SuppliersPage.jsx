@@ -223,7 +223,7 @@ export default function SuppliersPage() {
 
       <div className="panel">
         <div className="clients-toolbar">
-          <div className="search-input">
+          <div className="list-search">
             <input
               type="search"
               placeholder="Buscar proveedor..."
