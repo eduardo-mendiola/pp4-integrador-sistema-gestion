@@ -8,7 +8,7 @@ const PAGE_SIZE = 10;
 
 const STATUS_TABS = [
   { key: 'all', label: 'Todos' },
-  { key: 'active', label: 'En Stock' },
+  { key: 'active', label: 'Activos' },
   { key: 'cancelled', label: 'Cancelados' }
 ];
 
@@ -242,7 +242,7 @@ export default function ClientsPage() {
 
       <div className="panel">
         <div className="clients-toolbar">
-          <div className="search-input">
+          <div className="list-search">
             <input
               type="search"
               placeholder="Buscar cliente..."
