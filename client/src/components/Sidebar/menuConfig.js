@@ -11,9 +11,9 @@ export const menuConfig = [
     submenu: null,
   },
   {
-    id: "usuarios",
-    label: "Usuarios",
-    icon: "FiUsers",
+    id: "accesos",
+    label: "Accesos",
+    icon: "FiShield",
     permission: "view_users",
     submenu: [
       {
@@ -23,22 +23,30 @@ export const menuConfig = [
         permission: "view_users",
       },
       {
+        id: "roles",
+        label: "Roles",
+        path: "/roles",
+        permission: "view_roles",
+      },
+    ],
+  },
+  {
+    id: "personal",
+    label: "Personal",
+    icon: "FiUserCheck",
+    permission: "view_employees",
+    submenu: [
+      {
         id: "datos_personales",
         label: "Datos Personales",
         path: "/datos-personales",
-        permission: "view_employees",
+        permission: "view_personal_data",
       },
       {
         id: "empleados",
         label: "Empleados",
         path: "/empleados",
         permission: "view_employees",
-      },
-      {
-        id: "roles",
-        label: "Roles",
-        path: "/roles",
-        permission: "view_roles",
       },
     ],
   },
