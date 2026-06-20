@@ -2,6 +2,9 @@ import React from 'react';
 import { useAuth } from '../../../context/AuthContext.jsx';
 import usePersonsLogic from './usePersonsLogic';
 import PersonsTable from './PersonsTable';
+import PersonForm from './PersonForm';
+import PersonDetails from './PersonDetails';
+import PersonDeleteModal from './PersonDeleteModal';
 import './PersonsPage.css';
 
 export default function PersonsPage() {
@@ -11,10 +14,19 @@ export default function PersonsPage() {
     loading,
     error,
     showForm,
+    showDetails,
+    showDelete,
+    editingPerson,
+    selectedPerson,
     handleCreate,
     handleEdit,
     handleView,
-    handleDelete
+    handleDelete,
+    handleCloseForm,
+    handleCloseDetails,
+    handleCloseDelete,
+    handleSavePerson,
+    handleConfirmDelete
   } = usePersonsLogic();
 
   return (
@@ -39,6 +51,31 @@ export default function PersonsPage() {
         canEdit={hasPermission('edit_personal_data')}
         canDelete={hasPermission('delete_personal_data')}
       />
+
+      {showForm && (
+        <PersonForm
+          person={editingPerson}
+          onClose={handleCloseForm}
+          onSave={handleSavePerson}
+        />
+      )}
+
+      {showDetails && selectedPerson && (
+        <PersonDetails
+          person={selectedPerson}
+          onClose={handleCloseDetails}
+          onEdit={handleEdit}
+          canEdit={hasPermission('edit_personal_data')}
+        />
+      )}
+
+      {showDelete && selectedPerson && (
+        <PersonDeleteModal
+          person={selectedPerson}
+          onClose={handleCloseDelete}
+          onConfirm={handleConfirmDelete}
+        />
+      )}
     </div>
   );
 }
