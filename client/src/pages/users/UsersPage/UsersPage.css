@@ -46,6 +46,127 @@
   font-weight: 600;
 }
 
+/* Secciones del formulario */
+.user-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.user-form-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.user-form-section-title {
+  margin: 0;
+  font-size: 16px;
+  color: #525f7f;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+/* Input de contraseña con toggle */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 44px;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8898aa;
+}
+
+.password-toggle-btn:hover {
+  color: #333;
+  background: none;
+}
+
+/* Botón expandir datos personales */
+.user-form-expand-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: left;
+}
+
+.user-form-expand-btn:hover {
+  background: #e9ecef;
+  border-color: #84A3D3;
+  color: #84A3D3;
+}
+
+.expand-icon {
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+
+/* Contenido expandible */
+.user-form-expandable-content {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e1e8ed;
+  margin-top: 8px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.address-section-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #525f7f;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+}
+
+/* Campo deshabilitado (DNI) */
+.disabled-field {
+  background: #e9ecef !important;
+  cursor: not-allowed !important;
+  color: #6c757d !important;
+}
+
 @media (max-width: 768px) {
   .users-header {
     flex-direction: column;

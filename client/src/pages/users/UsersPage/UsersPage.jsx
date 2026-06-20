@@ -3,7 +3,7 @@ import { useAuth } from '../../../context/AuthContext.jsx';
 import useUsersLogic from './useUsersLogic';
 import UsersTable from './UsersTable';
 import UserForm from './UserForm';
-// import UserDetailsModal from './UserDetailsModal';
+import UserDetailsModal from './UserDetailsModal';
 // import DeleteUserModal from './DeleteUserModal';
 import './UsersPage.css';
 
@@ -65,6 +65,7 @@ export default function UsersPage() {
         <UserDetailsModal
           user={selectedUser}
           onClose={handleCloseDetails}
+          onEdit={handleEdit}
         />
       )}
 
