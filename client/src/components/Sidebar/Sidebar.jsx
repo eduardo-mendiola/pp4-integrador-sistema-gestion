@@ -16,6 +16,8 @@ import {
   FiChevronRight,
   FiLogOut,
   FiDollarSign,
+  FiShield,
+  FiUserCheck,
 } from 'react-icons/fi';
 import './Sidebar.css';
 
@@ -31,6 +33,8 @@ const iconMap = {
   FiBarChart2,
   FiSettings,
   FiDollarSign,
+  FiShield,
+  FiUserCheck,
 };
 
 export default function Sidebar({ isOpen, onClose }) {

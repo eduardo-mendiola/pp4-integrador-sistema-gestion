@@ -3,6 +3,8 @@ import { useAuth } from '../../../context/AuthContext.jsx';
 import useRolesLogic from './useRolesLogic';
 import RolesTable from './RolesTable';
 import RoleForm from './RoleForm';
+import RoleDetailsModal from './RoleDetailsModal';
+import DeleteRoleModal from './DeleteRoleModal';
 import './RolesPage.css';
 
 export default function RolesPage() {
@@ -55,6 +57,22 @@ export default function RolesPage() {
           role={editingRole}
           onClose={handleCloseForm}
           onSave={handleSaveRole}
+        />
+      )}
+
+      {showDetails && (
+        <RoleDetailsModal
+          role={selectedRole}
+          onClose={handleCloseDetails}
+          onEdit={handleEdit}
+        />
+      )}
+
+      {showDelete && (
+        <DeleteRoleModal
+          role={selectedRole}
+          onClose={handleCloseDelete}
+          onConfirm={handleConfirmDelete}
         />
       )}
     </div>
