@@ -45,8 +45,37 @@ export default function EmployeesTable({ employees, loading, onView, onEdit, onD
     return '-';
   };
 
-  const isActive = (employee) => {
-    return !employee.termination_date;
+  const getStatus = (employee) => {
+    return employee.status || 'active';
+  };
+
+  const getContractStatus = (employee) => {
+    return employee.contract_status || 'active';
+  };
+
+  const formatStatusReason = (reason) => {
+    if (!reason) return '';
+    const translations = {
+      'license': 'Licencia',
+      'suspension': 'Suspensión',
+      'medical_leave': 'Licencia Médica',
+      'maternity_leave': 'Licencia Maternidad',
+      'other': 'Otro'
+    };
+    return translations[reason] || reason;
+  };
+
+  const formatTerminationReason = (reason) => {
+    if (!reason) return '';
+    const translations = {
+      'resignation': 'Renuncia',
+      'dismissal': 'Despido',
+      'retirement': 'Jubilación',
+      'contract_end': 'Fin de Contrato',
+      'mutual_agreement': 'Acuerdo Mutuo',
+      'other': 'Otro'
+    };
+    return translations[reason] || reason;
   };
 
   const sortedEmployees = useMemo(() => {
@@ -77,8 +106,12 @@ export default function EmployeesTable({ employees, loading, onView, onEdit, onD
             bValue = (b.shift_schedule || '').toLowerCase();
             break;
           case 'status':
-            aValue = isActive(a) ? 1 : 0;
-            bValue = isActive(b) ? 1 : 0;
+            aValue = getStatus(a);
+            bValue = getStatus(b);
+            break;
+          case 'contract_status':
+            aValue = getContractStatus(a);
+            bValue = getContractStatus(b);
             break;
           case 'created_at':
             aValue = new Date(a.created_at || a.createdAt).getTime();
@@ -135,23 +168,26 @@ export default function EmployeesTable({ employees, loading, onView, onEdit, onD
         <thead>
           <tr>
             <th style={{ width: '50px' }}>#</th>
-            <th className="sortable" onClick={() => handleSort('code')} style={{ width: '170px' }}>
+            <th className="sortable" onClick={() => handleSort('code')} style={{ width: '150px' }}>
               Código {getSortIcon('code')}
             </th>
             <th className="sortable" onClick={() => handleSort('person')}>
               Nombre {getSortIcon('person')}
             </th>
-            <th className="sortable" onClick={() => handleSort('dni')} style={{ width: '120px' }}>
+            <th className="sortable" onClick={() => handleSort('dni')} style={{ width: '110px' }}>
               DNI {getSortIcon('dni')}
             </th>
-            <th className="sortable" onClick={() => handleSort('hire_date')} style={{ width: '130px' }}>
+            <th className="sortable" onClick={() => handleSort('hire_date')} style={{ width: '120px' }}>
               Fecha Ingreso {getSortIcon('hire_date')}
             </th>
-            <th className="sortable" onClick={() => handleSort('shift')}>
+            <th className="sortable" onClick={() => handleSort('shift')} style={{ width: '130px' }}>
               Turno {getSortIcon('shift')}
             </th>
-            <th className="sortable" onClick={() => handleSort('status')} style={{ textAlign: 'center', width: '100px' }}>
+            <th className="sortable" onClick={() => handleSort('status')} style={{ textAlign: 'center', width: '110px' }}>
               Estado {getSortIcon('status')}
+            </th>
+            <th className="sortable" onClick={() => handleSort('contract_status')} style={{ textAlign: 'center', width: '120px' }}>
+              Contrato {getSortIcon('contract_status')}
             </th>
             <th className="text-center" style={{ width: '120px' }}>Acciones</th>
           </tr>
@@ -168,8 +204,19 @@ export default function EmployeesTable({ employees, loading, onView, onEdit, onD
               <td>{formatDate(employee.hire_date)}</td>
               <td>{formatShiftSchedule(employee.shift_schedule)}</td>
               <td style={{ textAlign: 'center' }}>
-                <span className={`employees-status-badge ${isActive(employee) ? 'active' : 'inactive'}`}>
-                  {isActive(employee) ? 'Activo' : 'Inactivo'}
+                <span 
+                  className={`employees-status-badge ${getStatus(employee)}`}
+                  title={getStatus(employee) === 'inactive' ? formatStatusReason(employee.status_reason) : ''}
+                >
+                  {getStatus(employee) === 'active' ? 'Activo' : 'Inactivo'}
+                </span>
+              </td>
+              <td style={{ textAlign: 'center' }}>
+                <span 
+                  className={`employees-contract-badge ${getContractStatus(employee)}`}
+                  title={getContractStatus(employee) === 'terminated' ? formatTerminationReason(employee.termination_reason) : ''}
+                >
+                  {getContractStatus(employee) === 'active' ? 'Vigente' : 'Terminado'}
                 </span>
               </td>
               <td className="text-center">

@@ -206,6 +206,84 @@
   animation: spin 1s linear infinite;
 }
 
+/* Toggle de estado (Activo/Inactivo y Vigente/Terminado) */
+.employee-status-toggle {
+  display: flex;
+  gap: 12px;
+}
+
+.status-toggle-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  color: #525f7f;
+}
+
+.status-toggle-btn:hover:not(:disabled) {
+  border-color: #84A3D3;
+  background: #f8f9fa;
+}
+
+.status-toggle-btn.active {
+  background: #84A3D3;
+  border-color: #84A3D3;
+  color: white;
+}
+
+.status-toggle-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Textarea para comentarios */
+.employee-form-field textarea {
+  padding: 10px 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  background: white;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.employee-form-field textarea:focus {
+  outline: none;
+  border-color: #84A3D3;
+}
+
+.employee-form-field textarea:disabled {
+  background: #f2f2f2;
+  cursor: not-allowed;
+}
+
+/* Mensajes de error por campo */
+.employee-form-field-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #dc3545;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+@media (max-width: 600px) {
+  .employee-status-toggle {
+    flex-direction: column;
+  }
+  
+  .status-toggle-btn {
+    width: 100%;
+  }
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

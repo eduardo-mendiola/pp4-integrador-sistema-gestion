@@ -53,14 +53,16 @@
   letter-spacing: 0.5px;
 }
 
+/* Badge de Estado (Activo/Inactivo) */
 .employees-status-badge {
   display: inline-block;
   padding: 6px 12px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  cursor: help;
 }
 
 .employees-status-badge.active {
@@ -69,6 +71,28 @@
 }
 
 .employees-status-badge.inactive {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Badge de Contrato (Vigente/Terminado) */
+.employees-contract-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: help;
+}
+
+.employees-contract-badge.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.employees-contract-badge.terminated {
   background: #f8d7da;
   color: #721c24;
 }
@@ -110,12 +134,12 @@
 }
 
 .employees-action-btn.edit {
-  background: #e7f3ff;
-  color: #007bff;
+  background: #e7f8e7;
+  color: #43a258;
 }
 
 .employees-action-btn.edit:hover {
-  background: #007bff;
+  background: #43a258;
   color: white;
   transform: translateY(-1px);
 }
@@ -200,7 +224,8 @@
     font-size: 12px;
   }
   
-  .employees-status-badge {
+  .employees-status-badge,
+  .employees-contract-badge {
     padding: 4px 8px;
     font-size: 10px;
   }

@@ -179,7 +179,7 @@ export default function PersonForm({ person, onClose, onSave }) {
           </div>
 
           <div className="person-form-section">
-            <h3 className="person-form-section-title">Dirección (opcional)</h3>
+            <h3 className="person-form-section-title">Dirección</h3>
             <div className="person-form-grid">
               <div className="person-form-field field-span-2">
                 <label>Calle</label>

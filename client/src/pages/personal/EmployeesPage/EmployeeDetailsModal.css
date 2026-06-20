@@ -65,13 +65,14 @@
 .employee-details-header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
+/* Badge de Estado */
 .employee-details-status-badge {
   padding: 6px 12px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -83,6 +84,26 @@
 }
 
 .employee-details-status-badge.inactive {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Badge de Contrato */
+.employee-details-contract-badge {
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.employee-details-contract-badge.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.employee-details-contract-badge.terminated {
   background: #f8d7da;
   color: #721c24;
 }
@@ -226,5 +247,9 @@
   
   .employee-details-btn {
     width: 100%;
+  }
+  
+  .employee-details-header-actions {
+    flex-wrap: wrap;
   }
 }

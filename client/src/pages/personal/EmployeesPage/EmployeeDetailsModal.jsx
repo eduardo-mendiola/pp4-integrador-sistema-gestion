@@ -55,7 +55,33 @@ export default function EmployeeDetailsModal({ employee, onClose, onEdit }) {
     return translations[shift] || shift.charAt(0).toUpperCase() + shift.slice(1);
   };
 
-  const isActive = !employee.termination_date;
+  const formatStatusReason = (reason) => {
+    if (!reason) return '-';
+    const translations = {
+      'license': 'Licencia',
+      'suspension': 'Suspensión',
+      'medical_leave': 'Licencia Médica',
+      'maternity_leave': 'Licencia por Maternidad',
+      'other': 'Otro'
+    };
+    return translations[reason] || reason;
+  };
+
+  const formatTerminationReason = (reason) => {
+    if (!reason) return '-';
+    const translations = {
+      'resignation': 'Renuncia',
+      'dismissal': 'Despido',
+      'retirement': 'Jubilación',
+      'contract_end': 'Fin de Contrato',
+      'mutual_agreement': 'Acuerdo Mutuo',
+      'other': 'Otro'
+    };
+    return translations[reason] || reason;
+  };
+
+  const status = employee.status || 'active';
+  const contractStatus = employee.contract_status || 'active';
   const personInfo = getPersonInfo();
 
   return (
@@ -67,10 +93,13 @@ export default function EmployeeDetailsModal({ employee, onClose, onEdit }) {
             <span className="employee-details-code">{employee.employee_code || 'Sin código'}</span>
           </div>
           <div className="employee-details-header-actions">
-            <span className={`employee-details-status-badge ${isActive ? 'active' : 'inactive'}`}>
-              {isActive ? 'Activo' : 'Inactivo'}
+            <span className={`employee-details-status-badge ${status}`}>
+              {status === 'active' ? 'Activo' : 'Inactivo'}
             </span>
-            <button className="employee-details-close" onClick={onClose}></button>
+            <span className={`employee-details-contract-badge ${contractStatus}`}>
+              {contractStatus === 'active' ? 'Vigente' : 'Terminado'}
+            </span>
+            <button className="employee-details-close" onClick={onClose}>✕</button>
           </div>
         </div>
 
@@ -87,14 +116,50 @@ export default function EmployeeDetailsModal({ employee, onClose, onEdit }) {
                 <span className="employee-details-field-label">Turno</span>
                 <span className="employee-details-field-value">{formatShift(employee.shift_schedule)}</span>
               </div>
-              {!isActive && employee.termination_date && (
-                <div className="employee-details-field field-span-2">
-                  <span className="employee-details-field-label">Fecha de Baja</span>
-                  <span className="employee-details-field-value">{formatDate(employee.termination_date)}</span>
-                </div>
-              )}
             </div>
           </div>
+
+          {/* Estado del Empleado */}
+          {status === 'inactive' && (
+            <div className="employee-details-section">
+              <h3 className="employee-details-section-title">Estado del Empleado</h3>
+              <div className="employee-details-grid">
+                <div className="employee-details-field">
+                  <span className="employee-details-field-label">Motivo</span>
+                  <span className="employee-details-field-value">{formatStatusReason(employee.status_reason)}</span>
+                </div>
+                {employee.status_comments && (
+                  <div className="employee-details-field field-span-2">
+                    <span className="employee-details-field-label">Comentarios</span>
+                    <span className="employee-details-field-value">{employee.status_comments}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Estado del Contrato */}
+          {contractStatus === 'terminated' && (
+            <div className="employee-details-section">
+              <h3 className="employee-details-section-title">Fin de Contrato</h3>
+              <div className="employee-details-grid">
+                <div className="employee-details-field">
+                  <span className="employee-details-field-label">Fecha de Terminación</span>
+                  <span className="employee-details-field-value">{formatDate(employee.termination_date)}</span>
+                </div>
+                <div className="employee-details-field">
+                  <span className="employee-details-field-label">Motivo</span>
+                  <span className="employee-details-field-value">{formatTerminationReason(employee.termination_reason)}</span>
+                </div>
+                {employee.termination_comments && (
+                  <div className="employee-details-field field-span-2">
+                    <span className="employee-details-field-label">Comentarios</span>
+                    <span className="employee-details-field-value">{employee.termination_comments}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Persona Asociada */}
           <div className="employee-details-section">
