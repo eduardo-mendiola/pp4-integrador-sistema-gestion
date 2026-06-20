@@ -1,0 +1,214 @@
+.persons-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.persons-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.persons-table thead {
+  background-color: #f2f2f2;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.persons-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #525f7f;
+  letter-spacing: 0.5px;
+}
+
+.persons-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f0f4f8;
+  font-size: 15px;
+  color: #333;
+}
+
+.persons-table tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+.persons-table th.text-center,
+.persons-table td.text-center {
+  text-align: center;
+}
+
+/* DNI */
+.persons-dni {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  font-size: 14px;
+  color: #525f7f;
+  background: #f2f2f2;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #e1e8ed;
+  letter-spacing: 0.5px;
+}
+
+/* Badges de relación (Usuario/Empleado) */
+.persons-relation-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.persons-relation-badge.yes {
+  background: #d4edda;
+  color: #155724;
+}
+
+.persons-relation-badge.no {
+  background: #f8f9fa;
+  color: #adb5bd;
+  border: 1px solid #e1e8ed;
+}
+
+/* Acciones */
+.persons-table-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.persons-action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.persons-action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.persons-action-btn.view {
+  background: #e7f3ff;
+  color: #007bff;
+}
+
+.persons-action-btn.view:hover {
+  background: #007bff;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.persons-action-btn.edit {
+  background: #e7f8e7;
+  color: #43a258;
+}
+
+.persons-action-btn.edit:hover {
+  background: #43a258;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.persons-action-btn.delete {
+  background: #fde8e8;
+  color: #dc4655;
+}
+
+.persons-action-btn.delete:hover {
+  background: #dc4655;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Columnas ordenables */
+.persons-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.persons-table th.sortable:hover {
+  background-color: #e9ecef;
+  color: #007bff;
+}
+
+.persons-table th.sortable:active {
+  background-color: #dee2e6;
+}
+
+/* Loading */
+.persons-table-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+  color: #8898aa;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.persons-table-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Empty */
+.persons-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #8898aa;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.persons-table-empty svg {
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.persons-table-empty p {
+  margin: 0;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .persons-table th,
+  .persons-table td {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+  
+  .persons-relation-badge {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+}

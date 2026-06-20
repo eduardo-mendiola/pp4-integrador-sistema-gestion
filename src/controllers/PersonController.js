@@ -1,4 +1,6 @@
 import Person from "../models/PersonModel.js";
+import User from "../models/UserModel.js";
+import Employee from "../models/EmployeeModel.js";
 
 const PersonController = {
   create: async (req, res) => {
@@ -21,11 +23,47 @@ const PersonController = {
     try {
       const persons = await Person.findAll();
 
+      // Obtener todos los usuarios y empleados para verificar relaciones
+      const [users, employees] = await Promise.all([
+        User.model.find({}).select("person_id").lean(),
+        Employee.model.find({}).select("person_id").lean(),
+      ]);
+
+      // Crear mapas para búsqueda rápida (con validación)
+      const userMap = new Map();
+      users.forEach((u) => {
+        if (u.person_id) {
+          userMap.set(u.person_id.toString(), u);
+        }
+      });
+
+      const employeeMap = new Map();
+      employees.forEach((e) => {
+        if (e.person_id) {
+          employeeMap.set(e.person_id.toString(), e);
+        }
+      });
+
+      // Agregar información de relaciones a cada persona
+      const personsWithRelations = persons.map((person) => {
+        const personObj = person.toObject ? person.toObject() : person;
+        const personId = personObj._id?.toString();
+
+        return {
+          ...personObj,
+          has_user: personId ? userMap.has(personId) : false,
+          user_id: personId ? userMap.get(personId)?._id || null : null,
+          is_employee: personId ? employeeMap.has(personId) : false,
+          employee_id: personId ? employeeMap.get(personId)?._id || null : null,
+        };
+      });
+
       return res.json({
         success: true,
-        data: persons,
+        data: personsWithRelations,
       });
     } catch (error) {
+      console.error("Error en getAll persons:", error);
       return res.status(500).json({
         success: false,
         message: error.message,
@@ -111,12 +149,10 @@ const PersonController = {
 
       // Error de unicidad (DNI único)
       if (error.code === 11000) {
-        return res
-          .status(409)
-          .json({
-            success: false,
-            message: "Ya existe una persona con ese DNI",
-          });
+        return res.status(409).json({
+          success: false,
+          message: "Ya existe una persona con ese DNI",
+        });
       }
 
       // Error de validación de Mongoose
