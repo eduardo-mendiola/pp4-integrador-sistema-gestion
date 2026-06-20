@@ -15,6 +15,7 @@ import MovementsPage from '../pages/cashRegisterPage/MovementsPage/MovementsPage
 import SalesListPage from '../pages/sales/SalesListPage/SalesListPage.jsx';
 import UsersPage from '../pages/access/UsersPage/UsersPage.jsx';
 import EmployeesPage from '../pages/personal/EmployeesPage/EmployeesPage.jsx';
+import PersonsPage from '../pages/personal/PersonsPage/PersonsPage.jsx';
 import RolesPage from '../pages/access/RolesPage/RolesPage.jsx';
 import SuppliersPage from '../pages/suppliers/SuppliersPage.jsx';
 import UnderConstructionPage from '../pages/UnderConstructionPage/UnderConstructionPage.jsx';
@@ -45,10 +46,13 @@ export default function AppRouter() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
         
-        {/* Usuarios */}
+        {/* Acceso */}
         <Route path="usuarios" element={<ProtectedRoute><UsersPage /></ProtectedRoute>} />
         <Route path="roles" element={<ProtectedRoute><RolesPage /></ProtectedRoute>} />
+
+        {/* Personal */}
         <Route path="empleados" element={<ProtectedRoute><EmployeesPage /></ProtectedRoute>} />
+        <Route path="/datos-personales" element={<PersonsPage />} />
         
         {/* Clientes */}
         <Route path="clientes" element={<ProtectedRoute><ClientsPage /></ProtectedRoute>} />
