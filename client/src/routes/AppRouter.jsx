@@ -16,7 +16,7 @@ import SalesListPage from '../pages/sales/SalesListPage/SalesListPage.jsx';
 import UsersPage from '../pages/users/UsersPage/UsersPage.jsx';
 import RolesPage from '../pages/roles/RolesPage.jsx';
 import EmpleadosPage from '../pages/empleados/EmpleadosPage.jsx';
-import ProveedoresPage from '../pages/proveedores/ProveedoresPage.jsx';
+import SuppliersPage from '../pages/suppliers/SuppliersPage.jsx';
 import UnderConstructionPage from '../pages/UnderConstructionPage/UnderConstructionPage.jsx';
 import PromocionsPage from '../pages/promotions/PromocionsPage.jsx';
 import DescuentosPage from '../pages/discount-rules/DiscountRulesPage.jsx';
@@ -69,7 +69,7 @@ export default function AppRouter() {
         <Route path="categorias" element={<ProtectedRoute><CategoriesPage /></ProtectedRoute>} />
         
         {/* Proveedores */}
-        <Route path="proveedores" element={<ProtectedRoute><ProveedoresPage /></ProtectedRoute>} />
+        <Route path="proveedores" element={<ProtectedRoute><SuppliersPage /></ProtectedRoute>} />
         
         {/* Pagos */}
         <Route path="pagos/proveedores" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />
