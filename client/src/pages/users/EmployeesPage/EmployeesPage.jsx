@@ -3,6 +3,7 @@ import { useAuth } from '../../../context/AuthContext.jsx';
 import useEmployeesLogic from './useEmployeesLogic';
 import EmployeesTable from './EmployeesTable';
 import EmployeeForm from './EmployeeForm';
+import EmployeeDetailsModal from './EmployeeDetailsModal';
 import './EmployeesPage.css';
 
 export default function EmployeesPage() {
@@ -11,6 +12,7 @@ export default function EmployeesPage() {
     employees,
     loading,
     error,
+    selectedEmployee,
     editingEmployee,
     showForm,
     showDetails,
@@ -54,6 +56,14 @@ export default function EmployeesPage() {
           employee={editingEmployee}
           onClose={handleCloseForm}
           onSave={handleSaveEmployee}
+        />
+      )}
+
+      {showDetails && (
+        <EmployeeDetailsModal
+          employee={selectedEmployee}
+          onClose={handleCloseDetails}
+          onEdit={handleEdit}
         />
       )}
     </div>
