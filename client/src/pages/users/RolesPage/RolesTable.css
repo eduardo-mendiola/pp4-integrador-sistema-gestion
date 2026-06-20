@@ -1,0 +1,218 @@
+.roles-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.roles-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.roles-table thead {
+  background-color: #f2f2f2;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.roles-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #525f7f;
+  letter-spacing: 0.5px;
+}
+
+.roles-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f0f4f8;
+  font-size: 15px;
+  color: #333;
+}
+
+.roles-table tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+.roles-table th.text-center,
+.roles-table td.text-center {
+  text-align: center;
+}
+
+/* Nombre del rol */
+.roles-name {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Contador de permisos */
+.roles-permissions-count {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #e7f3ff;
+  color: #007bff;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Badge de estado */
+.roles-status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.roles-status-badge.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.roles-status-badge.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Acciones */
+.roles-table-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.roles-action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.roles-action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.roles-action-btn.view {
+  background: #e7f3ff;
+  color: #007bff;
+}
+
+.roles-action-btn.view:hover {
+  background: #007bff;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.roles-action-btn.edit {
+  background: #e7f8e7;
+  color: #43a258;
+}
+
+.roles-action-btn.edit:hover {
+  background: #43a258;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.roles-action-btn.delete {
+  background: #fde8e8;
+  color: #dc4655;
+}
+
+.roles-action-btn.delete:hover {
+  background: #dc4655;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Columnas ordenables */
+.roles-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.roles-table th.sortable:hover {
+  background-color: #e9ecef;
+  color: #007bff;
+}
+
+.roles-table th.sortable:active {
+  background-color: #dee2e6;
+}
+
+/* Loading */
+.roles-table-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+  color: #8898aa;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.roles-table-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Empty */
+.roles-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #8898aa;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.roles-table-empty svg {
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.roles-table-empty p {
+  margin: 0;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .roles-table th,
+  .roles-table td {
+    padding: 12px 8px;
+    font-size: 12px;
+  }
+  
+  .roles-status-badge,
+  .roles-permissions-count {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}

@@ -15,7 +15,7 @@ import MovementsPage from '../pages/cashRegisterPage/MovementsPage/MovementsPage
 import SalesListPage from '../pages/sales/SalesListPage/SalesListPage.jsx';
 import UsersPage from '../pages/users/UsersPage/UsersPage.jsx';
 import EmployeesPage from '../pages/users/EmployeesPage/EmployeesPage.jsx';
-import RolesPage from '../pages/roles/RolesPage.jsx';
+import RolesPage from '../pages/users/RolesPage/RolesPage.jsx';
 import SuppliersPage from '../pages/suppliers/SuppliersPage.jsx';
 import UnderConstructionPage from '../pages/UnderConstructionPage/UnderConstructionPage.jsx';
 import PromocionsPage from '../pages/promotions/PromocionsPage.jsx';
