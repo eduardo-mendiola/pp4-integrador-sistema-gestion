@@ -89,7 +89,7 @@ export default function PersonFormModal({ onClose, onPersonCreated }) {
       <div className="person-form-modal" onClick={(e) => e.stopPropagation()}>
         <div className="person-form-header">
           <h2>Crear Nueva Persona</h2>
-          <button className="person-form-close" onClick={onClose}></button>
+          <button className="person-form-close" onClick={onClose}>x</button>
         </div>
 
         <form className="person-form-body" onSubmit={handleSubmit}>
