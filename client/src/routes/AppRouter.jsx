@@ -14,8 +14,8 @@ import CashRegisterPage from '../pages/cashRegisterPage/CashRegisterPage/CashReg
 import MovementsPage from '../pages/cashRegisterPage/MovementsPage/MovementsPage.jsx';
 import SalesListPage from '../pages/sales/SalesListPage/SalesListPage.jsx';
 import UsersPage from '../pages/users/UsersPage/UsersPage.jsx';
+import EmployeesPage from '../pages/users/EmployeesPage/EmployeesPage.jsx';
 import RolesPage from '../pages/roles/RolesPage.jsx';
-import EmpleadosPage from '../pages/empleados/EmpleadosPage.jsx';
 import SuppliersPage from '../pages/suppliers/SuppliersPage.jsx';
 import UnderConstructionPage from '../pages/UnderConstructionPage/UnderConstructionPage.jsx';
 import PromocionsPage from '../pages/promotions/PromocionsPage.jsx';
@@ -48,7 +48,7 @@ export default function AppRouter() {
         {/* Usuarios */}
         <Route path="usuarios" element={<ProtectedRoute><UsersPage /></ProtectedRoute>} />
         <Route path="roles" element={<ProtectedRoute><RolesPage /></ProtectedRoute>} />
-        <Route path="empleados" element={<ProtectedRoute><EmpleadosPage /></ProtectedRoute>} />
+        <Route path="empleados" element={<ProtectedRoute><EmployeesPage /></ProtectedRoute>} />
         
         {/* Clientes */}
         <Route path="clientes" element={<ProtectedRoute><ClientsPage /></ProtectedRoute>} />

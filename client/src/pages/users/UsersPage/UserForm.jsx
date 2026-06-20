@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiRequest } from '../../../services/api.js';
-import PersonFormModal from './PersonFormModal';
+import PersonFormModal from '../PersonsPage/PersonFormModal';
 import './UserForm.css';
 
 export default function UserForm({ user, onClose, onSave }) {
