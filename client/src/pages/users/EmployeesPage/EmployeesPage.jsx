@@ -4,6 +4,7 @@ import useEmployeesLogic from './useEmployeesLogic';
 import EmployeesTable from './EmployeesTable';
 import EmployeeForm from './EmployeeForm';
 import EmployeeDetailsModal from './EmployeeDetailsModal';
+import DeleteEmployeeModal from './DeleteEmployeeModal';
 import './EmployeesPage.css';
 
 export default function EmployeesPage() {
@@ -64,6 +65,14 @@ export default function EmployeesPage() {
           employee={selectedEmployee}
           onClose={handleCloseDetails}
           onEdit={handleEdit}
+        />
+      )}
+
+      {showDelete && (
+        <DeleteEmployeeModal
+          employee={selectedEmployee}
+          onClose={handleCloseDelete}
+          onConfirm={handleConfirmDelete}
         />
       )}
     </div>
