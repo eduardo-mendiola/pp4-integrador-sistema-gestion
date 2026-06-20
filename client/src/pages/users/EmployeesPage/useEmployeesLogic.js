@@ -35,6 +35,8 @@ export default function useEmployeesLogic() {
   const handleEdit = (employee) => {
     setEditingEmployee(employee);
     setShowForm(true);
+    setShowDetails(false);
+    setSelectedEmployee(null);
   };
 
   const handleView = (employee) => {

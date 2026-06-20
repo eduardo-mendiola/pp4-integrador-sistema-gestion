@@ -162,14 +162,14 @@ export default function UserDetailsModal({ user, onClose, onEdit }) {
         </div>
 
         <div className="user-details-footer">
+          <button className="user-details-btn secondary" onClick={onClose}>
+            Cerrar
+          </button>
           {onEdit && (
             <button className="user-details-btn primary" onClick={() => onEdit(user)}>
               Editar
           </button>
           )}
-          <button className="user-details-btn secondary" onClick={onClose}>
-            Cerrar
-          </button>
         </div>
       </div>
     </div>
