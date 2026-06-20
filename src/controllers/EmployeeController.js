@@ -108,27 +108,120 @@ const EmployeeController = {
       delete updateData.createdAt;
       delete updateData.updatedAt;
 
-      // Trim en shift_schedule si existe
-      if (updateData.shift_schedule) {
-        updateData.shift_schedule = updateData.shift_schedule.trim();
+      // Trim en campos de texto
+      ["shift_schedule", "status_reason", "status_comments", "termination_reason", "termination_comments"].forEach((field) => {
+        if (updateData[field]) {
+          updateData[field] = updateData[field].trim();
+        }
+      });
+
+      // ===== VALIDACIONES DE ESTADO DEL CONTRATO =====
+      if (updateData.contract_status !== undefined) {
+        const validContractStatuses = ['active', 'terminated'];
+        if (!validContractStatuses.includes(updateData.contract_status)) {
+          return res.status(400).json({
+            success: false,
+            message: "contract_status debe ser 'active' o 'terminated'"
+          });
+        }
+
+        // Si está terminado, fecha y motivo son obligatorios
+        if (updateData.contract_status === 'terminated') {
+          if (!updateData.termination_date) {
+            return res.status(400).json({
+              success: false,
+              message: "termination_date es obligatorio cuando el contrato está terminado"
+            });
+          }
+          if (!updateData.termination_reason) {
+            return res.status(400).json({
+              success: false,
+              message: "termination_reason es obligatorio cuando el contrato está terminado"
+            });
+          }
+
+          // AUTOMÁTICO: Si el contrato termina, el empleado queda inactivo con motivo "fin de contrato"
+          updateData.status = 'inactive';
+          updateData.status_reason = 'contract_end';
+          updateData.status_comments = null;
+        }
+
+        // Si está activo, limpiar datos de terminación
+        if (updateData.contract_status === 'active') {
+          updateData.termination_date = null;
+          updateData.termination_reason = null;
+          updateData.termination_comments = null;
+          
+          // Si el contrato vuelve a estar activo, el empleado también (a menos que explícitamente se setee como inactivo)
+          if (updateData.status === undefined) {
+            updateData.status = 'active';
+            updateData.status_reason = null;
+            updateData.status_comments = null;
+          }
+        }
       }
 
-      // Validar termination_date si se envía (debe ser fecha válida o null)
+      // ===== VALIDACIONES DE ESTADO DEL EMPLEADO =====
+      // Solo validar si el contrato NO está terminado (porque si está terminado, ya se setea automáticamente)
+      if (updateData.status !== undefined && updateData.contract_status !== 'terminated') {
+        const validStatuses = ['active', 'inactive'];
+        if (!validStatuses.includes(updateData.status)) {
+          return res.status(400).json({
+            success: false,
+            message: "status debe ser 'active' o 'inactive'"
+          });
+        }
+
+        // Si está inactivo, el motivo es obligatorio
+        if (updateData.status === 'inactive' && !updateData.status_reason) {
+          return res.status(400).json({
+            success: false,
+            message: "status_reason es obligatorio cuando el estado es 'inactive'"
+          });
+        }
+
+        // Si está activo, limpiar motivo y comentarios
+        if (updateData.status === 'active') {
+          updateData.status_reason = null;
+          updateData.status_comments = null;
+        }
+      }
+
+      // Validar status_reason si se envía (solo si el contrato no está terminado)
+      if (updateData.status_reason !== undefined && updateData.contract_status !== 'terminated') {
+        const validStatusReasons = ['license', 'suspension', 'medical_leave', 'maternity_leave', 'contract_end', 'other', null];
+        if (updateData.status_reason !== null && !validStatusReasons.includes(updateData.status_reason)) {
+          return res.status(400).json({
+            success: false,
+            message: "status_reason inválido"
+          });
+        }
+      }
+
+      // Validar termination_date si se envía
       if (updateData.termination_date !== undefined) {
-        if (
-          updateData.termination_date === null ||
-          updateData.termination_date === ""
-        ) {
+        if (updateData.termination_date === null || updateData.termination_date === "") {
           updateData.termination_date = null;
         } else {
           const date = new Date(updateData.termination_date);
           if (isNaN(date.getTime())) {
             return res.status(400).json({
               success: false,
-              message: "termination_date debe ser una fecha válida o null",
+              message: "termination_date debe ser una fecha válida o null"
             });
           }
           updateData.termination_date = date;
+        }
+      }
+
+      // Validar termination_reason si se envía
+      if (updateData.termination_reason !== undefined) {
+        const validTerminationReasons = ['resignation', 'dismissal', 'retirement', 'contract_end', 'mutual_agreement', 'other', null];
+        if (updateData.termination_reason !== null && !validTerminationReasons.includes(updateData.termination_reason)) {
+          return res.status(400).json({
+            success: false,
+            message: "termination_reason inválido"
+          });
         }
       }
 
@@ -149,7 +242,7 @@ const EmployeeController = {
     } catch (error) {
       console.error("Error en partialUpdate employee:", error);
 
-      // Manejo de errores de duplicados (ej: employee_code único)
+      // Manejo de errores de duplicados
       if (error.code === 11000) {
         return res.status(409).json({
           success: false,
@@ -221,8 +314,41 @@ const EmployeeController = {
 
   terminate: async (req, res) => {
     try {
-      const employee = await Employee.update(req.params.id, {
-        termination_date: new Date(),
+      const { id } = req.params;
+      const { termination_date, termination_reason, termination_comments } = req.body;
+
+      // Validaciones
+      if (!termination_date) {
+        return res.status(400).json({
+          success: false,
+          message: "termination_date es obligatorio"
+        });
+      }
+
+      if (!termination_reason) {
+        return res.status(400).json({
+          success: false,
+          message: "termination_reason es obligatorio"
+        });
+      }
+
+      const validReasons = ['resignation', 'dismissal', 'retirement', 'contract_end', 'mutual_agreement', 'other'];
+      if (!validReasons.includes(termination_reason)) {
+        return res.status(400).json({
+          success: false,
+          message: "termination_reason inválido"
+        });
+      }
+
+      const employee = await Employee.patch(id, {
+        contract_status: 'terminated',
+        termination_date: new Date(termination_date),
+        termination_reason,
+        termination_comments: termination_comments || null,
+        // AUTOMÁTICO: Si el contrato termina, el empleado queda inactivo con motivo "fin de contrato"
+        status: 'inactive',
+        status_reason: 'contract_end',
+        status_comments: null
       });
 
       if (!employee) {

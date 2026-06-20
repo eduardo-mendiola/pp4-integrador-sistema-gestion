@@ -9,7 +9,14 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
   const [formData, setFormData] = useState({
     person_id: '',
     hire_date: new Date().toISOString().split('T')[0],
-    shift_schedule: 'full_time'
+    shift_schedule: 'full_time',
+    status: 'active',
+    status_reason: '',
+    status_comments: '',
+    contract_status: 'active',
+    termination_date: '',
+    termination_reason: '',
+    termination_comments: ''
   });
   
    const [userData, setUserData] = useState({
@@ -28,6 +35,7 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
   const [loadingLookups, setLoadingLookups] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
   const [showPersonForm, setShowPersonForm] = useState(false);
   const [newPersonData, setNewPersonData] = useState(null);
 
@@ -37,6 +45,22 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
     { value: 'night', label: 'Noche (22:00 - 6:00)' },
     { value: 'full_time', label: 'Turno Completo (9:00 - 17:00)' },
     { value: 'part_time', label: 'Medio Tiempo (4 horas)' }
+  ];
+
+  const statusReasonOptions = [
+    { value: 'license', label: 'Licencia' },
+    { value: 'suspension', label: 'Suspensión' },
+    { value: 'medical_leave', label: 'Licencia Médica' },
+    { value: 'maternity_leave', label: 'Licencia por Maternidad' },
+    { value: 'other', label: 'Otro' }
+  ];
+
+  const terminationReasonOptions = [
+    { value: 'resignation', label: 'Renuncia' },
+    { value: 'dismissal', label: 'Despido' },
+    { value: 'retirement', label: 'Jubilación' },
+    { value: 'mutual_agreement', label: 'Acuerdo Mutuo' },
+    { value: 'other', label: 'Otro' }
   ];
 
   useEffect(() => {
@@ -64,7 +88,14 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
       setFormData({
         person_id: employee.person_id?._id || employee.person_id || '',
         hire_date: employee.hire_date ? new Date(employee.hire_date).toISOString().split('T')[0] : '',
-        shift_schedule: employee.shift_schedule || 'full_time'
+        shift_schedule: employee.shift_schedule || 'full_time',
+        status: employee.status || 'active',
+        status_reason: employee.status_reason || '',
+        status_comments: employee.status_comments || '',
+        contract_status: employee.contract_status || 'active',
+        termination_date: employee.termination_date ? new Date(employee.termination_date).toISOString().split('T')[0] : '',
+        termination_reason: employee.termination_reason || '',
+        termination_comments: employee.termination_comments || ''
       });
     }
   }, [employee]);
@@ -72,6 +103,15 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Limpiar error del campo cuando el usuario cambia el valor
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
     
     // Si se cambia la persona seleccionada, resetear newPersonData
     if (name === 'person_id') {
@@ -82,56 +122,103 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
   const handleUserChange = (e) => {
     const { name, value } = e.target;
     setUserData(prev => ({ ...prev, [name]: value }));
+    
+    // Limpiar error del campo cuando el usuario cambia el valor
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  const clearFieldError = (fieldName) => {
+    if (fieldErrors[fieldName]) {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[fieldName];
+        return newErrors;
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setFieldErrors({});
+
+    let hasErrors = false;
+    const newFieldErrors = {};
 
     // Validaciones de empleado
     if (!formData.person_id) {
-      setError('Debe seleccionar una persona');
-      return;
+      newFieldErrors.person_id = 'Debe seleccionar una persona';
+      hasErrors = true;
     }
     if (!formData.hire_date) {
-      setError('La fecha de ingreso es obligatoria');
-      return;
+      newFieldErrors.hire_date = 'La fecha de ingreso es obligatoria';
+      hasErrors = true;
     }
     if (!formData.shift_schedule) {
-      setError('Debe seleccionar un turno');
-      return;
+      newFieldErrors.shift_schedule = 'Debe seleccionar un turno';
+      hasErrors = true;
+    }
+
+    // Validaciones de estado del empleado (solo en edición y si el contrato NO está terminado)
+    if (isEditing && formData.status === 'inactive' && formData.contract_status !== 'terminated') {
+      if (!formData.status_reason) {
+        newFieldErrors.status_reason = 'Debe seleccionar un motivo para el estado inactivo';
+        hasErrors = true;
+      }
+    }
+
+    // Validaciones de estado del contrato (solo en edición)
+    if (isEditing && formData.contract_status === 'terminated') {
+      if (!formData.termination_date) {
+        newFieldErrors.termination_date = 'La fecha de terminación es obligatoria';
+        hasErrors = true;
+      }
+      if (!formData.termination_reason) {
+        newFieldErrors.termination_reason = 'Debe seleccionar un motivo de terminación';
+        hasErrors = true;
+      }
     }
 
     // Validaciones de usuario (solo en crear)
     if (!isEditing) {
       if (!userData.username.trim()) {
-        setError('El nombre de usuario es obligatorio');
-        return;
+        newFieldErrors.username = 'El nombre de usuario es obligatorio';
+        hasErrors = true;
       }
       
       // Verificar que haya email (ya sea del usuario o de la persona)
       const selectedPerson = persons.find(p => p._id === formData.person_id);
       if (!userData.email.trim() && !selectedPerson?.email) {
-        setError('El email es obligatorio');
-        return;
+        newFieldErrors.email = 'El email es obligatorio';
+        hasErrors = true;
       }
       
       if (!userData.password.trim()) {
-        setError('La contraseña es obligatoria');
-        return;
+        newFieldErrors.password = 'La contraseña es obligatoria';
+        hasErrors = true;
+      } else if (userData.password !== confirmPassword) {
+        newFieldErrors.confirmPassword = 'Las contraseñas no coinciden';
+        hasErrors = true;
+      } else if (userData.password.length < 6) {
+        newFieldErrors.password = 'La contraseña debe tener al menos 6 caracteres';
+        hasErrors = true;
       }
-      if (userData.password !== confirmPassword) {
-        setError('Las contraseñas no coinciden');
-        return;
-      }
-      if (userData.password.length < 6) {
-        setError('La contraseña debe tener al menos 6 caracteres');
-        return;
-      }
+      
       if (!userData.role_id) {
-        setError('Debe seleccionar un rol para el usuario');
-        return;
+        newFieldErrors.role_id = 'Debe seleccionar un rol para el usuario';
+        hasErrors = true;
       }
+    }
+
+    if (hasErrors) {
+      setFieldErrors(newFieldErrors);
+      return;
     }
 
     setSaving(true);
@@ -140,11 +227,23 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
       let payload;
 
       if (isEditing) {
-        // Modo edición: solo datos del empleado
+        // Modo edición: datos del empleado incluyendo estados
+        // Si el contrato está terminado, NO enviar status ni status_reason (el backend lo setea automáticamente)
         payload = {
           hire_date: formData.hire_date,
-          shift_schedule: formData.shift_schedule
+          shift_schedule: formData.shift_schedule,
+          contract_status: formData.contract_status,
+          termination_date: formData.contract_status === 'terminated' ? formData.termination_date : null,
+          termination_reason: formData.contract_status === 'terminated' ? formData.termination_reason : null,
+          termination_comments: formData.contract_status === 'terminated' ? formData.termination_comments : null
         };
+
+        // Solo enviar status si el contrato NO está terminado
+        if (formData.contract_status !== 'terminated') {
+          payload.status = formData.status;
+          payload.status_reason = formData.status === 'inactive' ? formData.status_reason : null;
+          payload.status_comments = formData.status === 'inactive' ? formData.status_comments : null;
+        }
       } else {
         // Buscar la persona seleccionada para obtener su email si hace falta
         const selectedPerson = persons.find(p => p._id === formData.person_id);
@@ -255,6 +354,7 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
                       </option>
                     ))}
                   </select>
+                  {fieldErrors.person_id && <span className="employee-form-field-error">{fieldErrors.person_id}</span>}
                 </div>
 
                 <div className="employee-form-field">
@@ -266,6 +366,7 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
                     onChange={handleChange}
                     disabled={saving}
                   />
+                  {fieldErrors.hire_date && <span className="employee-form-field-error">{fieldErrors.hire_date}</span>}
                 </div>
 
                 <div className="employee-form-field">
@@ -282,9 +383,166 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
                       </option>
                     ))}
                   </select>
+                  {fieldErrors.shift_schedule && <span className="employee-form-field-error">{fieldErrors.shift_schedule}</span>}
                 </div>
               </div>
             </div>
+
+            {/* Sección: Estado del Empleado (solo en edición y si el contrato NO está terminado) */}
+            {isEditing && formData.contract_status !== 'terminated' && (
+              <div className="employee-form-section">
+                <h3 className="employee-form-section-title">Estado del Empleado</h3>
+                <div className="employee-form-grid">
+                  <div className="employee-form-field field-span-2">
+                    <label>Estado Laboral</label>
+                    <div className="employee-status-toggle">
+                      <button
+                        type="button"
+                        className={`status-toggle-btn ${formData.status === 'active' ? 'active' : ''}`}
+                        onClick={() => {
+                          setFormData(prev => ({ ...prev, status: 'active', status_reason: '', status_comments: '' }));
+                          clearFieldError('status_reason');
+                        }}
+                        disabled={saving}
+                      >
+                        Activo
+                      </button>
+                      <button
+                        type="button"
+                        className={`status-toggle-btn ${formData.status === 'inactive' ? 'active' : ''}`}
+                        onClick={() => setFormData(prev => ({ ...prev, status: 'inactive' }))}
+                        disabled={saving}
+                      >
+                        Inactivo
+                      </button>
+                    </div>
+                  </div>
+
+                  {formData.status === 'inactive' && (
+                    <>
+                      <div className="employee-form-field">
+                        <label>Motivo *</label>
+                        <select
+                          name="status_reason"
+                          value={formData.status_reason}
+                          onChange={handleChange}
+                          disabled={saving}
+                        >
+                          <option value="">Seleccionar motivo</option>
+                          {statusReasonOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                        {fieldErrors.status_reason && <span className="employee-form-field-error">{fieldErrors.status_reason}</span>}
+                      </div>
+
+                      <div className="employee-form-field field-span-2">
+                        <label>Comentarios</label>
+                        <textarea
+                          name="status_comments"
+                          value={formData.status_comments}
+                          onChange={handleChange}
+                          placeholder="Detalles adicionales sobre el estado..."
+                          disabled={saving}
+                          rows="3"
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Sección: Estado del Contrato (solo en edición) */}
+            {isEditing && (
+              <div className="employee-form-section">
+                <h3 className="employee-form-section-title">Estado del Contrato</h3>
+                <div className="employee-form-grid">
+                  <div className="employee-form-field field-span-2">
+                    <label>Contrato</label>
+                    <div className="employee-status-toggle">
+                      <button
+                        type="button"
+                        className={`status-toggle-btn ${formData.contract_status === 'active' ? 'active' : ''}`}
+                        onClick={() => {
+                          setFormData(prev => ({ 
+                            ...prev, 
+                            contract_status: 'active',
+                            termination_date: '',
+                            termination_reason: '',
+                            termination_comments: '',
+                            status: 'active',
+                            status_reason: '',
+                            status_comments: ''
+                          }));
+                          clearFieldError('termination_date');
+                          clearFieldError('termination_reason');
+                        }}
+                        disabled={saving}
+                      >
+                        Vigente
+                      </button>
+                      <button
+                        type="button"
+                        className={`status-toggle-btn ${formData.contract_status === 'terminated' ? 'active' : ''}`}
+                        onClick={() => setFormData(prev => ({ ...prev, contract_status: 'terminated' }))}
+                        disabled={saving}
+                      >
+                        Terminado
+                      </button>
+                    </div>
+                  </div>
+
+                  {formData.contract_status === 'terminated' && (
+                    <>
+                      <div className="employee-form-field">
+                        <label>Fecha de Terminación *</label>
+                        <input
+                          type="date"
+                          name="termination_date"
+                          value={formData.termination_date}
+                          onChange={handleChange}
+                          disabled={saving}
+                        />
+                        {fieldErrors.termination_date && <span className="employee-form-field-error">{fieldErrors.termination_date}</span>}
+                      </div>
+
+                      <div className="employee-form-field">
+                        <label>Motivo *</label>
+                        <select
+                          name="termination_reason"
+                          value={formData.termination_reason}
+                          onChange={handleChange}
+                          disabled={saving}
+                        >
+                          <option value="">Seleccionar motivo</option>
+                          {terminationReasonOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                        {fieldErrors.termination_reason && <span className="employee-form-field-error">{fieldErrors.termination_reason}</span>}
+                      </div>
+
+                      <div className="employee-form-field field-span-2">
+                        <label>Comentarios</label>
+                        <textarea
+                          name="termination_comments"
+                          value={formData.termination_comments}
+                          onChange={handleChange}
+                          placeholder="Detalles adicionales sobre la terminación..."
+                          disabled={saving}
+                          rows="3"
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Sección: Datos de Usuario (solo en CREAR) */}
             {!isEditing && (
@@ -301,6 +559,7 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
                       placeholder="ej. juan.perez"
                       disabled={saving}
                     />
+                    {fieldErrors.username && <span className="employee-form-field-error">{fieldErrors.username}</span>}
                   </div>
 
                   <div className="employee-form-field">
@@ -318,6 +577,7 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
                         </option>
                       ))}
                     </select>
+                    {fieldErrors.role_id && <span className="employee-form-field-error">{fieldErrors.role_id}</span>}
                   </div>
 
                   <div className="employee-form-field">
@@ -350,6 +610,7 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
                         )}
                       </button>
                     </div>
+                    {fieldErrors.password && <span className="employee-form-field-error">{fieldErrors.password}</span>}
                   </div>
 
                   <div className="employee-form-field">
@@ -359,7 +620,10 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
                         type={showConfirmPassword ? 'text' : 'password'}
                         name="confirmPassword"
                         value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        onChange={(e) => {
+                          setConfirmPassword(e.target.value);
+                          clearFieldError('confirmPassword');
+                        }}
                         placeholder="Repetir contraseña"
                         disabled={saving}
                       />
@@ -382,6 +646,7 @@ export default function EmployeeForm({ employee, onClose, onSave }) {
                         )}
                       </button>
                     </div>
+                    {fieldErrors.confirmPassword && <span className="employee-form-field-error">{fieldErrors.confirmPassword}</span>}
                   </div>
                 </div>
               </div>
