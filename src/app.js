@@ -3,6 +3,7 @@ import cors from 'cors';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from './config/passport.js';
+import { bypassAuth } from '../__tests__/helpers/authHelper.js'; // AGREGAR ESTO
 
 // Routes
 import authRoutes from './routes/auth-routes.js';
@@ -62,32 +63,41 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ======================
-// SESSION STORE
+// SESSION STORE (solo si NO estamos en test)
 // ======================
-const sessionStore = MongoStore.create({
-  mongoUrl: process.env.MONGO_URI_ATLAS || process.env.MONGO_URI
-});
+if (process.env.NODE_ENV !== 'test') {
+  const sessionStore = MongoStore.create({
+    mongoUrl: process.env.MONGO_URI_ATLAS || process.env.MONGO_URI
+  });
 
-const isProduction = process.env.NODE_ENV === 'production';
+  const isProduction = process.env.NODE_ENV === 'production';
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'dev-secret',
-  resave: false,
-  saveUninitialized: false,
-  store: sessionStore,
-  cookie: {
-    httpOnly: true,
-    secure: isProduction, 
-    sameSite: isProduction ? 'none' : 'lax',
-    maxAge: 1000 * 60 * 60 * 24 * 7  // ← 7 días en milisegundos
-  }
-}));
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'dev-secret',
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+      httpOnly: true,
+      secure: isProduction, 
+      sameSite: isProduction ? 'none' : 'lax',
+      maxAge: 1000 * 60 * 60 * 24 * 7  // ← 7 días en milisegundos
+    }
+  }));
+
+  // ======================
+  // PASSPORT (solo si NO estamos en test)
+  // ======================
+  app.use(passport.initialize());
+  app.use(passport.session());
+}
 
 // ======================
-// PASSPORT
+// BYPASS AUTH PARA TESTS
 // ======================
-app.use(passport.initialize());
-app.use(passport.session());
+if (process.env.NODE_ENV === 'test') {
+  app.use(bypassAuth);
+}
 
 // ======================
 // ROUTES API
@@ -111,6 +121,7 @@ app.use("/api/cash-flow", cashFlowRoutes);
 app.use("/api/internal-vouchers", internalVoucherRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/statistics", statisticsRoutes);
+
 // ======================
 // HEALTH CHECK
 // ======================

@@ -183,3 +183,6 @@ export const permissionLabels = {
   view_analytics: "Ver Analytics",
   export_analytics: "Exportar Analytics"
 };
+
+// Array con todos los permisos disponibles (para validación)
+export const allPermissions = Object.keys(permissionLabels);

@@ -60,7 +60,7 @@ export default function LoginPage() {
           {/* <h1 className="brand-name">JUGUETES MÁGICOS</h1> */}
 
           <div className="login-header text-center">
-            <h2>Ingreso a (nombre de la app)</h2>
+            <h2>Ingreso a TecnoFlow</h2>
             <p>Plataforma de gestión POS.</p>
           </div>
 

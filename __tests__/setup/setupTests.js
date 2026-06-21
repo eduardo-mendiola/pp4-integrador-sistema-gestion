@@ -2,36 +2,18 @@
  * Setup Tests - Configuración para cada archivo de test
  * 
  * Se ejecuta ANTES de cada archivo de test.
- * Configura timeouts, mocks globales y utilidades.
- * 
- * TDD Pattern: Configuración común para mantener tests DRY
  */
 
-// Establecer NODE_ENV para activar bypass de autenticación
 process.env.NODE_ENV = 'test';
 
-// Nota: jest no está disponible como global en ES modules
-// Los timeouts se configuran en jest.config.js
+beforeAll(() => {});
 
-// Configuración global para mantener tests consistentes
-beforeAll(() => {
-  // Cualquier configuración necesaria antes de todos los tests
-});
+afterAll(() => {});
 
-afterAll(() => {
-  // Limpieza después de todos los tests
-});
+beforeEach(() => {});
 
-// Limpiar mocks antes de cada test
-beforeEach(() => {
-  // jest.clearAllMocks se llama manualmente en cada test
-});
+afterEach(() => {});
 
-afterEach(() => {
-  // Limpieza adicional si es necesaria
-});
-
-// Helpers globales para assertions comunes
 global.expectValidMongoId = (id) => {
   expect(id).toBeDefined();
   expect(typeof id).toBe('string');
