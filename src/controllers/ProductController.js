@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Product from "../models/ProductModel.js";
 
 const ProductController = {
