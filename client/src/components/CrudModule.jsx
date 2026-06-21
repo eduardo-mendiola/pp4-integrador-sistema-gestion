@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { apiRequest, unwrapList } from '../services/api.js';
+import { Permission } from './Permission';
 import Modal from './Modal.jsx';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
@@ -179,9 +180,11 @@ export default function CrudModule({ config }) {
           <p className="section-description">{config.description}</p>
         </div>
         <div>
-          <button type="button" onClick={() => { resetForm(); setIsModalOpen(true); }}>
-            + Agregar {config.title}
-          </button>
+          <Permission permission="create_item">
+            <button type="button" onClick={() => { resetForm(); setIsModalOpen(true); }}>
+              + Agregar {config.title}
+            </button>
+          </Permission>
         </div>
       </header>
 
@@ -247,6 +250,7 @@ export default function CrudModule({ config }) {
                     ))}
                     <td>
                       <div className="row-actions">
+                        <Permission permission="edit_item">
                         <button
                           type="button"
                           className="action-btn edit-btn"
@@ -255,6 +259,8 @@ export default function CrudModule({ config }) {
                         >
                           <FiEdit size={16} />
                         </button>
+                        </Permission>
+                        <Permission permission="delete_item">
                         <button
                           type="button"
                           className="action-btn delete-btn"
@@ -263,6 +269,7 @@ export default function CrudModule({ config }) {
                         >
                           <FiTrash2 size={16} />
                         </button>
+                        </Permission>
                       </div>
                     </td>
                   </tr>

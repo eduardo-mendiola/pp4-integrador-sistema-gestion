@@ -3,6 +3,7 @@ import { apiRequest, unwrapList } from '../../services/api.js';
 import { exportToCsv, slugify } from '../../utils/csvExport.js';
 import ClientFormModal from './ClientFormModal.jsx';
 import ClientDetailModal from './ClientDetailModal.jsx';
+import { Permission } from '../../components/Permission';
 
 const PAGE_SIZE = 10;
 
@@ -220,24 +221,26 @@ export default function ClientsPage() {
           <p className="eyebrow">Módulo</p>
           <h2>Listado de clientes</h2>
         </div>
-        <button type="button" className="btn-with-icon" onClick={openCreate}>
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
+        <Permission permission="create_clients">
+          <button type="button" className="btn-with-icon" onClick={openCreate}>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
             <circle cx="12" cy="12" r="9" />
             <line x1="12" y1="8" x2="12" y2="16" />
             <line x1="8" y1="12" x2="16" y2="12" />
-          </svg>
-          Nuevo Cliente
-        </button>
+            </svg>
+            Nuevo Cliente
+          </button>
+        </Permission>
       </header>
 
       <div className="panel">

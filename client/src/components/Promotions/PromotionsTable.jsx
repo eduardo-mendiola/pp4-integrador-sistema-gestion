@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { Permission } from '../Permission';
 import './PromotionsTable.css';
 
 export default function PromotionsTable({ promotions, loading, onView, onEdit, onDelete, onToggleActive }) {
@@ -177,16 +178,21 @@ export default function PromotionsTable({ promotions, loading, onView, onEdit, o
                   </div>
                 </td>
                 <td className="text-center">
-                  <button
-                    className={`status-toggle ${status.class}`}
-                    onClick={() => onToggleActive(promo)}
-                    title={promo.active ? 'Click para desactivar' : 'Click para activar'}
-                  >
-                    {status.label}
-                  </button>
+                  {/* Botón de activar/desactivar solo si tiene permiso de editar */}
+                  <Permission permission="edit_promotions">
+                    <button
+                      className={`status-toggle ${status.class}`}
+                      onClick={() => onToggleActive(promo)}
+                      title={promo.active ? 'Click para desactivar' : 'Click para activar'}
+                    >
+                      {status.label}
+                    </button>
+                  </Permission>
+                  {!status.class && <span>{status.label}</span>}
                 </td>
                 <td className="text-center">
                   <div className="promotions-table-actions">
+                    {/* Botón Ver - siempre visible si puede ver la página */}
                     <button
                       className="promotions-action-btn view"
                       onClick={() => onView(promo)}
@@ -196,20 +202,28 @@ export default function PromotionsTable({ promotions, loading, onView, onEdit, o
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     </button>
-                    <button
-                      className="promotions-action-btn edit"
-                      onClick={() => onEdit(promo)}
-                      title="Editar promoción"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      className="promotions-action-btn delete"
-                      onClick={() => onDelete(promo)}
-                      title="Eliminar promoción"
-                    >
-                      🗑️
-                    </button>
+                    
+                    {/* Botón Editar - solo si tiene permiso */}
+                    <Permission permission="edit_promotions">
+                      <button
+                        className="promotions-action-btn edit"
+                        onClick={() => onEdit(promo)}
+                        title="Editar promoción"
+                      >
+                        ✏️
+                      </button>
+                    </Permission>
+                    
+                    {/* Botón Eliminar - solo si tiene permiso */}
+                    <Permission permission="delete_promotions">
+                      <button
+                        className="promotions-action-btn delete"
+                        onClick={() => onDelete(promo)}
+                        title="Eliminar promoción"
+                      >
+                        🗑️
+                      </button>
+                    </Permission>
                   </div>
                 </td>
               </tr>

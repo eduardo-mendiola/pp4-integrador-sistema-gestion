@@ -191,7 +191,7 @@ export const menuConfig = [
     label: "Configuración",
     icon: "FiSettings",
     path: "/configuracion",
-    permission: null,
+    permission: "view_settings",
     submenu: null,
   },
 ];

@@ -5,6 +5,11 @@ export const permissionCategories = [
     permissions: ['view_dashboard']
   },
   {
+    id: 'items',
+    label: 'Items',
+    permissions: ['view_item', 'create_item', 'edit_item', 'delete_item']
+  },
+  {
     id: 'personal_data',
     label: 'Datos Personales',
     permissions: ['view_personal_data', 'create_personal_data', 'edit_personal_data', 'delete_personal_data']
@@ -93,12 +98,22 @@ export const permissionCategories = [
     id: 'analytics',
     label: 'Analytics',
     permissions: ['view_analytics', 'export_analytics']
+  },
+  {
+    id: 'settings',
+    label: 'Configuración',
+    permissions: ['view_settings']
   }
 ];
 
 // Labels de permisos
 export const permissionLabels = {
   view_dashboard: "Ver Dashboard",
+
+  create_item: "Crear Item",
+  view_item: "Ver Item",
+  edit_item: "Editar Item",
+  delete_item: "Eliminar Item",
   
   view_personal_data: "Ver Datos Personales",
   create_personal_data: "Crear Datos Personales",
@@ -181,5 +196,7 @@ export const permissionLabels = {
   export_reports: "Exportar Reportes",
   
   view_analytics: "Ver Analytics",
-  export_analytics: "Exportar Analytics"
+  export_analytics: "Exportar Analytics",
+
+  view_settings: "Ver Configuración"
 };
