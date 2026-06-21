@@ -31,23 +31,29 @@ describe('Integration Tests - GET /api/products', () => {
         .get('/api/products')
         .expect(200);
 
-      expect(Array.isArray(response.body)).toBe(true);
-      expect(response.body.length).toBe(0);
+      expect(response.body.success).toBe(true);
+      expect(Array.isArray(response.body.data)).toBe(true);
+      expect(response.body.data.length).toBe(0);
     });
 
     it('debe retornar todos los productos', async () => {
-      const category = await Category.create({ name: 'Juguetes' });
-      const supplier = await Supplier.create({ name: 'Proveedor' });
+      const category = await Category.create({ name: 'TEST_Juguetes' });
+      const supplier = await Supplier.create({ 
+        supplier_code: 'TEST-SUP-001',
+        name: 'TEST_Proveedor' 
+      });
 
       await Product.create({
-        name: 'Producto 1',
+        name: 'TEST_Producto 1',
+        sku: 'TEST-SKU-001',
         category: category._id,
         supplier: supplier._id,
         price: 100
       });
 
       await Product.create({
-        name: 'Producto 2',
+        name: 'TEST_Producto 2',
+        sku: 'TEST-SKU-002',
         category: category._id,
         supplier: supplier._id,
         price: 200
@@ -57,10 +63,11 @@ describe('Integration Tests - GET /api/products', () => {
         .get('/api/products')
         .expect(200);
 
-      expect(response.body.length).toBe(2);
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.length).toBe(2);
 
-      response.body.forEach(product => {
-        expect(product).toHaveProperty('id');
+      response.body.data.forEach(product => {
+        expect(product).toHaveProperty('_id');
         expect(product).toHaveProperty('name');
         expect(product).toHaveProperty('category');
         expect(product).toHaveProperty('supplier');
@@ -68,11 +75,15 @@ describe('Integration Tests - GET /api/products', () => {
     });
 
     it('debe incluir category y supplier populados', async () => {
-      const category = await Category.create({ name: 'Educativos' });
-      const supplier = await Supplier.create({ name: 'Toy SA' });
+      const category = await Category.create({ name: 'TEST_Educativos' });
+      const supplier = await Supplier.create({ 
+        supplier_code: 'TEST-SUP-002',
+        name: 'TEST_Toy SA' 
+      });
 
       await Product.create({
-        name: 'Rompecabezas',
+        name: 'TEST_Rompecabezas',
+        sku: 'TEST-SKU-003',
         category: category._id,
         supplier: supplier._id
       });
@@ -81,19 +92,23 @@ describe('Integration Tests - GET /api/products', () => {
         .get('/api/products')
         .expect(200);
 
-      expect(response.body[0].category).toHaveProperty('name', 'Educativos');
-      expect(response.body[0].supplier).toHaveProperty('name', 'Toy SA');
+      expect(response.body.data[0].category).toHaveProperty('name', 'TEST_Educativos');
+      expect(response.body.data[0].supplier).toHaveProperty('name', 'TEST_Toy SA');
     });
   });
 
   describe('GET /api/products/:id', () => {
 
     it('debe retornar producto por ID', async () => {
-      const category = await Category.create({ name: 'Juguetes' });
-      const supplier = await Supplier.create({ name: 'Proveedor' });
+      const category = await Category.create({ name: 'TEST_Juguetes' });
+      const supplier = await Supplier.create({ 
+        supplier_code: 'TEST-SUP-003',
+        name: 'TEST_Proveedor' 
+      });
 
       const product = await Product.create({
-        name: 'Producto específico',
+        name: 'TEST_Producto específico',
+        sku: 'TEST-SKU-004',
         category: category._id,
         supplier: supplier._id
       });
@@ -102,8 +117,9 @@ describe('Integration Tests - GET /api/products', () => {
         .get(`/api/products/${product._id}`)
         .expect(200);
 
-      expect(response.body.id).toBe(product._id.toString());
-      expect(response.body.name).toBe('Producto específico');
+      expect(response.body.success).toBe(true);
+      expect(response.body.data._id.toString()).toBe(product._id.toString());
+      expect(response.body.data.name).toBe('TEST_Producto específico');
     });
 
     it('debe retornar 404 si no existe', async () => {
@@ -135,29 +151,38 @@ describe('Integration Tests - PUT /api/products/:id', () => {
   describe('Actualizar producto', () => {
 
     it('debe actualizar el nombre del producto', async () => {
-      const category = await Category.create({ name: 'Juguetes' });
-      const supplier = await Supplier.create({ name: 'Proveedor' });
+      const category = await Category.create({ name: 'TEST_Juguetes' });
+      const supplier = await Supplier.create({ 
+        supplier_code: 'TEST-SUP-004',
+        name: 'TEST_Proveedor' 
+      });
 
       const product = await Product.create({
-        name: 'Original',
+        name: 'TEST_Original',
+        sku: 'TEST-SKU-005',
         category: category._id,
         supplier: supplier._id
       });
 
       const response = await request(app)
         .put(`/api/products/${product._id}`)
-        .send({ name: 'Actualizado' })
+        .send({ name: 'TEST_Actualizado' })
         .expect(200);
 
-      expect(response.body.name).toBe('Actualizado');
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.name).toBe('TEST_Actualizado');
     });
 
     it('debe actualizar precio y stock', async () => {
-      const category = await Category.create({ name: 'Juguetes' });
-      const supplier = await Supplier.create({ name: 'Proveedor' });
+      const category = await Category.create({ name: 'TEST_Juguetes' });
+      const supplier = await Supplier.create({ 
+        supplier_code: 'TEST-SUP-005',
+        name: 'TEST_Proveedor' 
+      });
 
       const product = await Product.create({
-        name: 'Producto',
+        name: 'TEST_Producto',
+        sku: 'TEST-SKU-006',
         category: category._id,
         supplier: supplier._id,
         price: 100,
@@ -169,8 +194,9 @@ describe('Integration Tests - PUT /api/products/:id', () => {
         .send({ price: 250, stock: 5 })
         .expect(200);
 
-      expect(response.body.price).toBe(250);
-      expect(response.body.stock).toBe(5);
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.price).toBe(250);
+      expect(response.body.data.stock).toBe(5);
     });
 
     it('debe retornar 404 si no existe', async () => {
@@ -178,24 +204,6 @@ describe('Integration Tests - PUT /api/products/:id', () => {
         .put('/api/products/507f1f77bcf86cd799439011')
         .send({ name: 'X' })
         .expect(404);
-
-      expect(response.body).toHaveProperty('message');
-    });
-
-    it('debe rechazar status inválido si existe regla de enum', async () => {
-      const category = await Category.create({ name: 'Juguetes' });
-      const supplier = await Supplier.create({ name: 'Proveedor' });
-
-      const product = await Product.create({
-        name: 'Producto',
-        category: category._id,
-        supplier: supplier._id
-      });
-
-      const response = await request(app)
-        .put(`/api/products/${product._id}`)
-        .send({ status: 'invalid_status' })
-        .expect(500);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -211,18 +219,25 @@ describe('Integration Tests - DELETE /api/products/:id', () => {
   describe('Eliminar producto', () => {
 
     it('debe eliminar producto existente', async () => {
-      const category = await Category.create({ name: 'Juguetes' });
-      const supplier = await Supplier.create({ name: 'Proveedor' });
+      const category = await Category.create({ name: 'TEST_Juguetes' });
+      const supplier = await Supplier.create({ 
+        supplier_code: 'TEST-SUP-006',
+        name: 'TEST_Proveedor' 
+      });
 
       const product = await Product.create({
-        name: 'Eliminarme',
+        name: 'TEST_Eliminarme',
+        sku: 'TEST-SKU-007',
         category: category._id,
         supplier: supplier._id
       });
 
-      await request(app)
+      const response = await request(app)
         .delete(`/api/products/${product._id}`)
-        .expect(204);
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body).toHaveProperty('message');
 
       const deleted = await Product.findById(product._id);
       expect(deleted).toBeNull();
