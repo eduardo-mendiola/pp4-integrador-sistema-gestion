@@ -64,7 +64,7 @@ export default function SalesFooter({ totals, itemsCount, loading, onCancel, onP
           onClick={onPay}
           disabled={loading || itemsCount === 0}
         >
-          $ PAGAR
+          $ COBRAR
         </button>
       </div>
     </div>
