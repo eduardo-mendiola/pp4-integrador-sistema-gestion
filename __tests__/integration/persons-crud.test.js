@@ -1,5 +1,5 @@
 /**
- * Integration Tests - Sales API (CRUD completo)
+ * Integration Tests - Persons API (CRUD completo)
  * 
  * TDD Pattern: Red → Green → Refactor
  */
@@ -12,250 +12,115 @@ import {
   disconnectDB
 } from '../helpers/testHelpers.js';
 
-import Sale from '../../src/models/SaleModel.js';
-import Client from '../../src/models/ClientModel.js';
-import Product from '../../src/models/ProductModel.js';
-import Category from '../../src/models/CategoryModel.js';
-import Supplier from '../../src/models/SupplierModel.js';
-import User from '../../src/models/UserModel.js';
-import Role from '../../src/models/RoleModel.js';
 import Person from '../../src/models/PersonModel.js';
-import PaymentMethod from '../../src/models/PaymentMethodModel.js';
 
-describe('Integration Tests - Sales API', () => {
+describe('Integration Tests - Persons API', () => {
 
   beforeAll(async () => await connectDB());
   beforeEach(async () => await clearDatabase());
   afterAll(async () => await disconnectDB());
 
-  describe('POST /api/sales - Crear venta', () => {
+  describe('POST /api/persons - Crear persona', () => {
 
-    let testClient;
-    let testProduct;
-    let testUser;
-    let testPaymentMethod;
-
-    beforeEach(async () => {
-      // Crear datos base necesarias
-      const role = await Role.create({ 
-        name: 'TEST_Vendedor', 
-        permissions: ['create_sales'] 
-      });
-
-      const person = await Person.create({
-        dni: 'TEST-DNI-99999999',
-        first_name: 'TEST_Vendedor',
-        last_name: 'TEST'
-      });
-
-      testUser = await User.create({
-        username: 'test_vendedor',
-        email: 'test.vendedor@test-only.com',
-        password_hash: 'password123',
-        role_id: role._id,
-        person_id: person._id
-      });
-
-      testClient = await Client.create({
-        client_code: 'TEST-CLI-001',
-        document_type: 'DNI',
-        document_number: 'TEST-12345678',
-        first_name: 'TEST_Cliente',
-        last_name: 'TEST'
-      });
-
-      const category = await Category.create({ name: 'TEST_Juguetes' });
-      
-      // 👇 AGREGAR supplier_code
-      const supplier = await Supplier.create({ 
-        supplier_code: 'TEST-SUP-001',
-        name: 'TEST_Proveedor' 
-      });
-
-      testProduct = await Product.create({
-        name: 'TEST_Producto',
-        category: category._id,
-        supplier: supplier._id,
-        price: 1000,
-        stock: 10
-      });
-
-      testPaymentMethod = await PaymentMethod.create({
-        name: 'TEST_Efectivo',
-        requires_auth: false,
-        allows_installments: false
-      });
-    });
-
-    it('debe crear una venta correctamente', async () => {
+    it('debe crear una persona correctamente', async () => {
       // Arrange
       const payload = {
-        client_id: testClient._id,
-        employee_id: testUser._id,
-        items: [
-          {
-            product: testProduct._id,
-            quantity: 2,
-            price: 1000,
-            discount_rate: 0,
-            discount: 0,
-            subtotal: 2000
-          }
-        ],
-        subtotal: 2000,
-        discount_rate: 0,
-        discount: 0,
-        tax_rate: 21,
-        tax: 420,
-        total: 2420,
-        payments: [
-          {
-            method: testPaymentMethod._id,
-            amount: 2420,
-            status: 'CONFIRMED'
-          }
-        ],
-        status: 'PAID'
+        dni: '33333333',
+        first_name: 'Carlos',
+        last_name: 'López',
+        email: 'carlos@test.com',
+        phone: '1155556666'
       };
 
       // Act
       const response = await request(app)
-        .post('/api/sales')
+        .post('/api/persons')
         .send(payload);
 
       // Assert
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
-      expect(response.body.data).toHaveProperty('_id');
-      expect(response.body.data.client_id.toString()).toBe(testClient._id.toString());
-      expect(response.body.data.total).toBe(2420);
-      expect(response.body.data.status).toBe('PAID');
+      expect(response.body.data.dni).toBe('33333333');
+      expect(response.body.data.first_name).toBe('Carlos');
+      expect(response.body.data.last_name).toBe('López');
     });
 
-    it('debe crear venta con múltiples items', async () => {
+    it('debe crear persona con dirección completa', async () => {
       // Arrange
-      const category2 = await Category.create({ name: 'TEST_Cat2' });
-      const supplier2 = await Supplier.create({ 
-        supplier_code: 'TEST-SUP-002',
-        name: 'TEST_Sup2' 
-      });
-      
-      const product2 = await Product.create({
-        name: 'TEST_Producto 2',
-        category: category2._id,
-        supplier: supplier2._id,
-        price: 500,
-        stock: 5
-      });
-
       const payload = {
-        client_id: testClient._id,
-        employee_id: testUser._id,
-        items: [
-          {
-            product: testProduct._id,
-            quantity: 1,
-            price: 1000,
-            discount_rate: 0,
-            discount: 0,
-            subtotal: 1000
-          },
-          {
-            product: product2._id,
-            quantity: 3,
-            price: 500,
-            discount_rate: 10,
-            discount: 150,
-            subtotal: 1350
-          }
-        ],
-        subtotal: 2350,
-        discount_rate: 0,
-        discount: 0,
-        tax_rate: 21,
-        tax: 493.5,
-        total: 2843.5,
-        payments: [
-          {
-            method: testPaymentMethod._id,
-            amount: 2843.5,
-            status: 'CONFIRMED'
-          }
-        ],
-        status: 'PAID'
+        dni: '44444444',
+        first_name: 'Ana',
+        last_name: 'Martínez',
+        email: 'ana@test.com',
+        address: {
+          street: 'Av. Corrientes',
+          number: '1234',
+          neighborhood: 'Microcentro',
+          city: 'Buenos Aires'
+        }
       };
 
       // Act
       const response = await request(app)
-        .post('/api/sales')
+        .post('/api/persons')
         .send(payload);
 
       // Assert
       expect(response.status).toBe(201);
-      expect(response.body.data.items.length).toBe(2);
-      expect(response.body.data.total).toBe(2843.5);
+      expect(response.body.data.address).toBeDefined();
+      expect(response.body.data.address.street).toBe('Av. Corrientes');
+      expect(response.body.data.address.city).toBe('Buenos Aires');
     });
 
-    it('debe fallar si falta client_id', async () => {
+    it('debe fallar si falta DNI', async () => {
       // Arrange
       const payload = {
-        employee_id: testUser._id,
-        items: [
-          {
-            product: testProduct._id,
-            quantity: 1,
-            price: 1000,
-            subtotal: 1000
-          }
-        ],
-        total: 1000
+        first_name: 'Sin',
+        last_name: 'DNI'
       };
 
       // Act
       const response = await request(app)
-        .post('/api/sales')
+        .post('/api/persons')
         .send(payload);
 
       // Assert
       expect(response.status).toBe(400);
     });
 
-    it('debe fallar si falta employee_id', async () => {
+    it('debe fallar si falta nombre', async () => {
       // Arrange
       const payload = {
-        client_id: testClient._id,
-        items: [
-          {
-            product: testProduct._id,
-            quantity: 1,
-            price: 1000,
-            subtotal: 1000
-          }
-        ],
-        total: 1000
+        dni: '55555555',
+        last_name: 'SinNombre'
       };
 
       // Act
       const response = await request(app)
-        .post('/api/sales')
+        .post('/api/persons')
         .send(payload);
 
       // Assert
       expect(response.status).toBe(400);
     });
 
-    it('debe fallar si items está vacío', async () => {
+    it('debe fallar si DNI ya existe', async () => {
       // Arrange
+      await Person.create({
+        dni: '66666666',
+        first_name: 'Existente',
+        last_name: 'Persona'
+      });
+
       const payload = {
-        client_id: testClient._id,
-        employee_id: testUser._id,
-        items: [],
-        total: 0
+        dni: '66666666',
+        first_name: 'Duplicado',
+        last_name: 'Persona'
       };
 
       // Act
       const response = await request(app)
-        .post('/api/sales')
+        .post('/api/persons')
         .send(payload);
 
       // Assert
@@ -263,231 +128,166 @@ describe('Integration Tests - Sales API', () => {
     });
   });
 
-  describe('GET /api/sales - Obtener ventas', () => {
+  describe('GET /api/persons - Obtener personas', () => {
 
-    it('debe retornar lista vacía si no hay ventas', async () => {
+    it('debe retornar lista vacía si no hay personas', async () => {
       // Act
       const response = await request(app)
-        .get('/api/sales');
+        .get('/api/persons');
 
       // Assert
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual([]);
     });
 
-    it('debe retornar venta por ID con relaciones populadas', async () => {
+    it('debe retornar todas las personas', async () => {
       // Arrange
-      const role = await Role.create({ name: 'TEST_Vendedor_GET', permissions: [] });
-      const person = await Person.create({
-        dni: 'TEST-DNI-88888888',
-        first_name: 'TEST_Get',
-        last_name: 'TEST_User'
-      });
-      const user = await User.create({
-        username: 'test_user_get',
-        email: 'test.get@test-only.com',
-        password_hash: 'pass123',
-        role_id: role._id,
-        person_id: person._id
+      await Person.create({
+        dni: '11111111',
+        first_name: 'Persona',
+        last_name: 'Uno'
       });
 
-      const client = await Client.create({
-        client_code: 'TEST-CLI-002',
-        document_type: 'DNI',
-        document_number: 'TEST-87654321',
-        first_name: 'TEST_Cliente',
-        last_name: 'TEST'
-      });
-
-      const category = await Category.create({ name: 'TEST_Cat_GET' });
-      const supplier = await Supplier.create({ 
-        supplier_code: 'TEST-SUP-GET',
-        name: 'TEST_Sup_GET' 
-      });
-      const product = await Product.create({
-        name: 'TEST_Producto_GET',
-        category: category._id,
-        supplier: supplier._id,
-        price: 1000
-      });
-
-      const paymentMethod = await PaymentMethod.create({
-        name: 'TEST_Efectivo_GET'
-      });
-
-      const sale = await Sale.create({
-        client_id: client._id,
-        employee_id: user._id,
-        items: [{
-          product: product._id,
-          quantity: 1,
-          price: 1000,
-          subtotal: 1000
-        }],
-        subtotal: 1000,
-        total: 1210,
-        payments: [{
-          method: paymentMethod._id,
-          amount: 1210,
-          status: 'CONFIRMED'
-        }],
-        status: 'PAID'
+      await Person.create({
+        dni: '22222222',
+        first_name: 'Persona',
+        last_name: 'Dos'
       });
 
       // Act
       const response = await request(app)
-        .get(`/api/sales/${sale._id}`);
+        .get('/api/persons');
 
       // Assert
       expect(response.status).toBe(200);
-      expect(response.body.data._id.toString()).toBe(sale._id.toString());
-      expect(response.body.data.client_id).toHaveProperty('first_name');
-      expect(response.body.data.items[0].product).toHaveProperty('name');
+      expect(response.body.data.length).toBe(2);
     });
-  });
 
-  describe('PATCH /api/sales/:id - Actualizar venta', () => {
-
-    it('debe actualizar estado de venta', async () => {
+    it('debe retornar persona por ID', async () => {
       // Arrange
-      const role = await Role.create({ name: 'TEST_Vendedor_PATCH', permissions: [] });
       const person = await Person.create({
-        dni: 'TEST-DNI-77777777',
-        first_name: 'TEST_Patch',
-        last_name: 'TEST_User'
-      });
-      const user = await User.create({
-        username: 'test_user_patch',
-        email: 'test.patch@test-only.com',
-        password_hash: 'pass123',
-        role_id: role._id,
-        person_id: person._id
-      });
-
-      const client = await Client.create({
-        client_code: 'TEST-CLI-003',
-        document_type: 'DNI',
-        document_number: 'TEST-11111111',
-        first_name: 'TEST_Cliente',
-        last_name: 'TEST'
-      });
-
-      const category = await Category.create({ name: 'TEST_Cat_PATCH' });
-      const supplier = await Supplier.create({ 
-        supplier_code: 'TEST-SUP-PATCH',
-        name: 'TEST_Sup_PATCH' 
-      });
-      const product = await Product.create({
-        name: 'TEST_Producto_PATCH',
-        category: category._id,
-        supplier: supplier._id,
-        price: 1000
-      });
-
-      const paymentMethod = await PaymentMethod.create({
-        name: 'TEST_Efectivo_PATCH'
-      });
-
-      const sale = await Sale.create({
-        client_id: client._id,
-        employee_id: user._id,
-        items: [{
-          product: product._id,
-          quantity: 1,
-          price: 1000,
-          subtotal: 1000
-        }],
-        subtotal: 1000,
-        total: 1210,
-        payments: [{
-          method: paymentMethod._id,
-          amount: 1210,
-          status: 'CONFIRMED'
-        }],
-        status: 'PAID'
+        dni: '33333333',
+        first_name: 'Test',
+        last_name: 'User'
       });
 
       // Act
       const response = await request(app)
-        .patch(`/api/sales/${sale._id}`)
-        .send({ status: 'CANCELLED' });
+        .get(`/api/persons/${person._id}`);
 
       // Assert
       expect(response.status).toBe(200);
-      expect(response.body.data.status).toBe('CANCELLED');
+      expect(response.body.data.dni).toBe('33333333');
+    });
+
+    it('debe retornar 404 si no existe', async () => {
+      // Act
+      const response = await request(app)
+        .get('/api/persons/507f1f77bcf86cd799439011');
+
+      // Assert
+      expect(response.status).toBe(404);
     });
   });
 
-  describe('DELETE /api/sales/:id - Eliminar venta', () => {
+  describe('PATCH /api/persons/:id - Actualizar persona', () => {
 
-    it('debe eliminar venta existente', async () => {
+    it('debe actualizar campos de persona', async () => {
       // Arrange
-      const role = await Role.create({ name: 'TEST_Vendedor_DELETE', permissions: [] });
       const person = await Person.create({
-        dni: 'TEST-DNI-66666666',
-        first_name: 'TEST_Delete',
-        last_name: 'TEST_User'
-      });
-      const user = await User.create({
-        username: 'test_user_delete',
-        email: 'test.delete@test-only.com',
-        password_hash: 'pass123',
-        role_id: role._id,
-        person_id: person._id
-      });
-
-      const client = await Client.create({
-        client_code: 'TEST-CLI-004',
-        document_type: 'DNI',
-        document_number: 'TEST-22222222',
-        first_name: 'TEST_Cliente',
-        last_name: 'TEST'
-      });
-
-      const category = await Category.create({ name: 'TEST_Cat_DELETE' });
-      const supplier = await Supplier.create({ 
-        supplier_code: 'TEST-SUP-DELETE',
-        name: 'TEST_Sup_DELETE' 
-      });
-      const product = await Product.create({
-        name: 'TEST_Producto_DELETE',
-        category: category._id,
-        supplier: supplier._id,
-        price: 1000
-      });
-
-      const paymentMethod = await PaymentMethod.create({
-        name: 'TEST_Efectivo_DELETE'
-      });
-
-      const sale = await Sale.create({
-        client_id: client._id,
-        employee_id: user._id,
-        items: [{
-          product: product._id,
-          quantity: 1,
-          price: 1000,
-          subtotal: 1000
-        }],
-        subtotal: 1000,
-        total: 1210,
-        payments: [{
-          method: paymentMethod._id,
-          amount: 1210,
-          status: 'CONFIRMED'
-        }],
-        status: 'PAID'
+        dni: '44444444',
+        first_name: 'Original',
+        last_name: 'Nombre'
       });
 
       // Act
       const response = await request(app)
-        .delete(`/api/sales/${sale._id}`);
+        .patch(`/api/persons/${person._id}`)
+        .send({ first_name: 'Actualizado', email: 'nuevo@test.com' });
+
+      // Assert
+      expect(response.status).toBe(200);
+      expect(response.body.data.first_name).toBe('Actualizado');
+      expect(response.body.data.email).toBe('nuevo@test.com');
+    });
+
+    it('no debe permitir modificar DNI', async () => {
+      // Arrange
+      const person = await Person.create({
+        dni: '55555555',
+        first_name: 'Test',
+        last_name: 'User'
+      });
+
+      // Act
+      const response = await request(app)
+        .patch(`/api/persons/${person._id}`)
+        .send({ dni: '99999999' });
+
+      // Assert
+      expect(response.status).toBe(200);
+      // El DNI no debería cambiar
+      const updated = await Person.findById(person._id);
+      expect(updated.dni).toBe('55555555');
+    });
+
+    it('debe actualizar dirección parcialmente', async () => {
+      // Arrange
+      const person = await Person.create({
+        dni: '66666666',
+        first_name: 'Test',
+        last_name: 'User',
+        address: {
+          street: 'Calle Original',
+          number: '123',
+          city: 'Ciudad Original'
+        }
+      });
+
+      // Act
+      const response = await request(app)
+        .patch(`/api/persons/${person._id}`)
+        .send({ 
+          address: { 
+            city: 'Ciudad Nueva' 
+          } 
+        });
+
+      // Assert
+      expect(response.status).toBe(200);
+      expect(response.body.data.address.city).toBe('Ciudad Nueva');
+      expect(response.body.data.address.street).toBe('Calle Original');
+    });
+  });
+
+  describe('DELETE /api/persons/:id - Eliminar persona', () => {
+
+    it('debe eliminar persona existente', async () => {
+      // Arrange
+      const person = await Person.create({
+        dni: '77777777',
+        first_name: 'Eliminar',
+        last_name: 'Me'
+      });
+
+      // Act
+      const response = await request(app)
+        .delete(`/api/persons/${person._id}`);
 
       // Assert
       expect(response.status).toBe(200);
       
-      const deleted = await Sale.findById(sale._id);
+      const deleted = await Person.findById(person._id);
       expect(deleted).toBeNull();
+    });
+
+    it('debe retornar 404 si no existe', async () => {
+      // Act
+      const response = await request(app)
+        .delete('/api/persons/507f1f77bcf86cd799439011');
+
+      // Assert
+      expect(response.status).toBe(404);
     });
   });
 });
