@@ -1,5 +1,6 @@
 import React from 'react';
 import './PromotionViewModal.css';
+import { Permission } from '../Permission';
 
 export default function PromotionViewModal({ isOpen, promotion, onClose, onEdit }) {
   if (!isOpen || !promotion) return null;
@@ -123,11 +124,15 @@ export default function PromotionViewModal({ isOpen, promotion, onClose, onEdit 
           <button className="promo-view-btn secondary" onClick={onClose}>
             Cerrar
           </button>
-          {onEdit && (
-            <button className="promo-view-btn primary" onClick={() => onEdit(promotion)}>
-              ✏️ Editar Promoción
-            </button>
-          )}
+          
+          {/* Solo mostrar si tiene permiso de editar */}
+          <Permission permission="edit_promotions">
+            {onEdit && (
+              <button className="promo-view-btn primary" onClick={() => onEdit(promotion)}>
+                ✏️ Editar Promoción
+              </button>
+            )}
+          </Permission>
         </div>
       </div>
     </div>

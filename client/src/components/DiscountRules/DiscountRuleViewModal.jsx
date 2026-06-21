@@ -1,5 +1,6 @@
 import React from 'react';
 import './DiscountRuleViewModal.css';
+import { Permission } from '../Permission';
 
 const AGE_RANGE_LABELS = {
   '0-2': '0 a 2 años',
@@ -195,11 +196,13 @@ export default function DiscountRuleViewModal({ isOpen, rule, onClose, onEdit })
           <button className="rule-view-btn secondary" onClick={onClose}>
             Cerrar
           </button>
-          {onEdit && (
-            <button className="rule-view-btn primary" onClick={() => onEdit(rule)}>
-              ✏️ Editar Regla
-            </button>
-          )}
+          <Permission permission="edit_discount_rules">
+            {onEdit && (
+              <button className="rule-view-btn primary" onClick={() => onEdit(rule)}>
+                ✏️ Editar Regla
+              </button>
+            )}
+          </Permission>
         </div>
       </div>
     </div>

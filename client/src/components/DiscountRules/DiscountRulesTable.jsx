@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import './DiscountRulesTable.css';
+import { Permission } from '../Permission';
+
 
 const AGE_RANGE_LABELS = {
   '0-2': '0-2 años',
@@ -169,20 +171,24 @@ export default function DiscountRulesTable({ rules, loading, onView, onEdit, onD
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     </button>
-                    <button
-                      className="rules-action-btn edit"
-                      onClick={() => onEdit(rule)}
-                      title="Editar regla"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      className="rules-action-btn delete"
-                      onClick={() => onDelete(rule)}
-                      title="Eliminar regla"
-                    >
-                      🗑️
-                    </button>
+                    <Permission permission="edit_discount_rules">
+                      <button
+                        className="rules-action-btn edit"
+                        onClick={() => onEdit(rule)}
+                        title="Editar regla"
+                      >
+                        ✏️
+                      </button>
+                    </Permission>
+                    <Permission permission="delete_discount_rules">
+                      <button
+                        className="rules-action-btn delete"
+                        onClick={() => onDelete(rule)}
+                        title="Eliminar regla"
+                      >
+                        🗑️
+                      </button>
+                    </Permission>
                   </div>
                 </td>
               </tr>

@@ -74,6 +74,8 @@ export default function AppRouter() {
         
         {/* Proveedores */}
         <Route path="proveedores" element={<ProtectedRoute><SuppliersPage /></ProtectedRoute>} />
+        <Route path="proveedores/egresos" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />
+        <Route path="proveedores/ingresos" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />
         
         {/* Pagos */}
         <Route path="pagos/proveedores" element={<ProtectedRoute><UnderConstructionPage /></ProtectedRoute>} />

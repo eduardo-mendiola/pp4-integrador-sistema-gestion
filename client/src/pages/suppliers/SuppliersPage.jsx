@@ -3,6 +3,7 @@ import { apiRequest, unwrapList } from '../../services/api.js';
 import { exportToCsv, slugify } from '../../utils/csvExport.js';
 import SupplierFormModal from './SupplierFormModal.jsx';
 import SupplierDetailModal from './SupplierDetailModal.jsx';
+import { Permission } from '../../components/Permission';
 
 const PAGE_SIZE = 10;
 
@@ -72,12 +73,16 @@ function RowMenu({ supplier, onEdit, onDetail, onDelete }) {
           <button type="button" onClick={() => runAction(() => onDetail(supplier))}>
             Ver detalle
           </button>
+          <Permission permission="edit_suppliers">
           <button type="button" onClick={() => runAction(() => onEdit(supplier))}>
             Editar
           </button>
+          </Permission>
+          <Permission permission="delete_suppliers">
           <button type="button" className="danger-text" onClick={() => runAction(() => onDelete(supplier))}>
             Borrar
           </button>
+          </Permission>
         </div>
       ) : null}
     </div>
@@ -201,6 +206,7 @@ export default function SuppliersPage() {
           <p className="eyebrow">Módulo</p>
           <h2>Listado de proveedores</h2>
         </div>
+        <Permission permission="create_suppliers">
         <button type="button" className="btn-with-icon" onClick={openCreate}>
           <svg
             width="18"
@@ -219,6 +225,7 @@ export default function SuppliersPage() {
           </svg>
           Nuevo Proveedor
         </button>
+        </Permission>
       </header>
 
       <div className="panel">

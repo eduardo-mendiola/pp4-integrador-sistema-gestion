@@ -4,6 +4,7 @@ import useDiscountRulesLogic from './useDiscountRulesLogic';
 import DiscountRulesTable from '../../components/DiscountRules/DiscountRulesTable';
 import DiscountRuleViewModal from '../../components/DiscountRules/DiscountRuleViewModal';
 import DiscountRuleDeleteModal from '../../components/DiscountRules/DiscountRuleDeleteModal';
+import { Permission } from '../../components/Permission';
 import './DiscountRulesPage.css';
 
 export default function DiscountRulesPage() {
@@ -43,9 +44,11 @@ export default function DiscountRulesPage() {
     <div className="discount-rules-page">
       <div className="discount-rules-header">
         <h1>Reglas de Descuento</h1>
-        <button className="btn-primary" onClick={handleCreate}>
-          + Nueva Regla
-        </button>
+        <Permission permission="create_discount_rules">
+          <button className="btn-primary" onClick={handleCreate}>
+            + Nueva Regla
+          </button>
+        </Permission>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}

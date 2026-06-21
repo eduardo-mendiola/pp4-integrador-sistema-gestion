@@ -4,6 +4,7 @@ import PromotionsTable from '../../components/Promotions/PromotionsTable';
 import PromotionModal from '../../components/Promotions/PromotionModal';
 import PromotionViewModal from '../../components/Promotions/PromotionViewModal';
 import PromotionDeleteModal from '../../components/Promotions/PromotionDeleteModal';
+import { Permission } from '../../components/Permission';
 import './PromotionsPage.css';
 
 export default function PromotionsPage() {
@@ -31,19 +32,22 @@ export default function PromotionsPage() {
     toggleActive
   } = usePromotionsLogic();
 
-  // Cuando se hace clic en "Editar" desde la tabla o el modal de vista
   const handleEdit = (promotion) => {
-    closeViewModal(); // Cerrar modal de vista si está abierto
-    openEditModal(promotion); // Abrir modal de edición
+    closeViewModal();
+    openEditModal(promotion);
   };
 
   return (
     <div className="promotions-page">
       <div className="promotions-header">
         <h1>Promociones</h1>
-        <button className="btn-primary" onClick={openCreateModal}>
-          + Nueva Promoción
-        </button>
+        
+        {/* Botón solo visible si tiene permiso de crear */}
+        <Permission permission="create_promotions">
+          <button className="btn-primary" onClick={openCreateModal}>
+            + Nueva Promoción
+          </button>
+        </Permission>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
