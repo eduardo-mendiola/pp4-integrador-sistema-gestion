@@ -168,13 +168,13 @@ export const menuConfig = [
     id: "pagos",
     label: "Pagos",
     icon: "FiCreditCard",
-    permission: "view_supplier_payments",
+    permission: "under_construction",
     submenu: [
       {
         id: "pagos-proveedores",
         label: "Pagos a proveedores",
         path: "/pagos/proveedores",
-        permission: "view_supplier_payments",
+        permission: "under_construction",
       },
     ],
   },
