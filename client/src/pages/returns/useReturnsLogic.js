@@ -332,25 +332,34 @@ export default function useReturnsLogic() {
   };
 
   const calculateTotals = () => {
-    if (!originalSale) return { returnTotal: 0, exchangeTotal: 0, difference: 0, breakdown: {} };
+  if (!originalSale) return { returnTotal: 0, exchangeTotal: 0, difference: 0, breakdown: {} };
 
-    const selectedItems = returnItems.filter(item => item.quantity > 0);
-    
-    const returnSubtotalBruto = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const returnDiscountsIndividual = selectedItems.reduce((sum, item) => {
-      const proporcion = item.quantity / item.maxQuantity;
-      return sum + (item.discount * proporcion);
-    }, 0);
-    
-    const baseAfterIndividualDiscounts = returnSubtotalBruto - returnDiscountsIndividual;
-    const saleDiscountGlobalRate = originalSale.discount_rate || 0;
-    const returnDiscountGlobal = baseAfterIndividualDiscounts * (saleDiscountGlobalRate / 100);
-    const returnDiscountTotal = returnDiscountsIndividual + returnDiscountGlobal;
-    
-    const returnBaseImponible = returnSubtotalBruto - returnDiscountTotal;
-    const returnTaxRate = originalSale.tax_rate || 21;
-    const returnIVA = returnBaseImponible * (returnTaxRate / 100);
-    const returnTotal = returnBaseImponible + returnIVA;
+  const selectedItems = returnItems.filter(item => item.quantity > 0);
+  
+  // Calcular el precio ORIGINAL (bruto) antes del descuento
+  const returnSubtotalBruto = selectedItems.reduce((sum, item) => {
+    // Si tiene descuento, el price ya viene con descuento aplicado
+    // Calculamos el precio original: precio_original = price / (1 - discount_rate/100)
+    const precioOriginal = item.discount_rate > 0 
+      ? item.price / (1 - item.discount_rate / 100)
+      : item.price;
+    return sum + (precioOriginal * item.quantity);
+  }, 0);
+  
+  const returnDiscountsIndividual = selectedItems.reduce((sum, item) => {
+    const proporcion = item.quantity / item.maxQuantity;
+    return sum + (item.discount * proporcion);
+  }, 0);
+  
+  const baseAfterIndividualDiscounts = returnSubtotalBruto - returnDiscountsIndividual;
+  const saleDiscountGlobalRate = originalSale.discount_rate || 0;
+  const returnDiscountGlobal = baseAfterIndividualDiscounts * (saleDiscountGlobalRate / 100);
+  const returnDiscountTotal = returnDiscountsIndividual + returnDiscountGlobal;
+  
+  const returnBaseImponible = returnSubtotalBruto - returnDiscountTotal;
+  const returnTaxRate = originalSale.tax_rate || 21;
+  const returnIVA = returnBaseImponible * (returnTaxRate / 100);
+  const returnTotal = returnBaseImponible + returnIVA;
     
     // Calcular totales de items de cambio considerando descuentos y active
     let exchangeSubtotal = 0;
