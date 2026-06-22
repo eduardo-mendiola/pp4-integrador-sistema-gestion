@@ -12,6 +12,7 @@ const typeLabels = {
   EXPENSE: 'Egreso'
 };
 
+// Etiquetas para métodos de pago y tipos de origen
 const paymentMethodLabels = {
   cash: 'Efectivo',
   debit_card: 'Débito',

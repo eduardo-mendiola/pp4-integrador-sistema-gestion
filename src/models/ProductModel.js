@@ -37,7 +37,7 @@ class ProductModel extends BaseModel {
     return mongooseModel;
   }
 
-  
+  // Custom method to get unique brands
   async getUniqueBrands() {
     const brands = await mongooseModel.distinct('brand');
     return brands.filter(b => b && b.trim() !== '');

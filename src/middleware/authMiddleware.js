@@ -1,3 +1,4 @@
+// Middleware to check if the user is authenticated
 export const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated && req.isAuthenticated()) {
     return next()

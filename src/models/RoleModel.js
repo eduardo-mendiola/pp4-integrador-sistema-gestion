@@ -11,6 +11,7 @@ const roleSchema = new mongoose.Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 
+
 const Role = mongoose.model('Role', roleSchema);
 
 class RoleModel extends BaseModel {

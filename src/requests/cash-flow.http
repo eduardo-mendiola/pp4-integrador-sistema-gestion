@@ -64,7 +64,7 @@ Content-Type: application/json
 
 {
   "type": "INCOME",
-  "amount": 1500,
+  "amount": 2000,
   "paymentMethod": "cash",
   "concept": "Cobro de deuda cliente Juan Pérez",
   "notes": "Recibido en efectivo"

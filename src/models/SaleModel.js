@@ -32,7 +32,7 @@ const saleSchema = new mongoose.Schema({
 
   status: { type: String, enum: ['PENDING', 'PAID', 'CANCELLED'], default: 'PAID' },
   
-  // CAMPOS PARA DEVOLUCIONES
+  // Track returns related to this sale
   return_ids: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Return', default: [] }],
   has_returns: { type: Boolean, default: false },
   

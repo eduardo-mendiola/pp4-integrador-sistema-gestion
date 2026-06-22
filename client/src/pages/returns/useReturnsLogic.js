@@ -37,6 +37,7 @@ export default function useReturnsLogic() {
   const [exchangeDiscountRate, setExchangeDiscountRate] = useState(0);
   const [editingExchangeQuantities, setEditingExchangeQuantities] = useState({});
   
+  // Estados para motivo de devolución
   const [operationType, setOperationType] = useState('return');
   const [returnReason, setReturnReason] = useState('');
   const [customReason, setCustomReason] = useState('');

@@ -31,6 +31,7 @@ const EMPTY_FORM = {
   }
 };
 
+// Construye el estado inicial del formulario a partir del cliente existente (si se proporciona) o con valores vacíos para un nuevo cliente.
 const buildInitialForm = (client) => {
   if (!client) {
     return { ...EMPTY_FORM, address: { ...EMPTY_FORM.address } };

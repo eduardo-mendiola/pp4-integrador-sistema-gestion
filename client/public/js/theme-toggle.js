@@ -12,6 +12,7 @@ function toggleTheme() {
     updateLogos(newTheme);
 }
 
+
 // Función para actualizar el icono y texto del tema
 function updateThemeIcon(theme) {
     const icon = document.getElementById('theme-icon');

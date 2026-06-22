@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import BaseModel from './BaseModel.js';
 
+// Define the Category schema
 const categorySchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   description: { type: String, trim: true }

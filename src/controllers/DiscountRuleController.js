@@ -138,6 +138,7 @@ const DiscountRuleController = {
       delete updateData.createdAt;
       delete updateData.updatedAt;
 
+      // Trim en name
       const updatedRule = await DiscountRule.model.findByIdAndUpdate(
         id,
         { $set: updateData },

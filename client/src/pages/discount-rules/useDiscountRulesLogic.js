@@ -58,6 +58,7 @@ export default function useDiscountRulesLogic() {
     setShowDeleteConfirm(true);
   };
 
+  // Confirmar eliminación
   const confirmDelete = async () => {
     if (!ruleToDelete) return;
 

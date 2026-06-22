@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 class BaseModel {
     constructor(schema, collectionName) {
-        // Evitar sobrescribir modelos si ya existen
         this.model = mongoose.models[collectionName] || mongoose.model(collectionName, schema);
     }
 

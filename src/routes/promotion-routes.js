@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
+// Promotion routes
 router.get('/', PromotionController.getAll);
 router.get('/:id', PromotionController.getById);
 router.get('/active', PromotionController.getActiveByDate);

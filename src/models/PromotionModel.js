@@ -39,7 +39,7 @@ class PromotionModel extends BaseModel {
     ]);
   }
 
-  // encontrar promociones activas en una fecha (sin filtro de producto)
+  // Encontrar promociones activas en una fecha (sin filtro de producto)
   findActiveByDate(date = new Date()) {
     return this.model.find({
       active: true,

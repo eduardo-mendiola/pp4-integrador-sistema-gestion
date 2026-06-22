@@ -1,7 +1,6 @@
 /* ============================================
    HEADER - Estilos del componente Header
    ============================================ */
-
 .header {
 	grid-area: header;
 	display: flex;

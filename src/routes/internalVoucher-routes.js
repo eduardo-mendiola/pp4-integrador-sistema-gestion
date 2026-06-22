@@ -6,15 +6,11 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
-// Listar comprobantes con filtros
+// Define routes for internal voucher-related operations
 router.get("/", InternalVoucherController.getAll);
-// Resumen por período
 router.get("/summary", InternalVoucherController.getSummary);
-// Crear comprobante
 router.post("/", InternalVoucherController.create);
-// Detalle de un comprobante
 router.get("/:id", InternalVoucherController.getById);
-// Cancelar comprobante
 router.patch("/:id/cancel", InternalVoucherController.cancel);
 
 export default router;

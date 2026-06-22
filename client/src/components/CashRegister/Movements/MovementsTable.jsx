@@ -33,6 +33,7 @@ export default function MovementsTable({ movements, loading, filters, onFilterCh
     setSortConfig({ key, direction });
   };
 
+  // Función para mostrar el ícono de ordenamiento
   const getSortIcon = (key) => {
     if (sortConfig.key === key) {
       return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';

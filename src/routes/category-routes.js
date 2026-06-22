@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
+// Define routes for categories
 router.get('/', CategoryController.getAll);
 router.get('/:id', CategoryController.getById);
 router.post('/', CategoryController.create);

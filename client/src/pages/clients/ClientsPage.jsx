@@ -36,6 +36,7 @@ const CLIENT_COLUMNS = [
   { header: 'ESTADO', value: (client) => (client.active ? 'Activo' : 'Cancelado') }
 ];
 
+/// Menu de acciones para cada fila de cliente
 function RowMenu({ client, onEdit, onDetail, onToggleActive }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);

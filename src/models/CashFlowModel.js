@@ -62,7 +62,7 @@ class CashFlowModel extends BaseModel {
     ]);
   }
 
-  // Resumen desde la apertura de la caja, no desde medianoche
+  // Obtener resumen diario de movimientos para una caja, considerando su fecha de apertura
   async getDailySummary(cashRegisterId, date = new Date()) {
     // Buscar la caja para obtener su fecha de apertura
     const CashRegister = (await import('../models/CashRegisterModel.js')).default;

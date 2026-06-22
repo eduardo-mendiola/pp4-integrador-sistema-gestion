@@ -17,8 +17,8 @@ Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Content-Type: application/json
 
 {
-  "dni": "30123456",
-  "first_name": "Test",
+  "dni": "3012345666",
+  "first_name": "Test2",
   "last_name": "Pérez",
   "email": "Test.perez@email.com",
   "phone": "1123456789",

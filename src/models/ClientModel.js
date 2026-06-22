@@ -39,8 +39,6 @@ const clientSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-
-
 // Historial de compras del cliente
 clientSchema.virtual('purchases', {
   ref: 'Sale',
@@ -53,9 +51,7 @@ clientSchema.virtual('full_name').get(function () {
   return `${this.first_name || ''} ${this.last_name || ''}`.trim();
 });
 
-
 mongoose.models.Client || mongoose.model('Client', clientSchema);
-
 
 class ClientModel extends BaseModel {
   constructor() {

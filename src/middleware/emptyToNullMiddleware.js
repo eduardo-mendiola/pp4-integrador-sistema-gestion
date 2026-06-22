@@ -1,4 +1,4 @@
-// Lista de campos que pueden ser null si están vacíos
+// Middleware to convert empty string fields to null for specific fields
 const nullableFields = [
   'first_name', 'last_name', 'category',
   'company_type', 'name', 'website',

@@ -8,6 +8,7 @@ const canManageUsers = hasRole('admin', 'Administrador', 'CEO');
 
 router.use(isAuthenticated);
 
+// Define routes for user-related operations
 router.get('/', canManageUsers, UserController.getAll);
 router.get('/:id', canManageUsers, UserController.getById);
 router.post('/', canManageUsers, UserController.create);

@@ -27,6 +27,7 @@ export const loginAPI = (req, res, next) => {
   })(req, res, next)
 }
 
+// Logout API
 export const logoutAPI = (req, res, next) => {
   req.logout((error) => {
     if (error) {
@@ -44,6 +45,7 @@ export const logoutAPI = (req, res, next) => {
   })
 }
 
+// Endpoint para obtener información del usuario autenticado
 export const me = (req, res) => {
   if (!req.user) {
     return res.status(401).json({ success: false, message: 'No autenticado' })

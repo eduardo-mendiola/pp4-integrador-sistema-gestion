@@ -11,7 +11,6 @@ GET {{baseUrl}}/api/clients/6a1269faf182234a2f2f61b2
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Accept: application/json
 
-
 ### Create client
 POST {{baseUrl}}/api/clients
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
@@ -34,7 +33,6 @@ Content-Type: application/json
     "country": "Argentina"
   }
 }
-
 
 ### Update client (PATCH - partial update)
 PATCH {{baseUrl}}/api/clients/6a1269faf182234a2f2f61b2

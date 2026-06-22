@@ -3,6 +3,7 @@ import { apiRequest } from '../services/api.js';
 
 const AuthContext = createContext(null);
 
+// Proveedor de autenticación que maneja el estado del usuario y las funciones de login/logout
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);

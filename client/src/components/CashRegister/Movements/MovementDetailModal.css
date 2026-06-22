@@ -239,6 +239,7 @@
   transform: translateY(-1px);
 }
 
+
 @media (max-width: 768px) {
   .movement-detail-row {
     flex-direction: column;

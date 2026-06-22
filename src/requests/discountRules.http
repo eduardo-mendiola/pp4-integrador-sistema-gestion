@@ -28,7 +28,7 @@ Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Content-Type: application/json
 
 {
-  "percentage": 15,
+  "percentage": 50,
   "active": false
 }
 

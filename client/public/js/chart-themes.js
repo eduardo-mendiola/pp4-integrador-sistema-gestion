@@ -92,6 +92,7 @@ function isObject(item) {
     return item && typeof item === 'object' && !Array.isArray(item);
 }
 
+
 /**
  * Actualiza un gráfico existente con los colores del tema actual
  * @param {Chart} chart - Instancia de Chart.js

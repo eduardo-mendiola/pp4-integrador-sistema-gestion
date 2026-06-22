@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
+// Define routes for payment method-related operations
 router.get('/', PaymentMethodController.getAll);
 router.get('/:id', PaymentMethodController.getById);
 router.post('/', PaymentMethodController.create);

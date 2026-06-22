@@ -10,6 +10,7 @@ import CashFlow from "../models/CashFlowModel.js";
 
 const Product = ProductModel.getNativeModel();
 
+// Funciones auxiliares para normalizar datos y enriquecer items con precios y descuentos
 const normalizeItems = (items) => {
   if (Array.isArray(items)) return items;
   if (typeof items === "string" && items.trim()) return JSON.parse(items);
@@ -23,6 +24,7 @@ const normalizePayments = (payments) => {
   return [];
 };
 
+// Enriquecer items con precios, descuentos automáticos y cálculos de subtotal
 const enrichItemsWithPricing = async (items) => {
   const productIds = items.map((i) => i.productId);
 

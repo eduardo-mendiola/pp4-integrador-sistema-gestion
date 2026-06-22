@@ -48,6 +48,7 @@ export default function SalesListPage() {
     }
   };
 
+  // Función para confirmar anulación de venta
   const handleConfirmCancel = async (sale, reason) => {
     setCancelling(true);
     try {

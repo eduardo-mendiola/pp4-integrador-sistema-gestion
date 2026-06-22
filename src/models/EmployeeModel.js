@@ -26,7 +26,7 @@ const employeeSchema = new mongoose.Schema({
     required: true 
   },
 
-  // --- Estado del empleado (activo/inactivo, licencias, etc.) ---
+  // Estado del empleado (activo/inactivo, licencias, etc.) ---
   status: {
     type: String,
     enum: ['active', 'inactive'],
@@ -45,7 +45,7 @@ const employeeSchema = new mongoose.Schema({
     default: null
   },
 
-  // --- Estado del contrato (vigente/terminado) ---
+  // Estado del contrato (vigente/terminado) ---
   contract_status: {
     type: String,
     enum: ['active', 'terminated'],

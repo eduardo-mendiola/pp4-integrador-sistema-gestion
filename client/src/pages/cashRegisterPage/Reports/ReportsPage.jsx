@@ -29,6 +29,7 @@ export default function ReportsPage() {
     'returns': 'Devoluciones y Cambios'
   };
 
+  // Función para renderizar el reporte seleccionado
   const renderReport = () => {
     if (!reportData) return null;
 

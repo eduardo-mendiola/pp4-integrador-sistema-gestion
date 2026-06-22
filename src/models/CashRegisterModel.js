@@ -51,7 +51,7 @@ class CashRegisterModel extends BaseModel {
       .lean();
   }
 
-  // Obtener la caja principal (hardcodeada, para usar como default)
+  // Obtener la caja principal, si no existe crearla
   async getMainRegister() {
     let mainRegister = await this.model.findOne({ name: "Caja Principal" });
     if (!mainRegister) {

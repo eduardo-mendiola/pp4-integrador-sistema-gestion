@@ -17,7 +17,7 @@ Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Content-Type: application/json
 
 {
-  "name": "Electrónica",
+  "name": "Lúdicos y Entretenimiento",
   "description": "Productos electrónicos y tecnología"
 }
 

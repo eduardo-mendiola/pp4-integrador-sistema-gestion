@@ -50,6 +50,7 @@ export default function NewSalePage() {
     sales.openPaymentModal();
   };
 
+  // Función para procesar el pago
   const handleProcessPayment = async (paymentData) => {
     const result = await sales.processPayment(
       client.selectedClient,

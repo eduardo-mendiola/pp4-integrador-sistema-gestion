@@ -63,7 +63,7 @@ const PromotionController = {
       delete updateData._id;
       delete updateData.createdAt;
       delete updateData.updatedAt;
-      delete updateData.productId; // ✅ Eliminar productId si viene
+      delete updateData.productId; 
 
       if (updateData.name !== undefined) {
         updateData.name = updateData.name.trim();

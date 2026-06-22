@@ -29,6 +29,7 @@ export default function useSalesLogic() {
   // Descuento global (%)
   const [discountRate, setDiscountRate] = useState(0);
 
+  // Mensajes de feedback al usuario
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);

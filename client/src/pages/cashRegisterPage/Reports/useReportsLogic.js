@@ -18,6 +18,7 @@ export default function useReportsLogic() {
     setError('');
   };
 
+  // Limpia la selección y los datos del reporte
   const clearSelection = () => {
     setSelectedReport(null);
     setReportData(null);

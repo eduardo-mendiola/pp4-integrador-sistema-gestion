@@ -8,6 +8,7 @@
 # REPORTE 1: CIERRE DE CAJA
 # ------------------------------------------------------------
 
+
 ### Get cash closing report for today
 GET {{baseUrl}}/api/reports/cash-closing
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
@@ -32,7 +33,7 @@ GET {{baseUrl}}/api/reports/sales
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Accept: application/json
 
-### Get sales report for date range
+### Get sales report for date range 
 GET {{baseUrl}}/api/reports/sales?from=2026-06-01&to=2026-06-19
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Accept: application/json
@@ -47,7 +48,7 @@ GET {{baseUrl}}/api/reports/sales?from=2026-06-01&to=2026-06-19&paymentMethod=cr
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Accept: application/json
 
-### Get sales report for current month
+### Get sales report for current month 
 GET {{baseUrl}}/api/reports/sales?from=2026-06-01&to=2026-06-30
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Accept: application/json
@@ -66,7 +67,7 @@ GET {{baseUrl}}/api/reports/movements?from=2026-06-01&to=2026-06-19
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Accept: application/json
 
-### Get only INCOME movements
+### Get only INCOME movements 
 GET {{baseUrl}}/api/reports/movements?from=2026-06-01&to=2026-06-19&type=INCOME
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Accept: application/json

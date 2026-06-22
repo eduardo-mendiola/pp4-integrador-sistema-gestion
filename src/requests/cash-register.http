@@ -39,7 +39,7 @@ Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Content-Type: application/json
 
 {
-  "initialAmount": 3000,
+  "initialAmount": 3500,
   "notes": "Intento de apertura duplicada"
 }
 

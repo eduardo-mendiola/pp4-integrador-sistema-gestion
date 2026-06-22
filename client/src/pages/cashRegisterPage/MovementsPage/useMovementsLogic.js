@@ -16,6 +16,7 @@ export default function useMovementsLogic() {
     dateTo: ''
   });
 
+  // Función para cargar los movimientos desde la API
   const loadMovements = async () => {
     setLoading(true);
     setError('');

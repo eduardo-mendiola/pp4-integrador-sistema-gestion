@@ -33,6 +33,7 @@ export function exportToExcel(data, filename = 'reporte', sheetName = 'Datos', c
       XLSX.utils.book_append_sheet(wb, ws, sheet);
     });
   } 
+  
   // Caso 2: data es un array simple
   else if (Array.isArray(data)) {
     if (data.length === 0) {

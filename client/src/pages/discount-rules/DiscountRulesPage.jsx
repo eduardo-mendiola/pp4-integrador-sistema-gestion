@@ -31,6 +31,7 @@ export default function DiscountRulesPage() {
     navigate('/promociones/descuentos/nuevo');
   };
 
+  // Editar desde la tabla o desde el modal de vista previa
   const handleEdit = (rule) => {
     navigate(`/promociones/descuentos/${rule._id}/editar`);
   };

@@ -207,6 +207,7 @@ const ReturnController = {
             ? "PAID"
             : "PENDING";
 
+        // Crear la venta de reemplazo
         const replacementSale = await Sale.create({
           client_id: originalSale.client_id,
           employee_id: req.user?._id || req.body.employee_id,

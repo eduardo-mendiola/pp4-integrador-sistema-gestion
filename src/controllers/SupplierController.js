@@ -117,7 +117,7 @@ const SupplierController = {
     }
   },
 
-  // Baja lógica
+  // Eliminación lógica: se marca el proveedor como "CANCELADO" en lugar de eliminarlo físicamente
   remove: async (req, res) => {
     try {
       const supplier = await Supplier.model.findByIdAndUpdate(
