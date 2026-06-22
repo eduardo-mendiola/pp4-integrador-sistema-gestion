@@ -1,6 +1,7 @@
 import React from 'react';
 import CrudModule from '../../components/CrudModule.jsx';
 
+// Configuración específica para el módulo de ventas
 const config = {
   title: 'Ventas',
   description: 'Registro básico de ventas con items en JSON.',

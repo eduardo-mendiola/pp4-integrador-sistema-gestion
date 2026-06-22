@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import BaseModel from './BaseModel.js';
 
+// Define the Supplier schema
 const supplierSchema = new mongoose.Schema({
   supplier_code: { type: String, unique: true, required: true, trim: true },
   name: { type: String, required: true, trim: true },

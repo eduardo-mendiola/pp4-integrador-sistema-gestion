@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import BaseModel from './BaseModel.js';
 
+// Schema for payment methods (e.g., cash, credit card, etc.)
 const paymentMethodSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   requires_auth: { type: Boolean, default: false },

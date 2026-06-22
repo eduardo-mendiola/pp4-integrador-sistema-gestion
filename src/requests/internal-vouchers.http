@@ -65,7 +65,7 @@ Content-Type: application/json
 {
   "type": "EXPENSE",
   "concept": "Compra de mercadería - Proveedor ABC",
-  "amount": 15000,
+  "amount": 15500,
   "paymentMethod": "none",
   "notes": "Factura A-0001-00000456 - Se pagará en 30 días"
 }
@@ -78,7 +78,7 @@ Content-Type: application/json
 {
   "type": "ADJUSTMENT",
   "concept": "Ajuste de stock - Mercadería dañada",
-  "amount": 2500,
+  "amount": 2550,
   "paymentMethod": "none",
   "relatedEntityType": "PRODUCT",
   "notes": "3 unidades de producto XYZ rotas por accidente"

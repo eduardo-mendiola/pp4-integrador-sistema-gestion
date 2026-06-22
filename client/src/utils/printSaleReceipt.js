@@ -42,6 +42,7 @@ const getPaymentMethodLabel = (sale) => {
   return '-';
 };
 
+// Obtener nombre del cliente con múltiples posibles ubicaciones
 const getClientName = (sale) => {
   return sale.customer_name || 
          sale.metadata?.customer_name || 

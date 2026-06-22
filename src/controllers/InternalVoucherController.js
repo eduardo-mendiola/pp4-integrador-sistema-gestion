@@ -203,6 +203,7 @@ const InternalVoucherController = {
       const end = endDate ? new Date(endDate) : new Date();
       end.setHours(23, 59, 59, 999);
 
+      // Validar fechas
       const summary = await InternalVoucher.getSummary(start, end);
       return res.json({ success: true, data: summary });
     } catch (error) {

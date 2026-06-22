@@ -30,7 +30,7 @@ Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Content-Type: application/json
 
 {
-  "surcharge_percentage": 3.0,
+  "surcharge_percentage": 10.0,
   "active": false
 }
 

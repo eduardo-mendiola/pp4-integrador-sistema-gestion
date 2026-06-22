@@ -1,6 +1,7 @@
 import React from 'react';
 import CrudModule from '../../components/CrudModule.jsx';
 
+// Configuración específica para el módulo de categorías
 const config = {
   title: 'Categorías',
   description: 'Catálogo simple de categorías.',

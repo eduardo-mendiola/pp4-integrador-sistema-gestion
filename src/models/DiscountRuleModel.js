@@ -7,7 +7,7 @@ const discountRuleSchema = new mongoose.Schema({
   active: { type: Boolean, default: true },
   
   conditions: {
-    // Filtros de identidad
+    // Filtros de identidad (igualdad)
     productIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     brands: [{ type: String, trim: true }],
     supplierIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Supplier" }],
@@ -23,7 +23,7 @@ const discountRuleSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// Hook de migración para datos antiguos
+// Hook de migración para datos antiguos antes de guardar
 discountRuleSchema.pre('save', function(next) {
   if (!this.conditions) this.conditions = {};
   

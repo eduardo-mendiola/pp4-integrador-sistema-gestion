@@ -11,6 +11,3 @@ export function filterManagers(employees) {
         managerRoles.includes(emp.user_id.role_id.name) // rol permitido
     );
 }
-
-
-

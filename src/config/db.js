@@ -3,6 +3,7 @@ import 'dotenv/config';
 
 const DB_URI = process.env.MONGO_URI_ATLAS 
 
+// Si no se encuentra la variable de entorno, se puede usar una URI de conexión local como respaldo
 const dbConnect = async () => {
     try {
         await mongoose.connect(DB_URI);

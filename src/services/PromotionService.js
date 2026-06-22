@@ -12,7 +12,7 @@ const AGE_RANGES = {
 const PromotionService = {
   calculateAutomaticDiscount: async (productId, currentDate = new Date()) => {
     try {
-      // ✅ NUEVO: Obtener todas las promociones activas en la fecha (sin filtro de producto)
+      // Obtener todas las promociones activas en la fecha (sin filtro de producto)
       const activePromotions = await Promotion.findActiveByDate(currentDate);
       if (!activePromotions || activePromotions.length === 0) return null;
 
@@ -80,7 +80,7 @@ const PromotionService = {
 
     return metrics;
   },
-
+  
   evaluateRule: (rule, product, metrics) => {
     const conditions = rule.conditions || {};
     const matchedConditions = [];
@@ -136,7 +136,7 @@ const PromotionService = {
         allConditionsMet = false;
       }
     }
-
+    
     if (conditions.maxMonthsWithoutSale != null) {
       if (metrics.monthsWithoutSale <= conditions.maxMonthsWithoutSale) {
         matchedConditions.push(`Sin venta: ≤${conditions.maxMonthsWithoutSale} meses`);
@@ -144,7 +144,7 @@ const PromotionService = {
         allConditionsMet = false;
       }
     }
-
+    // Filtros de stock
     if (conditions.minStockQuantity != null) {
       if (metrics.stock >= conditions.minStockQuantity) {
         matchedConditions.push(`Stock: ≥${conditions.minStockQuantity} uds`);

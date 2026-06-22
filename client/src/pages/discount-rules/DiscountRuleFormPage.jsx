@@ -119,6 +119,7 @@ export default function DiscountRuleFormPage() {
     }
   };
 
+  // Manejo de cambios en campos simples (nombre, porcentaje, activo)
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({

@@ -10,6 +10,7 @@ export default function AppShell() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  
   return (
     <div className="app-shell">
       <Header onProductSelect={setSelectedProduct} />

@@ -239,6 +239,7 @@ const ReportController = {
 
       totals.balance = totals.totalIncomes - totals.totalExpenses;
 
+      // Desglose por método de pago y por origen
       movements.forEach(m => {
         if (!totals.byPaymentMethod[m.paymentMethod]) {
           totals.byPaymentMethod[m.paymentMethod] = { count: 0, total: 0 };

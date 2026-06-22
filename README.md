@@ -1102,12 +1102,38 @@ El desarrollo del sistema se apoyó en documentación oficial, recursos técnico
 
 ### Documentación Oficial
 
+### Backend - Autenticación y Seguridad
+
+- Passport: http://www.passportjs.org/
+- Passport Local: http://www.passportjs.org/packages/passport-local/
+- bcrypt: https://github.com/kelektiv/node.bcrypt.js
+- express-session: https://github.com/expressjs/session
+- connect-mongo: https://github.com/jdesboeufs/connect-mongo
+
+### Backend - Utilidades
+
+- CORS: https://github.com/expressjs/cors
+- Method Override: https://github.com/expressjs/method-override
+- node-cron: https://github.com/node-cron/node-cron
+- dotenv: https://github.com/motdotla/dotenv
+- nodemon: https://nodemon.io/
 - Node.js Documentation: https://nodejs.org/en/docs/
 - Express.js Guide: https://expressjs.com/
 - MongoDB Manual: https://www.mongodb.com/docs/
 - Mongoose Documentation: https://mongoosejs.com/docs/
 - React Documentation: https://react.dev/
 - JWT Introduction: https://jwt.io/introduction/
+
+### Frontend (React + Vite)
+
+- Vite: https://vitejs.dev/
+- Chart.js: https://www.chartjs.org/
+- React Chartjs 2: https://react-chartjs-2.js.org/
+- jsPDF: https://github.com/parallax/jsPDF
+- html2canvas: https://html2canvas.hertzen.com/
+- React Router: https://reactrouter.com/
+- React Icons: https://react-icons.github.io/react-icons/
+- SheetJS (XLSX): https://sheetjs.com/
 
 ### Herramientas de Testing
 

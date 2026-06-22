@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { apiRequest } from "../../../services/api.js";
 
+// Hook personalizado para manejar la lógica de la lista de ventas
 export default function useSalesList() {
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(false);

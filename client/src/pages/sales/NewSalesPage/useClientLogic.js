@@ -29,6 +29,7 @@ export default function useClientLogic() {
     }
   };
 
+  // Funciones para manejar el modal y la selección de clientes
   const openModal = (mode = 'search') => {
     setModalMode(mode);
     setIsModalOpen(true);

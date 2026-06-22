@@ -147,7 +147,7 @@ const CashFlowController = {
     }
   },
 
-  // Resumen por período
+  // Resumen por período y caja
   getSummary: async (req, res) => {
     try {
       const { startDate, endDate, cashRegisterId } = req.query;

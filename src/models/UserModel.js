@@ -36,7 +36,6 @@ const userSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
-
 // Virtual
 userSchema.virtual('employee', {
   ref: 'Employee',
@@ -48,7 +47,6 @@ userSchema.virtual('employee', {
 userSchema.methods.comparePassword = async function (password) {
   return bcrypt.compare(password, this.password_hash);
 };
-
 
 // Pre-save password hashing
 userSchema.pre('save', async function (next) {
@@ -67,7 +65,6 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-
 // Hide sensitive fields
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
@@ -75,7 +72,6 @@ userSchema.methods.toJSON = function () {
   delete obj.__v;
   return obj;
 };
-
 
 // Model base
 const User = mongoose.model('User', userSchema);

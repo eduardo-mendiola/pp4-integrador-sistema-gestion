@@ -53,6 +53,7 @@ export default function PromotionsPage() {
       {error && <div className="alert alert-error">{error}</div>}
       {success && <div className="alert alert-success">{success}</div>}
 
+      {/* Tabla de promociones */}
       <PromotionsTable
         promotions={promotions}
         loading={loading}

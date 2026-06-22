@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
+// Define routes for discount rules
 router.get('/', DiscountRuleController.getAll);
 router.get('/:id', DiscountRuleController.getById);
 router.get('/:id/promotions-count', DiscountRuleController.getPromotionsCount);

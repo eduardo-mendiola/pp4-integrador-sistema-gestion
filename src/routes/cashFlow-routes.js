@@ -6,19 +6,11 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
-// Listar movimientos con filtros
+// Define routes for cash flow
 router.get("/", CashFlowController.getAll);
-
-// Resumen por período
 router.get("/summary", CashFlowController.getSummary);
-
-// Crear movimiento manual
 router.post("/", CashFlowController.create);
-
-// Detalle de un movimiento
 router.get("/:id", CashFlowController.getById);
-
-// Eliminar movimiento manual
 router.delete("/:id", CashFlowController.delete);
 
 export default router;

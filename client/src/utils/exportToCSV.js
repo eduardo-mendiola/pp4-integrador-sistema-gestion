@@ -28,7 +28,7 @@ export function exportToCSV(data, filename = 'reporte', columns = null) {
     }).join(',')
   );
 
-  // Unir todo
+  // Combinar encabezados y filas
   const csvContent = [
     headers.join(','),
     ...rows

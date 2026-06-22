@@ -13,6 +13,7 @@ export async function exportReportToPDF(element, filename = 'reporte', options =
     return;
   }
 
+  // Configuración por defecto
   const {
     orientation = 'portrait',
     unit = 'mm',

@@ -46,7 +46,7 @@ const internalVoucherSchema = new mongoose.Schema({
   timestamps: { createdAt: "created_at", updatedAt: "updated_at" }
 });
 
-// ✅ CORREGIDO: Solo índices adicionales, no duplicados
+// Solo índices adicionales, no duplicados
 internalVoucherSchema.index({ date: -1 });
 internalVoucherSchema.index({ type: 1, status: 1 });
 internalVoucherSchema.index({ operatorId: 1, date: -1 });
@@ -74,7 +74,7 @@ class InternalVoucherModel extends BaseModel {
     ]);
   }
 
-  // ✅ Generar el próximo número de comprobante correlativo
+  // Generar el próximo número de comprobante correlativo
   async generateNextVoucherNumber(prefix = "CI") {
     const lastVoucher = await this.model
       .findOne({ prefix })
@@ -87,7 +87,7 @@ class InternalVoucherModel extends BaseModel {
     return { voucherNumber: nextNumber, formattedNumber, prefix };
   }
 
-  // ✅ Buscar comprobantes en un rango de fechas
+  // Buscar comprobantes en un rango de fechas
   async findByDateRange(startDate, endDate, filters = {}) {
     const query = {
       date: { $gte: startDate, $lte: endDate }

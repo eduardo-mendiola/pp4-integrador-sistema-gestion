@@ -1,6 +1,6 @@
 class CodeGenerator {
     constructor(collection) {
-        this.collection = collection; // colección de Mongo
+        this.collection = collection; // colección de MongoDB para verificar códigos únicos
     }
 
     // Método para generar código basado en un ObjectId existente

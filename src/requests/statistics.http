@@ -4,6 +4,8 @@
 # ESTADÍSTICAS (Statistics)
 # ============================================================
 
+# Note: All statistics endpoints require authentication. Make sure to include the session cookie in your requests.
+
 ### Get dashboard statistics for today
 GET {{baseUrl}}/api/statistics/dashboard
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// Página de acceso denegado para usuarios sin permisos
 export default function AccessDeniedPage() {
   return (
     <div className="state-box">

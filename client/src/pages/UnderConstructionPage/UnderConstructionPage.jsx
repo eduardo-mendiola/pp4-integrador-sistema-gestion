@@ -2,6 +2,7 @@ import React from 'react';
 import { FiTool } from 'react-icons/fi';
 import './UnderConstructionPage.css';
 
+// Página de "En construcción" para secciones en desarrollo
 export default function UnderConstructionPage() {
   return (
     <div className="under-construction">

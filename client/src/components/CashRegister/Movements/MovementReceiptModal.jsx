@@ -1,6 +1,7 @@
 import React from 'react';
 import './MovementReceiptModal.css';
 
+
 const typeLabels = {
   INCOME: 'Ingreso',
   EXPENSE: 'Egreso'

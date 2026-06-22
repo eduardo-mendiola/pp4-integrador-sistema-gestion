@@ -13,7 +13,7 @@ GET {{baseUrl}}/api/products/{{productId}}
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Accept: application/json
 
-### Create product
+### Create product 
 POST {{baseUrl}}/api/products
 Cookie: connect.sid={{$dotenv CONNECT_SID_VALUE}}
 Content-Type: application/json

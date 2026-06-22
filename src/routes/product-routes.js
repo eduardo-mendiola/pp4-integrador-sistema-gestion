@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
+// Define routes for product operations
 router.get('/', ProductController.getAll);
 router.get('/:id', ProductController.getById);
 router.get('/brands', ProductController.getUniqueBrands);

@@ -47,6 +47,7 @@ export default function useCashRegisterLogic() {
     }
   };
 
+  // Función para cargar el resumen diario desde la API
   const loadDailySummary = async () => {
     try {
       const response = await apiRequest('/api/cash-register/daily-summary');

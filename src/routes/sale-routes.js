@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
+// Define routes for sale-related operations
 router.get('/', SaleController.getAll);
 router.get('/:id', SaleController.getById);
 router.post('/', SaleController.create);

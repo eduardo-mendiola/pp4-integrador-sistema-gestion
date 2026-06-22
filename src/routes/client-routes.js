@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
+// Define routes for clients
 router.get('/', ClientController.getAll);
 router.get('/:id', ClientController.getById);
 router.post('/', ClientController.create);

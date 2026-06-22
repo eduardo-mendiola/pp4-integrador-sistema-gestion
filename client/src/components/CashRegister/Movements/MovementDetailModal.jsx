@@ -13,6 +13,7 @@ const paymentMethodLabels = {
   transfer: 'Transferencia'
 };
 
+// Etiquetas para los tipos de origen
 const sourceTypeLabels = {
   SALE: 'Venta',
   RETURN: 'Devolución',

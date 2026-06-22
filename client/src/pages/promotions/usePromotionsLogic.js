@@ -39,6 +39,7 @@ export default function usePromotionsLogic() {
     }
   };
 
+  // Carga las reglas de descuento para el formulario
   const loadDiscountRules = async () => {
     try {
       const response = await apiRequest('/api/discount-rules');

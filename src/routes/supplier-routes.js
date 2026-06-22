@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
+// Define routes for supplier-related operations
 router.get('/', SupplierController.getAll);
 router.get('/:id', SupplierController.getById);
 router.post('/', SupplierController.create);

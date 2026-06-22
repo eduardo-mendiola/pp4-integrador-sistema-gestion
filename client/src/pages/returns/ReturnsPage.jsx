@@ -54,6 +54,7 @@ export default function ReturnsPage() {
     totals
   } = useReturnsLogic();
 
+  // Estado para el detalle de la devolución seleccionada
   const [selectedReturn, setSelectedReturn] = useState(null);
   const [completedData, setCompletedData] = useState(null); 
   const [showReceiptModal, setShowReceiptModal] = useState(false);

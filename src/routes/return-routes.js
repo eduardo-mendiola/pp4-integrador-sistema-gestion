@@ -5,7 +5,7 @@ import { isAuthenticated } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router.use(isAuthenticated);
-
+// Define routes for returns
 router.get('/', ReturnController.getAll);
 router.get('/:id', ReturnController.getById);
 router.post('/', ReturnController.create);

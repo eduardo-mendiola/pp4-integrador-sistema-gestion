@@ -1,3 +1,4 @@
+// Middleware to check if the user has the required role(s) to access a route
 export const hasRole = (...allowedRoles) => {
   return (req, res, next) => {
     const userRole = req.user?.role_id?.name

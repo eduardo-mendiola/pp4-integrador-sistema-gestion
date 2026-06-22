@@ -46,7 +46,7 @@ const CashRegisterController = {
     }
   },
 
-    // Cerrar caja (con arqueo)
+    // Cerrar caja
   close: async (req, res) => {
     try {
       const openRegister = await CashRegister.findOpenRegister();
@@ -149,7 +149,7 @@ const CashRegisterController = {
     }
   },
 
-  // Resumen del día para la caja abierta
+  // Resumen diario de la caja abierta (ingresos, egresos, saldo esperado)
   getDailySummary: async (req, res) => {
     try {
       const openRegister = await CashRegister.findOpenRegister();

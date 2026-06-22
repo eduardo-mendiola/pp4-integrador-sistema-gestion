@@ -1,4 +1,3 @@
-// controllers/RoleController.js
 import RoleModel from '../models/RoleModel.js';
 
 const RoleController = {

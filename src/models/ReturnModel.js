@@ -21,11 +21,11 @@ const returnSchema = new mongoose.Schema({
   },
   
   reason: { type: String, required: true },
-  reason_custom: { type: String, default: '' }, // Si el motivo es "otro"
+  reason_custom: { type: String, default: '' }, 
   
   items: { type: [returnItemSchema], required: true },
   
-  // Montos de la devolución
+  // Totales
   subtotal: { type: Number, required: true, default: 0 },
   discount_rate: { type: Number, default: 0 },
   discount: { type: Number, default: 0 },
@@ -33,10 +33,10 @@ const returnSchema = new mongoose.Schema({
   tax: { type: Number, default: 0 },
   total: { type: Number, required: true },
   
-  // En caso de cambio con diferencia
-  exchange_items: [{ type: mongoose.Schema.Types.Mixed }], // Items nuevos en caso de cambio
+  // Campos específicos para cambios
+  exchange_items: [{ type: mongoose.Schema.Types.Mixed }], 
   exchange_total: { type: Number, default: 0 },
-  difference: { type: Number, default: 0 }, // Positivo: cliente paga. Negativo: comercio devuelve
+  difference: { type: Number, default: 0 }, 
   
   // Método de devolución/pago de diferencia
   payment_method: { type: mongoose.Schema.Types.ObjectId, ref: 'PaymentMethod' },

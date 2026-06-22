@@ -5,7 +5,7 @@ const PricingService = {
     const rule = promotion.discountRuleId;
 
     const monthsWithoutSale =
-      (new Date() - new Date(lastSaleDate)) / (1000 * 60 * 60 * 24 * 30);
+      (new Date() - new Date(lastSaleDate)) / (1000 * 60 * 60 * 24 * 30); // Convert milliseconds to months
 
     const ruleApplies = monthsWithoutSale >= rule.timeWithoutSaleMonths;
 

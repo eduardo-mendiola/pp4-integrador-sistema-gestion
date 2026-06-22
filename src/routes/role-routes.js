@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
-
+// Define routes for role-related operations
 router.get('/', RoleController.getAll);
 router.get('/:id', RoleController.getById);
 router.post('/', RoleController.create);

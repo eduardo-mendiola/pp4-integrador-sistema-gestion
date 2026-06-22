@@ -21,6 +21,7 @@ const formatDate = (value) => {
   return date.toLocaleDateString('es-AR');
 };
 
+// Intenta construir el nombre completo a partir de los campos disponibles
 const getFullName = (client) => {
   const composed = `${client.first_name || ''} ${client.last_name || ''}`.trim();
   return client.full_name || composed || client.business_name || '-';

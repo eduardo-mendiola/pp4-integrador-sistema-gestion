@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
-// Dashboard principal con todos los datos
+// Get dashboard statistics
 router.get("/dashboard", StatisticsController.getDashboard);
 
 export default router;

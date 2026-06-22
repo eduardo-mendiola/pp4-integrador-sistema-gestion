@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(isAuthenticated);
 
+// Define routes for person-related operations
 router.get('/', PersonController.getAll);
 router.get('/:id', PersonController.getById);
 router.post('/', PersonController.create);

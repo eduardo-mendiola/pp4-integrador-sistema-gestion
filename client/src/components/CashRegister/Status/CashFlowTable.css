@@ -232,6 +232,7 @@
   margin: 0;
 }
 
+
 @media (max-width: 768px) {
   .cash-flow-filters {
     flex-direction: column;

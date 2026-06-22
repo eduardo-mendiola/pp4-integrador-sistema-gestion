@@ -12,6 +12,7 @@ export async function apiRequest(path, options = {}) {
     ...options
   });
 
+  // Intentar parsear como JSON, pero si no es posible, devolver el texto
   const contentType = response.headers.get('content-type') || '';
   const payload = contentType.includes('application/json')
     ? await response.json()

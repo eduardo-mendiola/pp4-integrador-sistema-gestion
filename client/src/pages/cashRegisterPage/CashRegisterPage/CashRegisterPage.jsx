@@ -32,6 +32,7 @@ export default function CashRegisterPage() {
 
   const isOpen = cashRegister?.status === 'OPEN';
 
+  // Función para refrescar datos manualmente
   const handleRefresh = async () => {
     await loadCashRegisterStatus();
     if (cashRegister?.status === 'OPEN') {
